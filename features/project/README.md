@@ -17,7 +17,7 @@ The Project module manages projects, which link clients to quotations and organi
 - **Status:** ✅ FROZEN
 - **Freeze Date:** 2025-12-17 (IST)
 - **Batches Included:** 09A + 10 (micro-batch)
-- **Total Files:** 16 (13 features + 3 changes)
+- **Total Files:** 18 (15 features including 2 stubs + 3 changes)
 
 > **Note:** "Total Files Frozen" counts module-curated artifacts only (feature docs, change docs, stubs). Git "Files Changed" includes scaffolding/README/index updates, folder structure, and other repository infrastructure files.
 
