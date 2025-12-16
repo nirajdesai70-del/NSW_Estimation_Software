@@ -1,33 +1,59 @@
 # Trace Directory
 
-This directory contains trace documentation mapping NEPL to NSW.
+**Purpose:** Traceability and mapping documentation for NSW Estimation Software evolution
 
 ---
 
-## Purpose
+## Directory Structure
 
-- Route maps
-- File maps
-- Component/Item Master traces
-- Migration traces
-- Relationship documentation
-
----
-
-## Files
-
-- `ROUTE_MAP.md` - Route mapping from NEPL to NSW
-- `FILE_MAP.md` - File structure mapping
-- `COMPONENT_ITEM_TRACE.md` - Component and Item Master trace
-- [Other trace documents]
+```
+trace/
+├── phase_1/          # Phase 1 - Baseline Capture trace artifacts
+├── phase_2/          # Phase 2 - Traceability & Mapping
+└── README.md         # This file
+```
 
 ---
 
-## Usage
+## Phase 1 — Baseline Trace
 
-Use this directory to document:
-- Where NEPL code lives
-- How it maps to NSW
-- What changes are planned
-- What must be preserved
+**Location:** `trace/phase_1/`
 
+**Contains:**
+- Batch bifurcation summaries (`BATCH_*.md`)
+- Baseline freeze notes (`BASELINE_FREEZE_*.md`)
+- Phase-1 audit trail
+
+**Purpose:** Documents what was bifurcated, placement decisions, validation outcomes, and baseline freeze details during Phase 1.
+
+**Files:**
+- `BATCH_01_COMPONENT_ITEM_MASTER.md` through `BATCH_10C_EMPLOYEE_ROLE.md`
+- `BASELINE_FREEZE_COMPONENT_ITEM_MASTER.md` through `BASELINE_FREEZE_EMPLOYEE_ROLE.md`
+
+---
+
+## Phase 2 — Traceability & Mapping
+
+**Location:** `trace/phase_2/`
+
+**Contains:**
+- Route maps (`ROUTE_MAP.md`)
+- Feature-to-code mappings (`FEATURE_CODE_MAP.md`)
+- File ownership documentation (`FILE_OWNERSHIP.md`)
+
+**Purpose:** Maps features to code, routes to controllers, and documents file ownership for safe NSW planning.
+
+**Status:** In Progress
+
+---
+
+## Navigation
+
+- **Phase 1 Summary:** See `docs/PHASE_1/PHASE_1_CLOSURE_SUMMARY.md`
+- **Baseline Register:** See `docs/PHASE_1/BASELINE_FREEZE_REGISTER.md`
+- **Feature Index:** See `features/FEATURE_INDEX.md`
+- **Change Index:** See `changes/CHANGE_INDEX.md`
+
+---
+
+**Last Updated:** 2025-12-17 (IST)

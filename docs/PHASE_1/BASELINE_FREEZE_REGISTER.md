@@ -27,50 +27,50 @@
 - **Batches:** 01-02
 - **Files:** 27 (features + changes + stubs)
 - **Primary Reference:** `features/component_item_master/_general/08_PRODUCT_MODULE.md`
-- **Freeze Summary:** `trace/BASELINE_FREEZE_COMPONENT_ITEM_MASTER.md` (stored in `trace/`)
+- **Freeze Summary:** `trace/phase_1/BASELINE_FREEZE_COMPONENT_ITEM_MASTER.md`
 
 ### Quotation
 - **Batches:** 03-04
 - **Files:** Multiple (V2, workflows, costing, reports)
 - **Primary Reference:** `features/quotation/_general/07_QUOTATION_MODULE.md`
-- **Freeze Summary:** `trace/BASELINE_FREEZE_QUOTATION.md` (stored in `trace/`)
+- **Freeze Summary:** `trace/phase_1/BASELINE_FREEZE_QUOTATION.md`
 
 ### Master BOM
 - **Batches:** 05-06
 - **Files:** 12 (features)
 - **Primary Reference:** `features/master_bom/_general/09_BOM_MODULE.md`
-- **Freeze Summary:** `trace/BASELINE_FREEZE_MASTER_BOM.md` (stored in `trace/`)
+- **Freeze Summary:** `trace/phase_1/BASELINE_FREEZE_MASTER_BOM.md`
 
 ### Feeder Library
 - **Batches:** 07
 - **Files:** 10 (4 features + 6 changes)
 - **Primary Reference:** `features/feeder_library/_general/V2_FEEDER_LIBRARY_COMPREHENSIVE_ANALYSIS.md`
-- **Freeze Summary:** `trace/BASELINE_FREEZE_FEEDER_LIBRARY.md` (stored in `trace/`)
+- **Freeze Summary:** `trace/phase_1/BASELINE_FREEZE_FEEDER_LIBRARY.md`
 
 ### Proposal BOM
 - **Batches:** 08
 - **Files:** 11 (9 features + 2 changes)
 - **Primary Reference:** `features/proposal_bom/_general/V2_MASTER_BOM_VS_PROPOSAL_BOM_ANALYSIS.md`
-- **Freeze Summary:** `trace/BASELINE_FREEZE_PROPOSAL_BOM.md` (stored in `trace/`)
+- **Freeze Summary:** `trace/phase_1/BASELINE_FREEZE_PROPOSAL_BOM.md`
 
 ### Project
 - **Batches:** 09A + 10A
 - **Files:** 18 (15 features + 3 changes)
 - **Primary Reference:** `features/project/_general/PROJECT_BACKEND_DESIGN_INDEX.md`
-- **Freeze Summary:** `trace/BASELINE_FREEZE_PROJECT.md` (stored in `trace/`)
+- **Freeze Summary:** `trace/phase_1/BASELINE_FREEZE_PROJECT.md`
 
 ### Master (Org/Vendor/PDF)
 - **Batches:** 10B
 - **Files:** 7 (1 content + 5 stubs + 1 README)
 - **Primary Reference:** `features/master/_general/MASTER_MODULE_OVERVIEW.md`
-- **Freeze Summary:** `trace/BASELINE_FREEZE_MASTER.md` (stored in `trace/`)
+- **Freeze Summary:** `trace/phase_1/BASELINE_FREEZE_MASTER.md`
 - **Note:** Option A applied - clean boundaries, reference-based stubs only
 
 ### Employee/Role
 - **Batches:** 10C
 - **Files:** 6 (3 content + 3 stubs)
 - **Primary Reference:** `features/employee/_general/12_USER_MANAGEMENT.md`
-- **Freeze Summary:** `trace/BASELINE_FREEZE_EMPLOYEE_ROLE.md` (stored in `trace/`)
+- **Freeze Summary:** `trace/phase_1/BASELINE_FREEZE_EMPLOYEE_ROLE.md`
 - **Note:** Security docs separated to `features/security` and `changes/security`
 
 ---
