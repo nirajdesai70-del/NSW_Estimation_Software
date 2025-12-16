@@ -160,14 +160,13 @@
 ## Security (Cross-Cutting)
 
 **Status:** Created during Batch 10C  
-**Primary Reference:** `features/security/_general/36_SECURITY_GUIDE.md`
+**Primary Reference:** `features/security/_general/36_SECURITY_GUIDE.md`  
+**Change Evidence:** `changes/security/phase_1/`
 
 **Key Areas:**
 - Authentication
 - Authorization
 - Security Best Practices
-
-**Change Evidence:** `changes/security/phase_1/`
 
 **Note:** Security is a cross-cutting concern, not a standalone baseline.
 

@@ -52,7 +52,7 @@ NSW_Estimation_Software/
 
 | Module | README | Status |
 |--------|--------|--------|
-| **Security** | `features/security/_general/36_SECURITY_GUIDE.md` | Created |
+| **Security** | [`features/security/README.md`](features/security/README.md) | Cross-Cutting |
 
 ---
 
@@ -119,9 +119,10 @@ NSW_Estimation_Software/
 
 ## 📊 Repository Statistics
 
-- **Modules Frozen:** 8
-- **Batches Completed:** 10C
-- **Total Baselines:** 8
+- **Baselines Frozen:** 8
+- **Cross-Cutting Modules:** 1 (Security)
+- **Last Batch Completed:** 10C
+- **Total Batches Executed:** 01-10C (with A/B/C suffixes)
 - **Phase 1 Status:** ✅ Complete
 
 ---
