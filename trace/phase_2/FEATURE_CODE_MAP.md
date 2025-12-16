@@ -13,8 +13,10 @@
 ### Controllers
 - `App\Http\Controllers\HomeController`
 
-### Models
-- TBD (scan controller imports)
+### Models (from controller imports)
+- `Quotation` (HomeController)
+- `QuotationSale` (HomeController)
+- `Client` (HomeController)
 
 ### Services
 - TBD
