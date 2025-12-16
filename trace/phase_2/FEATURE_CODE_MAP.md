@@ -94,8 +94,9 @@
 - `resources/views/generic/` (index.blade.php, create.blade.php, edit.blade.php)
 - `resources/views/product/` (index.blade.php, create.blade.php, edit.blade.php, bom-list.blade.php, tempview.blade.php)
 - `resources/views/price/` (index.blade.php, create.blade.php, edit.blade.php)
-- `resources/views/import/` (product.blade.php - verified from ImportController@importview: `view('import.product')`)
-- Note: `product.tempview` is in `resources/views/product/tempview.blade.php` (verified from ImportController@importtempview)
+- `resources/views/import/product.blade.php` (used by ImportController@importview for `/import` route)
+- `resources/views/product/tempview.blade.php` (used by ImportController@importtempview for `/importview/{uuid}` route)
+- Note: No `import/index.blade.php` exists; import view is `import/product.blade.php`
 - `resources/views/catalog-health/` (index.blade.php)
 - `resources/views/catalog-cleanup/` (index.blade.php)
 
@@ -255,7 +256,7 @@
 - `MasterBom` (MasterBomController)
 - `MasterBomItem` (MasterBomController)
 - `Product` (MasterBomController)
-- `QuotationSaleBom` (MasterBomController)
+- `QuotationSaleBom` (MasterBomController - reference-only import for compatibility/reuse; not a Master BOM table)
 - `SubCategory` (MasterBomController)
 
 ### Services
@@ -310,6 +311,7 @@
 
 ### Cross-Module Touchpoints
 - Used by Quotation V2 (apply-feeder-template route)
+- Reuse/search endpoints touch this feature via Quotation reuse APIs (`api.reuse.feeders`)
 - Uses Master BOM concepts (structure integration)
 
 ---
@@ -336,7 +338,7 @@
 - **Note:** Routes likely incomplete; cross-check with controllers and route files. Additional routes likely under Quotation V2 apply endpoints (`quotation.v2.applyProposalBom`) and search APIs (`api.reuse.proposalBoms`).
 
 ### Database Touchpoints
-- `quotation_sale_boms` (Proposal BOMs stored with BomName or MasterBomName)
+- `quotation_sale_boms` (Proposal BOMs stored here - verify discriminator fields used for Proposal BOM identification)
 
 ### Cross-Module Touchpoints
 - Used by Quotation V2 (apply-proposal-bom route, search APIs)
@@ -525,29 +527,29 @@
 These files contain critical business logic and must be protected during NSW refactoring:
 
 ### Quotation Module
-- `app/Services/QuotationQuantityService.php` - Core quantity calculation logic
-- `app/Services/CostingService.php` - Core costing calculations (SUM(AmountTotal) rule)
-- `app/Services/DiscountRuleApplyService.php` - Discount rule application logic
-- `app/Services/QuotationDiscountRuleService.php` - Discount rule business logic
+- `source_snapshot/app/Services/QuotationQuantityService.php` - Core quantity calculation logic
+- `source_snapshot/app/Services/CostingService.php` - Core costing calculations (SUM(AmountTotal) rule)
+- `source_snapshot/app/Services/DiscountRuleApplyService.php` - Discount rule application logic
+- `source_snapshot/app/Services/QuotationDiscountRuleService.php` - Discount rule business logic
 
 ### Component/Item Master Module
-- `app/Services/ProductAttributeService.php` - Product attribute management logic
-- `app/Helpers/ProductHelper.php` - Product helper functions
+- `source_snapshot/app/Services/ProductAttributeService.php` - Product attribute management logic (if exists)
+- `source_snapshot/app/Helpers/ProductHelper.php` - Product helper functions (if exists)
 
 ### General
-- `app/Services/DeletionPolicyService.php` - Deletion policy enforcement
-- `app/Services/AutoNamingService.php` - Auto-naming logic
+- `source_snapshot/app/Services/DeletionPolicyService.php` - Deletion policy enforcement
+- `source_snapshot/app/Services/AutoNamingService.php` - Auto-naming logic (if exists)
 
 ### Models (Core Business Objects - Protected)
-- `app/Models/Quotation.php` - Core quotation entity
-- `app/Models/QuotationSale.php` - Panel/Sale entity
-- `app/Models/QuotationSaleBom.php` - BOM entity
-- `app/Models/QuotationSaleBomItem.php` - BOM item entity
-- `app/Models/MasterBom.php` - Master BOM template entity
-- `app/Models/MasterBomItem.php` - Master BOM item entity
-- `app/Models/Category.php` - Category entity
-- `app/Models/Product.php` - Product entity
-- `app/Models/Project.php` - Project entity
+- `source_snapshot/app/Models/Quotation.php` - Core quotation entity
+- `source_snapshot/app/Models/QuotationSale.php` - Panel/Sale entity
+- `source_snapshot/app/Models/QuotationSaleBom.php` - BOM entity
+- `source_snapshot/app/Models/QuotationSaleBomItem.php` - BOM item entity
+- `source_snapshot/app/Models/MasterBom.php` - Master BOM template entity
+- `source_snapshot/app/Models/MasterBomItem.php` - Master BOM item entity
+- `source_snapshot/app/Models/Category.php` - Category entity
+- `source_snapshot/app/Models/Product.php` - Product entity
+- `source_snapshot/app/Models/Project.php` - Project entity
 
 **Note:** These files implement core business logic that must be preserved in NSW. Changes require careful review and testing.
 
