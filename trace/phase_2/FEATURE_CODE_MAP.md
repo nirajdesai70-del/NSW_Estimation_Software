@@ -290,8 +290,8 @@
 ### Controllers
 - `FeederTemplateController`
 
-### Models
-- TBD (scan controller imports)
+### Models (from controller imports)
+- `MasterBom` (FeederTemplateController - uses MasterBom with TemplateType='FEEDER')
 
 ### Services
 - TBD
@@ -319,8 +319,8 @@
 ### Controllers
 - `ProposalBomController`
 
-### Models
-- TBD (scan controller imports)
+### Models (from controller imports)
+- `QuotationSaleBom` (ProposalBomController - Proposal BOMs are stored in quotation_sale_boms table)
 
 ### Services
 - TBD
@@ -358,7 +358,8 @@
 - `Client` (ProjectController, ClientController, also used by Quotation controllers)
 - `Contact` (ContactController)
 - `State` (ClientController - getState route)
-- TBD (scan ContactController imports)
+- `Country` (ClientController)
+- `Organization` (ClientController)
 
 ### Services
 - TBD
