@@ -22,8 +22,17 @@ owners: ["Niraj", "DevTeam"]
 ### Primary References
 - `_general/09_BOM_MODULE.md` - Complete module overview
 - `_general/MASTER_BOM_BACKEND_DESIGN_INDEX.md` - Backend design index
-- `structure/MASTER_BOM_BACKEND_DESIGN_PART3_STRUCTURE.md` - BOM structure
+- `_general/MASTER_BOM_BACKEND_DESIGN_PART1_FOUNDATION.md` - Foundation and architecture
 - `_general/MASTER_BOM_VS_PROPOSAL_BOM_SPECIFICATION.md` - Master vs Proposal BOM comparison
+- `structure/MASTER_BOM_BACKEND_DESIGN_PART2_DATA_MODELS.md` - Data models and relationships
+- `structure/MASTER_BOM_BACKEND_DESIGN_PART3_STRUCTURE.md` - BOM structure
+- `validation/MASTER_BOM_BACKEND_DESIGN_PART5_RULES.md` - Business rules and validation
+- `import_export/EXCEL_BOM_IMPORT_IMPLEMENTATION_PLAN.md` - Import implementation plan
+- `import_export/EXCEL_BOM_IMPORT_COMPLETE.md` - Import completion documentation
+- `workflows/19_BOM_CREATION_FLOW.md` - Complete BOM creation workflow
+
+### Items Documentation
+Items are covered via stub references in `items/README.md` which points to structure documentation.
 
 ## Sub-Modules (Areas)
 
