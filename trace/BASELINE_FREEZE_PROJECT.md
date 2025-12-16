@@ -11,12 +11,12 @@
 
 ### Batches Included
 - **Batch 09A:** Initial bifurcation (13 files)
-- **Batch 10:** Micro-batch (3 files)
+- **Batch 10A:** Micro-batch (3 files)
 - **Total Files Frozen:** 18 files (15 features including 2 stubs + 3 changes)
 
 > **Note:** "Total Files Frozen" counts module-curated artifacts only (feature docs, change docs, stubs). Git "Files Changed" includes scaffolding/README/index updates, folder structure, and other repository infrastructure files.
 
-> **Note:** Batch 09A includes 13 files due to high-value backend design series coverage; Batch 10 micro-batch added 3 additional high-value files.
+> **Note:** Batch 09A includes 13 files due to high-value backend design series coverage; Batch 10A micro-batch added 3 additional high-value files.
 
 ### Structural Refinements Applied
 1. ✅ Reorganized from Batch 09 structure to Batch 09A structure
