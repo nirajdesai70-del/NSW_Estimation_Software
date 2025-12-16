@@ -1,11 +1,7 @@
 > Source: source_snapshot/COMPONENT_ITEM_CASCADE_REVIEW.md
-> Bifurcated into: features/component_item_master/_general/COMPONENT_ITEM_CASCADE_REVIEW.md
-> Module: Component / Item Master > General (Cascade Behavior)
+> Bifurcated into: changes/quotation/v2/QUOTATION_V2_COMPONENT_MODAL_CASCADE_RCA.md
+> Module: Quotation > V2 Modal (Cascade bug RCA)
 > Date: 2025-12-17 (IST)
-> Bifurcated into: features/_inbox/component_item_master/COMPONENT_ITEM_CASCADE_REVIEW.md
-> Module: Component / Item Master > [Unclear - needs review]
-> Date: 2025-12-17 (IST)
-> Note: This file discusses cascade behavior - may belong in trace/ or changes/
 
 # Component/Item Cascade Review - Root Cause Analysis
 
@@ -192,5 +188,4 @@ Product Type → Category → SubCategory → Generic → Make → Series → De
 **Status:** IN PROGRESS  
 **Priority:** HIGH  
 **Assigned:** Review in progress
-
 
