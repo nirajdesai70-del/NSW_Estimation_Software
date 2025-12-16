@@ -1,22 +1,25 @@
 # Master — Organization
 
-No dedicated Organization Master documentation found in Batch 10B.
+This folder defines the Organization master concept and policies.
 
-**Note:** Organization master data integration is documented in Project and Quotation modules from their usage perspective.
+## Usage References
 
-Primary references:
-- `../../project/_general/PROJECT_BACKEND_DESIGN_PART7_MASTER_DATA.md` - Organization master data integration (Project perspective)
-- `../../quotation/_general/QUOTATION_BACKEND_DESIGN_PART7_MASTER_DATA.md` - Organization master data integration (Quotation perspective)
+- **Project integration:**
+  - `../../project/_general/PROJECT_BACKEND_DESIGN_PART7_MASTER_DATA.md`
+- **Quotation integration:**
+  - `../../quotation/_general/QUOTATION_BACKEND_DESIGN_PART7_MASTER_DATA.md`
 
-**Scope of this folder:**
+## Scope
+
+- Organization identity
+- Global attributes
+- System-wide defaults
 - Organization master entity definition (if dedicated docs exist)
-- Organization fields and attributes
-- Organization management workflows
-- Organization import/export templates
-- GST/address/letterhead data structure
+- Organization management workflows (if dedicated docs exist)
+- Organization import/export templates (if dedicated docs exist)
+- GST/address/letterhead data structure (if dedicated docs exist)
 
 To be added later (if dedicated org master docs exist):
 - Standalone organization master specification
 - Organization master management interface
 - Organization-level defaults and policies
-

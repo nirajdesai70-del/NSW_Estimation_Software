@@ -1,16 +1,21 @@
 # Master — PDF Formats
 
-No dedicated PDF format/template documentation found in Batch 10B.
+No standalone PDF template or layout specification found.
 
-**Note:** PDF generation workflow is documented in the Quotation module.
+## Workflow Reference
 
-Primary references:
-- `../../quotation/reports/21_PDF_GENERATION_FLOW.md` - PDF generation workflow (quotation-specific)
+- **Quotation PDF generation:**
+  - `../../quotation/reports/21_PDF_GENERATION_FLOW.md`
+
+## Intended Scope
+
+- PDF layout standards
+- Header/footer templates
+- Print configuration defaults
+- PDF container structure
+- Letterhead definitions
 
 To be added later (if separate PDF format docs exist):
 - PDF template/layout standards
-- Letterhead definitions
-- Header/footer templates
+- Template customization rules
 - Print format specifications
-- PDF container structure
-
