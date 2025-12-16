@@ -1,17 +1,17 @@
 # Master — PDF Formats
 
-No standalone PDF template or layout specification found.
+No standalone PDF template/layout spec found.
 
-## Workflow Reference
+## Primary Workflow Reference
 
 - **Quotation PDF generation:**
   - `../../quotation/reports/21_PDF_GENERATION_FLOW.md`
 
-## Intended Scope
+## Scope of This Folder
 
-- PDF layout standards
-- Header/footer templates
-- Print configuration defaults
+- Template/layout standards
+- Header/footer policies
+- Print defaults
 - PDF container structure
 - Letterhead definitions
 

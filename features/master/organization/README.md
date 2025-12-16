@@ -1,6 +1,6 @@
 # Master — Organization
 
-This folder defines the Organization master concept and policies.
+This folder defines the Organization master concept and global fields.
 
 ## Usage References
 

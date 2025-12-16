@@ -8,26 +8,28 @@
 
 ## Files Bifurcated (4 content files + 3 stubs = 7 total)
 
-### ✅ Feature Documentation (4 files)
+### ✅ Feature Documentation (1 content file + 5 stubs)
 
 | # | File Name | Original Path | Target Folder | Module > Area | Status |
 |---|-----------|---------------|---------------|--------------|---------|
-| 1 | PROJECT_BACKEND_DESIGN_PART7_MASTER_DATA.md | `source_snapshot/PROJECT_BACKEND_DESIGN_PART7_MASTER_DATA.md` | `features/master/organization/` | Master > Organization | ✅ Copied |
-| 2 | QUOTATION_BACKEND_DESIGN_PART7_MASTER_DATA.md | `source_snapshot/QUOTATION_BACKEND_DESIGN_PART7_MASTER_DATA.md` | `features/master/organization/` | Master > Organization | ✅ Copied |
-| 3 | 21_PDF_GENERATION_FLOW.md | `source_snapshot/docs/05_WORKFLOWS/21_PDF_GENERATION_FLOW.md` | `features/master/pdf_formats/` | Master > PDF Formats | ✅ Copied |
-| 4 | MASTER_MODULE_OVERVIEW.md | Created for Batch 10B | `features/master/_general/` | Master > General | ✅ Created |
+| 1 | MASTER_MODULE_OVERVIEW.md | Created for Batch 10B | `features/master/_general/` | Master > General | ✅ Created |
+
+**Note:** Master data integration docs (`PROJECT_BACKEND_DESIGN_PART7_MASTER_DATA.md`, `QUOTATION_BACKEND_DESIGN_PART7_MASTER_DATA.md`) are located in Project and Quotation modules respectively. Master organization stub references them.
+
+**Note:** PDF generation workflow (`21_PDF_GENERATION_FLOW.md`) is located in Quotation module. Master pdf_formats stub references it.
 
 ---
 
 ## Area Coverage After Batch 10B
 
-| Area | Files Copied | Status | Notes |
-|------|--------------|--------|-------|
-| Organization | 2 | ✅ | Project and Quotation master data integration |
-| Vendor | 0 | ⚠️ | Covered in Component/Item Master (Make/Brand) |
-| PDF Formats | 1 | ✅ | PDF generation flow |
-| Templates | 0 | ⚠️ | None found yet |
-| Defaults | 0 | ⚠️ | None found yet |
+| Area | Files | Status | Notes |
+|------|-------|--------|-------|
+| General | 1 | ✅ | Master module overview |
+| Organization | 0 | ⚠️ | Stub references Project/Quotation integration |
+| Vendor | 0 | ⚠️ | Stub references Component/Item Master (Make/Brand) |
+| PDF Formats | 0 | ⚠️ | Stub references Quotation PDF workflow |
+| Templates | 0 | ⚠️ | Stub placeholder |
+| Defaults | 0 | ⚠️ | Stub placeholder |
 
 ---
 
