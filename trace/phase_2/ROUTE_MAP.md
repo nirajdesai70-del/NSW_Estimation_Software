@@ -11,7 +11,7 @@
 ## Route Map Table
 
 | Method | URI | Route Name | Middleware/Auth | Controller@Method | Module | Sub-Area | Cross-Module Touchpoints | Views/JS (if known) | Notes |
-|---|---|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|---|---|---|
 | GET | / | home | auth | HomeController@index | Dashboard | Home | - | home/index.blade.php | Home page |
 | GET | /home | home | auth | HomeController@index | Dashboard | Home | - | home/index.blade.php | Home page alias |
 | GET | /api/category/{categoryId}/subcategories | api.category.subcategories | auth, throttle:search | QuotationController@getSubCategories | Quotation | Shared (Legacy+V2) | Component/Item Master | - | AJAX endpoint - supports both Legacy and V2 |
@@ -266,7 +266,7 @@
 | GET | /pdfcontain | pdfcontain.index | auth | ImportController@pdfcontain | Master | PDF Formats | - | pdfcontain/index.blade.php | PDF container - Controller name is misleading (ImportController). Feature is Master/PDF container. |
 | PUT | /pdfcontain | pdfcontain.save | auth | ImportController@pdfcontainsave | Master | PDF Formats | - | - | Save PDF container - Controller name is misleading (ImportController). Feature is Master/PDF container. |
 | GET | /mySQLDownload | mySQLDownload | auth | CronController@mySQLDownload | Shared/Ops | Maintenance | - | - | MySQL download |
-| GET | /clear | - | auth | Closure | Shared/Ops | Maintenance | - | - | Clear cache |
+| GET | /clear | - | auth | Closure | Shared/Ops | Maintenance | - | - | Clear cache - Maintenance route; verify if enabled in production |
 
 ---
 
