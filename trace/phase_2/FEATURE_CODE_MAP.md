@@ -20,8 +20,8 @@
 - TBD
 
 ### Views
-- `resources/views/home.blade.php` (verify)
-- `resources/views/home/index.blade.php` (TBD - verify)
+- `resources/views/home.blade.php` (verified from HomeController@index: `view('home')`)
+- Note: `resources/views/home/index.blade.php` does not exist
 
 ### JS
 - TBD
@@ -29,6 +29,11 @@
 ### Routes (from ROUTE_MAP)
 - GET `/` (home)
 - GET `/home` (home)
+
+### Database Touchpoints
+- `quotations` (via Quotation model)
+- `quotation_sales` (via QuotationSale model)
+- `clients` (via Client model)
 
 ---
 
@@ -40,6 +45,7 @@
 - `ItemController`
 - `AttributeController`
 - `CategoryAttributeController`
+- `ProductAttributeController`
 - `MakeController`
 - `SeriesController`
 - `GenericController`
@@ -53,15 +59,24 @@
 - `Category` (CategoryController)
 - `SubCategory` (CategoryController, SubCategoryController)
 - `Item` (CategoryController, ItemController)
-- `Attribute` (CategoryController, AttributeController)
-- `CategoryAttribute` (CategoryController, CategoryAttributeController)
-- `Product` (CategoryController, ProductController)
-- `Make` (MakeController)
-- `Series` (SeriesController)
+- `Attribute` (CategoryController, AttributeController, ImportController)
+- `AttributeTemp` (ImportController)
+- `CategoryAttribute` (CategoryController, CategoryAttributeController, ImportController)
+- `CategoryAttributeTemp` (ImportController)
+- `Product` (CategoryController, ProductController, ImportController)
+- `ProductAttribute` (ImportController)
+- `ProductAttributeTemp` (ImportController)
+- `Make` (MakeController, ImportController)
+- `MakeCategory` (ImportController)
+- `Series` (SeriesController, ImportController)
+- `SeriesCategory` (ImportController)
+- `SeriesMake` (ImportController)
 - `Generic` (GenericController)
-- `Price` (PriceController)
+- `Price` (PriceController, ImportController)
 - `TempProduct` (ImportController)
-- TBD (additional models from other controllers)
+- `MasterBom` (ImportController)
+- `Setting` (ImportController)
+- TBD (additional models from CatalogHealthController, CatalogCleanupController)
 
 ### Services
 - TBD (scanning controller imports)
@@ -77,7 +92,8 @@
 - `resources/views/generic/` (index.blade.php, create.blade.php, edit.blade.php)
 - `resources/views/product/` (index.blade.php, create.blade.php, edit.blade.php, bom-list.blade.php, tempview.blade.php)
 - `resources/views/price/` (index.blade.php, create.blade.php, edit.blade.php)
-- `resources/views/import/` (product.blade.php)
+- `resources/views/import/` (product.blade.php - verified from ImportController@importview: `view('import.product')`)
+- Note: `product.tempview` is in `resources/views/product/tempview.blade.php` (verified from ImportController@importtempview)
 - `resources/views/catalog-health/` (index.blade.php)
 - `resources/views/catalog-cleanup/` (index.blade.php)
 
@@ -87,6 +103,26 @@
 
 ### Routes (from ROUTE_MAP)
 - `category.*`, `subcategory.*`, `item.*` (product-type), `make.*`, `series.*`, `attribute.*`, `category-attribute.*`, `generic.*`, `product.*`, `price.*`, `import.*`, `catalog-health.*`, `catalog-cleanup.*`
+
+### Database Touchpoints
+- `categories`
+- `sub_categories`
+- `items` (product_types)
+- `attributes`
+- `category_attributes`
+- `product_attributes`
+- `makes`
+- `make_categories`
+- `series`
+- `series_categories`
+- `series_makes`
+- `products`
+- `generic_products`
+- `prices`
+- `temp_products`
+- `attribute_temps`
+- `category_attribute_temps`
+- `product_attribute_temps`
 
 ### Cross-Module Touchpoints
 - Used by Quotation (via AJAX endpoints: `api.category.*`, `api.item.*`, `api.product.*`, `api.make.*`)
@@ -128,8 +164,8 @@
 - `QuotationDiscountRuleService` (QuotationDiscountRuleController)
 - TBD (additional services)
 
-### Views (verified from directory structure)
-- `resources/views/quotation/` (Legacy)
+### Views (verified from directory structure and controller view calls)
+- `resources/views/quotation/` (Legacy - verified from directory structure)
   - `index.blade.php`
   - `create.blade.php`
   - `edit.blade.php`
@@ -137,19 +173,23 @@
   - `step.blade.php`
   - `pdf.blade.php`
   - `audit-logs.blade.php`
-  - Additional legacy views (item.blade.php, line.blade.php, etc.)
-- `resources/views/quotation/v2/` (V2)
-  - `index.blade.php`
-  - `panel.blade.php`
+  - Additional legacy views (item.blade.php, line.blade.php, make_series.blade.php, masterbom.blade.php, stepedit.blade.php, steppopup.blade.php, linepopup.blade.php, discount.blade.php)
+- `resources/views/quotation/v2/` (V2 - verified from directory structure and QuotationV2Controller view calls)
+  - `index.blade.php` (verified: `view('quotation.v2.index')`)
+  - `panel.blade.php` (verified: `view('quotation.v2.panel')`)
   - `masterbom.blade.php`
   - `_bom.blade.php`
   - `_feeder.blade.php`
   - `_items_table.blade.php`
-  - `_masterbom_modal.blade.php`
+  - `_masterbom_modal.blade.php` (verified: `view('quotation.v2._masterbom_modal')`)
   - `_feeder_library_modal.blade.php`
   - `_reuse_filter_modal.blade.php`
-  - Additional V2 partials/modals
-- `resources/views/quotation/discount-rules/` (TBD - verify if exists)
+  - Additional V2 partials/modals (_edit_panel_qty_modal.blade.php, _edit_feeder_qty_modal.blade.php, _edit_bom_qty_modal.blade.php, _global_bulk_edit_modal.blade.php, _multi_edit_modal.blade.php, _reuse_filter_modal_step.blade.php)
+- `resources/views/quotation/v2/discount_rules/` (verified from QuotationDiscountRuleController view calls)
+  - `index.blade.php` (verified: `view('quotation.v2.discount_rules.index')`)
+  - `create.blade.php` (verified: `view('quotation.v2.discount_rules.create')`)
+  - `show.blade.php` (verified: `view('quotation.v2.discount_rules.show')`)
+  - `edit.blade.php` (verified: `view('quotation.v2.discount_rules.edit')`)
 
 ### JS
 - `public/js/quotation/*` (TBD - verify)
@@ -190,6 +230,16 @@
 - **Touchpoint:** Component/Item Master module
 - **Purpose:** AJAX lookups for category/subcategory/item/product/make/series (supports both Legacy and V2)
 
+### Database Touchpoints
+- `quotations`
+- `quotation_sales`
+- `quotation_sale_boms`
+- `quotation_sale_bom_items`
+- `quotation_discount_rules`
+- `pricing_audit_logs`
+- `clients`
+- `projects`
+
 ---
 
 ## Master BOM
@@ -198,9 +248,13 @@
 - `MasterBomController`
 
 ### Models (from controller imports)
-- `MasterBom` (inferred from MasterBomController)
-- `MasterBomItem` (inferred from routes)
-- TBD (scan controller imports)
+- `Category` (MasterBomController)
+- `Item` (MasterBomController)
+- `MasterBom` (MasterBomController)
+- `MasterBomItem` (MasterBomController)
+- `Product` (MasterBomController)
+- `QuotationSaleBom` (MasterBomController)
+- `SubCategory` (MasterBomController)
 
 ### Services
 - TBD
@@ -213,6 +267,15 @@
 
 ### Routes (from ROUTE_MAP)
 - `masterbom.*`
+
+### Database Touchpoints
+- `master_boms`
+- `master_bom_items`
+- `categories`
+- `sub_categories`
+- `items`
+- `products`
+- `quotation_sale_boms` (for reference)
 
 ### Cross-Module Touchpoints
 - Used by Quotation V2 (apply-master-bom route)
@@ -239,6 +302,9 @@
 
 ### Routes (from ROUTE_MAP)
 - `feeder-library.*`
+
+### Database Touchpoints
+- `master_boms` (with TemplateType='FEEDER')
 
 ### Cross-Module Touchpoints
 - Used by Quotation V2 (apply-feeder-template route)
@@ -267,6 +333,9 @@
 - `proposal-bom.*`
 - **Note:** Routes likely incomplete; cross-check with controllers and route files. Additional routes likely under Quotation V2 apply endpoints (`quotation.v2.applyProposalBom`) and search APIs (`api.reuse.proposalBoms`).
 
+### Database Touchpoints
+- `quotation_sale_boms` (Proposal BOMs stored with BomName or MasterBomName)
+
 ### Cross-Module Touchpoints
 - Used by Quotation V2 (apply-proposal-bom route, search APIs)
 - Can be promoted to Master BOM (promote route)
@@ -282,11 +351,12 @@
 - `ContactController`
 
 ### Models (from controller imports)
-- `Project` (inferred from ProjectController)
-- `Client` (inferred from ClientController, also used by Quotation controllers)
-- `Contact` (inferred from ContactController)
+- `Project` (ProjectController)
+- `Quotation` (ProjectController)
+- `Client` (ProjectController, ClientController, also used by Quotation controllers)
+- `Contact` (ContactController)
 - `State` (ClientController - getState route)
-- TBD (additional models)
+- TBD (scan ContactController imports)
 
 ### Services
 - TBD
@@ -304,6 +374,13 @@
 - `client.*`
 - `contact.*`
 
+### Database Touchpoints
+- `projects`
+- `quotations`
+- `clients`
+- `contacts`
+- `states`
+
 ### Cross-Module Touchpoints
 - Links to Quotation (project-quotation relationship via Quotation model)
 - Client/Contact masters used by Project/Quotation
@@ -315,12 +392,13 @@
 ### Controllers
 - `OrganizationController`
 - `VendorController`
-- `ImportController` (pdfcontain methods only - note: controller name is misleading, feature is Master/PDF container)
+- `ImportController` (pdfcontain methods only)
+  - **Note:** Shared controller - also used by Component/Item Master Import routes. Controller name is misleading; pdfcontain feature is Master/PDF container, not Import.
 
 ### Models (from controller imports)
-- `Organization` (inferred from OrganizationController)
-- `Vendor` (inferred from VendorController)
-- TBD (PDF container model)
+- `Organization` (OrganizationController)
+- `Vendor` (VendorController)
+- `Setting` (ImportController - pdfcontain uses Setting model)
 
 ### Services
 - TBD
@@ -338,6 +416,11 @@
 - `vendor.*`
 - `pdfcontain.*` (Note: Controller name is misleading - ImportController, but feature is Master/PDF container)
 
+### Database Touchpoints
+- `organizations`
+- `vendors`
+- `settings` (PDF container configuration)
+
 ### Cross-Module Touchpoints
 - Organization used by Project/Quotation (master data)
 - Vendor used by Component/Item Master (Make/Series concepts)
@@ -352,9 +435,8 @@
 - `RoleController`
 
 ### Models (from controller imports)
-- `User` (inferred from UserController)
-- `Role` (inferred from RoleController)
-- TBD (scan controller imports)
+- `User` (UserController, RoleController)
+- `Role` (UserController, RoleController)
 
 ### Services
 - TBD
@@ -369,6 +451,10 @@
 ### Routes (from ROUTE_MAP)
 - `user.*`
 - `role.*`
+
+### Database Touchpoints
+- `users`
+- `roles`
 
 ### Cross-Module Touchpoints
 - Used by all modules (authentication/authorization via middleware)
@@ -423,8 +509,44 @@
 - `mySQLDownload`
 - `clear` (Maintenance route; verify if enabled in production)
 
+### Database Touchpoints
+- TBD (maintenance operations may touch multiple tables)
+
 ### Cross-Module Touchpoints
 - Maintenance operations affecting all modules
+
+---
+
+## Protected/Core Files (Do Not Refactor Casually)
+
+These files contain critical business logic and must be protected during NSW refactoring:
+
+### Quotation Module
+- `app/Services/QuotationQuantityService.php` - Core quantity calculation logic
+- `app/Services/CostingService.php` - Core costing calculations (SUM(AmountTotal) rule)
+- `app/Services/DiscountRuleApplyService.php` - Discount rule application logic
+- `app/Services/QuotationDiscountRuleService.php` - Discount rule business logic
+
+### Component/Item Master Module
+- `app/Services/ProductAttributeService.php` - Product attribute management logic
+- `app/Helpers/ProductHelper.php` - Product helper functions
+
+### General
+- `app/Services/DeletionPolicyService.php` - Deletion policy enforcement
+- `app/Services/AutoNamingService.php` - Auto-naming logic
+
+### Models (Core Business Objects - Protected)
+- `app/Models/Quotation.php` - Core quotation entity
+- `app/Models/QuotationSale.php` - Panel/Sale entity
+- `app/Models/QuotationSaleBom.php` - BOM entity
+- `app/Models/QuotationSaleBomItem.php` - BOM item entity
+- `app/Models/MasterBom.php` - Master BOM template entity
+- `app/Models/MasterBomItem.php` - Master BOM item entity
+- `app/Models/Category.php` - Category entity
+- `app/Models/Product.php` - Product entity
+- `app/Models/Project.php` - Project entity
+
+**Note:** These files implement core business logic that must be preserved in NSW. Changes require careful review and testing.
 
 ---
 
