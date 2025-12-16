@@ -1,0 +1,34 @@
+# NSW Estimation Software - Shadow Repository
+# This is a shadow repository for documentation and trace purposes.
+
+# Source snapshot (read-only reference)
+source_snapshot/
+
+# Dependencies
+node_modules/
+vendor/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
