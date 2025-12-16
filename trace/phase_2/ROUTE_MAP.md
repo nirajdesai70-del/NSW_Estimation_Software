@@ -173,8 +173,8 @@
 | POST | /quotation/{id}/panel/{panelId}/feeder | quotation.v2.addFeeder | auth | QuotationV2Controller@addFeeder | Quotation | V2 | - | - | Add feeder |
 | POST | /quotation/{id}/bom/{parentBomId}/bom | quotation.v2.addBom | auth | QuotationV2Controller@addBom | Quotation | V2 | - | - | Add BOM |
 | POST | /quotation/{id}/bom/{bomId}/item | quotation.v2.addItem | auth | QuotationV2Controller@addItem | Quotation | V2 | - | - | Add item |
-| POST | /quotation/v2/apply-master-bom | quotation.v2.applyMasterBom | auth, throttle:critical-write | QuotationV2Controller@applyMasterBom | Quotation | V2 | - | - | Apply Master BOM |
-| POST | /quotation/{quotation}/panel/{panel}/feeder/apply-template | quotation.v2.applyFeederTemplate | auth | QuotationV2Controller@applyFeederTemplate | Quotation | V2 | - | - | Apply feeder template |
+| POST | /quotation/v2/apply-master-bom | quotation.v2.applyMasterBom | auth, throttle:critical-write | QuotationV2Controller@applyMasterBom | Quotation | V2 | Master BOM | - | Apply Master BOM - Cross-module: Master BOM |
+| POST | /quotation/{quotation}/panel/{panel}/feeder/apply-template | quotation.v2.applyFeederTemplate | auth | QuotationV2Controller@applyFeederTemplate | Quotation | V2 | Feeder Library | - | Apply feeder template - Cross-module: Feeder Library |
 | POST | /quotation/{quotation}/feeder/{feeder}/delete | quotation.v2.deleteFeeder | auth | QuotationV2Controller@deleteFeeder | Quotation | V2 | - | - | Delete feeder |
 | POST | /quotation/{quotation}/bom/{bom}/delete | quotation.v2.deleteBom | auth | QuotationV2Controller@deleteBom | Quotation | V2 | - | - | Delete BOM |
 | POST | /quotation/{quotation}/panel/{panel}/delete | quotation.v2.deletePanel | auth | QuotationV2Controller@deletePanel | Quotation | V2 | - | - | Delete panel |
