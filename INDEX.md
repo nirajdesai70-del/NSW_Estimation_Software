@@ -58,20 +58,24 @@ NSW_Estimation_Software/
 
 ## 📖 Key Documentation
 
-### Phase 1 Documentation
+### Phase 1 — Baseline Capture
 
 - **[Baseline Freeze Register](docs/PHASE_1/BASELINE_FREEZE_REGISTER.md)** - Complete list of frozen baselines
 - **[Phase 1 Closure Summary](docs/PHASE_1/PHASE_1_CLOSURE_SUMMARY.md)** - Phase 1 completion summary
-
-### Module Indices
-
 - **[Feature Index](features/FEATURE_INDEX.md)** - Quick reference to all module features
 - **[Change Index](changes/CHANGE_INDEX.md)** - Change history by module
 
-### Trace Documentation
+### Phase 2 — Traceability & Mapping
 
-- **[Batch Summaries](trace/)** - Bifurcation summaries for each batch
-- **[Baseline Freeze Notes](trace/)** - Detailed freeze documentation for each module
+- **[Phase 2 Closure Summary](docs/PHASE_2/PHASE_2_CLOSURE_SUMMARY.md)** - Phase 2 completion summary
+- **[Route Map](trace/phase_2/ROUTE_MAP.md)** - Route → Controller@Method → Module mapping (~80% coverage)
+- **[Feature Code Map](trace/phase_2/FEATURE_CODE_MAP.md)** - Feature → Controllers → Services → Models → Views mapping
+- **[File Ownership](trace/phase_2/FILE_OWNERSHIP.md)** - File ownership + risk level matrix (52 files)
+
+### Trace Documentation (Phase 1)
+
+- **[Batch Summaries](trace/phase_1/)** - Bifurcation summaries for each batch
+- **[Baseline Freeze Notes](trace/phase_1/)** - Detailed freeze documentation for each module
 
 ---
 
@@ -124,14 +128,16 @@ NSW_Estimation_Software/
 - **Last Batch Completed:** 10C
 - **Total Batches Executed:** 01-10C (with A/B/C suffixes)
 - **Phase 1 Status:** ✅ Complete
+- **Phase 2 Status:** ✅ Complete
+- **Files Mapped (Phase 2):** 52 (Controllers + Services + Models)
 
 ---
 
-## 🚀 Next Steps
+## 🚀 Phase Status
 
-1. **Phase 2:** Traceability maps (route maps, feature-code mapping)
-2. **Phase 3:** NSW implementation planning
-3. **Future:** Additional modules as needed
+**Phase 1:** ✅ Complete - Baseline Capture (8 modules frozen)  
+**Phase 2:** ✅ Complete - Traceability & Mapping (Route/Feature/File ownership maps)  
+**Phase 3:** 🔄 Next - NSW Implementation Planning
 
 ---
 
