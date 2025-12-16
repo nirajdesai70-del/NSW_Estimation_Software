@@ -3,8 +3,8 @@
 No dedicated defaults documentation found in Batch 10B.
 
 Primary references:
-- `../organization/PROJECT_BACKEND_DESIGN_PART7_MASTER_DATA.md` - Master data integration
-- `../organization/QUOTATION_BACKEND_DESIGN_PART7_MASTER_DATA.md` - Quotation master data
+- `../organization/README.md` - Organization master (references Project/Quotation integration)
+- `../_general/MASTER_MODULE_OVERVIEW.md` - Master module overview
 
 To be added later (if defaults docs exist):
 - System-wide default values
