@@ -1,6 +1,6 @@
 > Source: source_snapshot/docs/06_TECHNICAL_REFERENCE/36_SECURITY_GUIDE.md
-> Bifurcated into: features/employee/permissions/36_SECURITY_GUIDE.md
-> Module: Employee/Role > Permissions
+> Bifurcated into: features/security/_general/36_SECURITY_GUIDE.md
+> Module: Security > General
 > Date: 2025-12-17 (IST)
 
 # Security Guide
