@@ -14,10 +14,19 @@ owners: ["Niraj", "DevTeam"]
 **Purpose:** Core business module managing complete quotation lifecycle from creation to PDF generation.
 
 ## Baseline Status
-- **Status:** ✅ Frozen
+- **Status:** ✅ FROZEN
 - **Freeze Date:** 2025-12-17 (IST)
 - **Batches Included:** 03–04
 - **Total Files:** 14 (12 features + 2 changes)
+
+### Primary V2 References
+- `v2/QUOTATION_V2_AUDIT_REPORT.md`
+- `v2/QUOTATION_V2_IMPLEMENTATION_PLAN.md`
+- `v2/QUOTATION_BACKEND_DESIGN_PART3_HIERARCHY.md`
+
+### Change References
+- `../changes/quotation/v2/QUOTATION_V2_COMPONENT_MODAL_CASCADE_RCA.md`
+- `../changes/quotation/v2/QUOTATION_V2_PROGRESS.md`
 
 ## Sub-Modules (Areas)
 
