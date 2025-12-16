@@ -12,7 +12,7 @@
 
 | File Path (source_snapshot/...) | Type | Owner Module | Sub-Area | Risk Level | Why it matters | Change Rule | Related Routes/Features |
 |---|---|---|---|---|---|---|---|
-| `source_snapshot/app/Http/Controllers/HomeController.php` | Controller | Dashboard | Home | MEDIUM | Dashboard entry point | Normal testing | `home` (GET `/`, `/home`) |
+| `source_snapshot/app/Http/Controllers/HomeController.php` | Controller | Dashboard | Home | MEDIUM | Dashboard entry point; cross-module dashboard counts (queries Quotation/Client) | Normal testing | `home` (GET `/`, `/home`) |
 | `source_snapshot/app/Http/Controllers/CategoryController.php` | Controller | Component/Item Master | Category | MEDIUM | Category CRUD operations | Normal testing | `category.*` |
 | `source_snapshot/app/Http/Controllers/SubCategoryController.php` | Controller | Component/Item Master | Subcategory | MEDIUM | Subcategory CRUD operations | Normal testing | `subcategory.*` |
 | `source_snapshot/app/Http/Controllers/ItemController.php` | Controller | Component/Item Master | Product Type | MEDIUM | Product Type CRUD operations | Normal testing | `item.*` (product-type) |
@@ -24,7 +24,7 @@
 | `source_snapshot/app/Http/Controllers/GenericController.php` | Controller | Component/Item Master | Generic Product | MEDIUM | Generic product CRUD | Normal testing | `generic.*` |
 | `source_snapshot/app/Http/Controllers/ProductController.php` | Controller | Component/Item Master | Specific Product | MEDIUM | Specific product CRUD | Normal testing | `product.*` |
 | `source_snapshot/app/Http/Controllers/PriceController.php` | Controller | Component/Item Master | Price List | HIGH | Price affects quotation costing, discounts, and audits | Review + sample quotation + discount check | `price.*` |
-| `source_snapshot/app/Http/Controllers/ImportController.php` | Controller | Component/Item Master + Master | Import/Export + PDF Formats | HIGH | Split ownership: Import routes (Component/Item Master) + pdfcontain (Master/PDF) | Review required | `import.*` (Component/Item Master), `pdfcontain.*` (Master) |
+| `source_snapshot/app/Http/Controllers/ImportController.php` | Controller | Component/Item Master + Master | Import/Export + PDF Formats | HIGH | Split ownership: Import routes (Component/Item Master) + pdfcontain (Master/PDF); touches settings table (pdfcontain) | Review required | `import.*` (Component/Item Master), `pdfcontain.*` (Master) |
 | `source_snapshot/app/Http/Controllers/CatalogHealthController.php` | Controller | Component/Item Master | Catalog Health | MEDIUM | Catalog health monitoring | Normal testing | `catalog-health.*` |
 | `source_snapshot/app/Http/Controllers/CatalogCleanupController.php` | Controller | Component/Item Master | Catalog Cleanup | HIGH | Catalog cleanup operations; data mutation risk | Review + backup + controlled test | `catalog-cleanup.*` |
 | `source_snapshot/app/Http/Controllers/QuotationController.php` | Controller | Quotation | Legacy | HIGH | Legacy quotation workflow; widely used | Review required | `quotation.*` (Legacy), `api.category.*`, `api.item.*`, `api.product.*`, `api.make.*` (Shared APIs) |
