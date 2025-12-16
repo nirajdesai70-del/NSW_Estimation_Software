@@ -25,7 +25,7 @@
 
 ---
 
-## Area Coverage After Batch 10
+## Area Coverage After Batch 10A
 
 | Area | Files Added | Total Files | Status |
 |------|------------|------------|--------|
