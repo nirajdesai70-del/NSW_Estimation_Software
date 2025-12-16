@@ -19,6 +19,8 @@ The Master module contains global masters and shared resources that affect all m
 - **Batches Included:** 10B
 - **Total Files:** 6 (1 content + 5 stubs)
 
+> **Note:** Master baseline is intentionally stub-heavy. Core masters (Organization, PDF) are referenced from other modules where operational workflows are documented. Master data integration docs are kept in Project/Quotation modules (their usage perspective).
+
 > **Note:** "Total Files Frozen" counts module-curated artifacts only (feature docs, change docs, stubs). Git "Files Changed" includes scaffolding/README/index updates, folder structure, and other repository infrastructure files.
 
 > **Note:** Master baseline is intentionally stub-heavy. Core masters (Organization, PDF) are referenced from other modules where operational workflows are documented.
