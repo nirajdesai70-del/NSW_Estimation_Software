@@ -64,7 +64,7 @@ This checklist ensures no governance fields or business rules are missed, preven
 | 7.6 ID strategy | ✅ | Naming conventions | **VERIFIED:** Documented (bigserial for MVP, UUID reserved) | ✅ VERIFIED |
 | 7.7 Tenant isolation convention | ✅ | Naming conventions | **VERIFIED:** Documented (tenant_id everywhere) | ✅ VERIFIED |
 | **8. Design Decisions** | ⚠️ **LOCK NEEDED** | Schema Design | Lock 3 critical decisions | ⏳ PENDING |
-| 8.1 Multi-SKU linkage | ⚠️ | Schema DDL | **LOCK:** parent_line_id + metadata_json (both) | ⏳ |
+| 8.1 Multi-SKU linkage | ✅ | Schema DDL | **LOCKED:** D-007 APPROVED - parent_line_id + metadata_json (both) | ✅ VERIFIED |
 | 8.2 Customer normalization | ⚠️ | Schema DDL | **LOCK:** customer_name (text) + customer_id (optional FK) | ⏳ |
 | 8.3 Resolution level constraints | ⚠️ | Schema DDL + Data Dictionary | **LOCK:** L0/L1/L2 allowed everywhere with explicit rules | ⏳ |
 
@@ -92,7 +92,7 @@ This checklist ensures no governance fields or business rules are missed, preven
 - [ ] Document all naming standards
 
 ### Step 4: Design Decision Lock
-- [ ] Lock Multi-SKU linkage strategy (parent_line_id + metadata_json)
+- [x] Lock Multi-SKU linkage strategy (parent_line_id + metadata_json) - **D-007 APPROVED**
 - [ ] Lock Customer normalization approach (customer_name + optional customer_id)
 - [ ] Lock Resolution level constraints (L0/L1/L2 at all levels with rules)
 
@@ -114,7 +114,7 @@ This checklist ensures no governance fields or business rules are missed, preven
 5. ✅ AI scope explicitly declared (schema reservation vs implementation)
 6. ✅ Module ownership matrix complete (all tables mapped)
 7. ✅ Naming conventions documented (all standards written)
-8. ✅ Three design decisions locked (Multi-SKU, Customer, Resolution levels)
+8. ⚠️ Three design decisions locked (Multi-SKU: D-007 ✅, Customer: ⏳, Resolution levels: ⏳)
 
 ---
 
@@ -129,7 +129,9 @@ This checklist ensures no governance fields or business rules are missed, preven
 5. [ ] **Declare IsLocked scope** (which tables have is_locked, or explicit exclusion)
 6. [ ] **Document CostHead resolution order** (item → product → system default)
 7. [ ] **Declare AI scope** (Phase-5 schema reservation, Post-Phase-5 implementation)
-8. [ ] **Lock 3 design decisions** (Multi-SKU, Customer, Resolution levels)
+8. [x] **Lock Multi-SKU design decision** (D-007 APPROVED - parent_line_id + metadata_json)
+8b. [ ] **Lock Customer normalization design decision** (customer_name + optional customer_id)
+8c. [ ] **Lock Resolution level constraints design decision** (L0/L1/L2 with explicit rules)
 9. [ ] **Update compliance matrix** with final verification status
 10. [ ] **Get stakeholder approval** for freeze gate criteria
 

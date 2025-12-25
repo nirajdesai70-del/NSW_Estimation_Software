@@ -81,8 +81,11 @@ Each decision follows this structure:
 - Option A: Line-item only (selected - MVP scope)
 - Option B: All quotation levels (rejected - too complex for MVP, can be added in future phases)
 **Impact:** QUO module, `quote_bom_items` table, deletion protection logic  
-**Fundamentals Citation:** LOCKING_POLICY.md Section "MVP Scope: Line-Item Level Locking"  
+**Fundamentals Citation:** 
+- LOCKING_POLICY.md Section "MVP Scope: Line-Item Level Locking"
+- MASTER_FUNDAMENTALS_v2.0.md (locking semantics for workflow control)
 **Alignment Status:** ALIGNED  
+**Schema Reference:** `04_SCHEMA_CANON/NSW_SCHEMA_CANON_v1.0.md` Section "quote_bom_items" table (line 700-754), field `is_locked` (line 718)  
 **Schema Impact:** `quote_bom_items.is_locked` (BOOLEAN NOT NULL DEFAULT false) - only table with locking field  
 **Status:** ✅ APPROVED
 
@@ -94,8 +97,11 @@ Each decision follows this structure:
 - Option A: Add `products.cost_head_id` (selected - provides useful defaults)
 - Option B: CostHead only at line-item level (rejected - requires manual assignment for every item)
 **Impact:** CIM module, PRICING module, `products` table, CostHead resolution logic  
-**Fundamentals Citation:** COSTHEAD_RULES.md Section "CostHead Resolution Precedence" (line-item → product → system)  
+**Fundamentals Citation:** 
+- COSTHEAD_RULES.md Section "CostHead Resolution Precedence" (line-item → product → system)
+- MASTER_FUNDAMENTALS_v2.0.md (costing engine requirements)
 **Alignment Status:** ALIGNED  
+**Schema Reference:** `04_SCHEMA_CANON/NSW_SCHEMA_CANON_v1.0.md` Section "products" table (line 355-389), field `cost_head_id` (line 367, FK line 378, index line 389)  
 **Schema Impact:** `products.cost_head_id` (BIGINT NULL, FK to `cost_heads.id`)  
 **Status:** ✅ APPROVED
 
@@ -108,8 +114,11 @@ Each decision follows this structure:
 - Option B: `metadata_json` only (rejected - loses efficient relational query capability)
 - Option C: Both (selected - best of both approaches)
 **Impact:** QUO module, `quote_bom_items` table, multi-SKU explosion logic  
-**Fundamentals Citation:** MASTER_FUNDAMENTALS_v2.0.md (multi-SKU explosion requirements)  
+**Fundamentals Citation:** 
+- MASTER_FUNDAMENTALS_v2.0.md (multi-SKU explosion requirements)
+- FUNDAMENTALS_v2.0_PHASE_5_GAP_ANALYSIS.md (if relevant gap items addressed)
 **Alignment Status:** ALIGNED  
+**Schema Reference:** `04_SCHEMA_CANON/NSW_SCHEMA_CANON_v1.0.md` Section "quote_bom_items" table (line 700-754), fields `parent_line_id` (line 706, FK line 730, index line 749) and `metadata_json` (line 722). See also design notes section (line 999-1014).  
 **Schema Impact:** `quote_bom_items.parent_line_id` (BIGINT NULL, self-referencing FK), `quote_bom_items.metadata_json` (JSONB)  
 **Status:** ✅ APPROVED
 
