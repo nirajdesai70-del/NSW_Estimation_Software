@@ -163,7 +163,7 @@ This document establishes the operating mode for Phase 5 and defines when transi
 
 ---
 
-## Weekly Cadence (Exploration Mode
+## Weekly Cadence (Exploration Mode)
 
 ### Monday: Change Summary
 - List all changes from previous week

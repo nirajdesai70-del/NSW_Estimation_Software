@@ -66,6 +66,18 @@ To prevent confusion:
 - Create ER diagram and table inventory
 - Output: `NSW_SCHEMA_CANON_v1.0.md` + ERD
 
+## Current Operating Mode
+
+**Mode:** 🔓 OPEN_GATE_EXPLORATION (as of 2025-01-27)
+
+Phase 5 currently operates in Exploration Mode with controlled decision capture. See `PHASE_5_MODE_POLICY.md` for details.
+
+**Key Operating Rules:**
+- Schema and rule changes require Decision Register entry FIRST
+- All changes must be logged (Decision Register or Feature Discovery Log)
+- Prerequisites are reference inputs, not blockers
+- See `EXPLORATION_MODE_SETUP_SUMMARY.md` for complete setup details
+
 ## Critical Rules
 
 1. **Three-Truth Model:**
