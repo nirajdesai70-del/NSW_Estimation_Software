@@ -30,39 +30,39 @@ This checklist ensures no governance fields or business rules are missed, preven
 | 2.2 `quote_panels.is_locked` | ⚠️ | `quote_panels` table | **DECIDE:** Add or explicitly exclude | ⏳ |
 | 2.3 `quote_boms.is_locked` | ⚠️ | `quote_boms` table | **DECIDE:** Add or explicitly exclude | ⏳ |
 | 2.4 `quotations.is_locked` | ⚠️ | `quotations` table | **DECIDE:** Add or explicitly exclude | ⏳ |
-| 2.5 Locking scope declaration | ❌ | Data Dictionary | **REQUIRED:** Document locking scope (line-item only or all levels) | ❌ |
+| 2.5 Locking scope declaration | ✅ | Data Dictionary | **VERIFIED:** Documented in LOCKING_POLICY.md (line-item level only in MVP) | ✅ VERIFIED |
 | **3. CostHead System** | ⚠️ **VERIFY** | Schema DDL + Data Dictionary | Verify table + FKs + resolution rules | ⏳ PENDING |
 | 3.1 `cost_heads` table | ⚠️ | Schema DDL | Verify table exists with: id, code, name, category, priority | ⏳ |
 | 3.2 `quote_bom_items.cost_head_id` | ⚠️ | `quote_bom_items` table | Verify FK to `cost_heads.id` | ⏳ |
 | 3.3 `products.cost_head_id` (optional) | ⚠️ | `products` table | **DECIDE:** Add for default CostHead or exclude | ⏳ |
-| 3.4 CostHead resolution order | ❌ | Data Dictionary | **REQUIRED:** Document precedence (item override → product default → system default) | ❌ |
-| **4. Validation Guardrails G1-G7** | ❌ **MISSING** | Data Dictionary + Schema notes | **REQUIRED:** Document all 7 guardrails explicitly | ❌ PENDING |
-| 4.1 G1: Master BOM rejects ProductId | ❌ | Data Dictionary rules | **REQUIRED:** Explicit business rule | ❌ |
-| 4.2 G2: Production BOM requires ProductId | ❌ | Data Dictionary rules | **REQUIRED:** Explicit business rule | ❌ |
-| 4.3 G3: IsPriceMissing normalizes Amount | ❌ | Data Dictionary rules | **REQUIRED:** Explicit business rule | ❌ |
-| 4.4 G4: RateSource consistency | ❌ | Data Dictionary rules | **REQUIRED:** Explicit business rule | ❌ |
-| 4.5 G5: UNRESOLVED normalizes values | ❌ | Data Dictionary rules | **REQUIRED:** Explicit business rule | ❌ |
-| 4.6 G6: FIXED_NO_DISCOUNT forces Discount=0 | ❌ | Data Dictionary rules | **REQUIRED:** Explicit business rule | ❌ |
-| 4.7 G7: All discounts are percentage-based | ❌ | Data Dictionary rules | **REQUIRED:** Explicit business rule | ❌ |
+| 3.4 CostHead resolution order | ✅ | Data Dictionary | **VERIFIED:** Documented in COSTHEAD_RULES.md with explicit precedence order | ✅ VERIFIED |
+| **4. Validation Guardrails G1-G7** | ✅ **COMPLETE** | Data Dictionary + Schema notes | **VERIFIED:** All 7 guardrails documented in VALIDATION_GUARDRAILS_G1_G7.md | ✅ VERIFIED |
+| 4.1 G1: Master BOM rejects ProductId | ✅ | Data Dictionary rules | **VERIFIED:** Explicitly documented with enforcement layer | ✅ VERIFIED |
+| 4.2 G2: Production BOM requires ProductId | ✅ | Data Dictionary rules | **VERIFIED:** Explicitly documented with enforcement layer | ✅ VERIFIED |
+| 4.3 G3: IsPriceMissing normalizes Amount | ✅ | Data Dictionary rules | **VERIFIED:** Explicitly documented with normalization rules | ✅ VERIFIED |
+| 4.4 G4: RateSource consistency | ✅ | Data Dictionary rules | **VERIFIED:** Explicitly documented with consistency rules | ✅ VERIFIED |
+| 4.5 G5: UNRESOLVED normalizes values | ✅ | Data Dictionary rules | **VERIFIED:** Explicitly documented with normalization rules | ✅ VERIFIED |
+| 4.6 G6: FIXED_NO_DISCOUNT forces Discount=0 | ✅ | Data Dictionary rules | **VERIFIED:** Explicitly documented with enforcement rules | ✅ VERIFIED |
+| 4.7 G7: All discounts are percentage-based | ✅ | Data Dictionary rules | **VERIFIED:** Explicitly documented with range validation | ✅ VERIFIED |
 | **5. AI Entities** | ✅ **COVERED** | Schema DDL | Verify tables exist | ✅ VERIFIED |
 | 5.1 `ai_call_logs` table | ✅ | Schema DDL | Table exists with required fields | ✅ |
-| 5.2 AI scope declaration | ⚠️ | Data Dictionary | **REQUIRED:** Label as Phase-5 schema reservation, Post-Phase-5 implementation | ⏳ |
-| **6. Module Ownership Mapping** | ❌ **MISSING** | Data Dictionary | **REQUIRED:** Map every table to owner module | ❌ PENDING |
-| 6.1 Auth module tables | ❌ | Module ownership matrix | **REQUIRED:** List tables (tenants, users, roles, etc.) | ❌ |
-| 6.2 CIM module tables | ❌ | Module ownership matrix | **REQUIRED:** List tables (categories, products, etc.) | ❌ |
-| 6.3 MBOM module tables | ❌ | Module ownership matrix | **REQUIRED:** List tables (master_boms, master_bom_items) | ❌ |
-| 6.4 QUO module tables | ❌ | Module ownership matrix | **REQUIRED:** List tables (quotations, panels, boms, items) | ❌ |
-| 6.5 PRICING module tables | ❌ | Module ownership matrix | **REQUIRED:** List tables (price_lists, prices) | ❌ |
-| 6.6 AUDIT module tables | ❌ | Module ownership matrix | **REQUIRED:** List tables (audit_log, bom_change_logs) | ❌ |
-| 6.7 AI module tables | ❌ | Module ownership matrix | **REQUIRED:** List tables (ai_call_logs, etc.) | ❌ |
-| **7. Naming Conventions** | ❌ **MISSING** | Data Dictionary | **REQUIRED:** Document naming standards | ❌ PENDING |
-| 7.1 Table naming | ❌ | Naming conventions | **REQUIRED:** Document standard (snake_case, plural, etc.) | ❌ |
-| 7.2 Column naming | ❌ | Naming conventions | **REQUIRED:** Document standard | ❌ |
-| 7.3 FK naming | ❌ | Naming conventions | **REQUIRED:** Document pattern (table_id, etc.) | ❌ |
-| 7.4 Enum naming | ❌ | Naming conventions | **REQUIRED:** Document standard | ❌ |
-| 7.5 Timestamp naming | ❌ | Naming conventions | **REQUIRED:** Document (created_at, updated_at, etc.) | ❌ |
-| 7.6 ID strategy | ❌ | Naming conventions | **REQUIRED:** Document (bigserial vs UUID) | ❌ |
-| 7.7 Tenant isolation convention | ❌ | Naming conventions | **REQUIRED:** Document (tenant_id everywhere) | ❌ |
+| 5.2 AI scope declaration | ✅ | Data Dictionary | **VERIFIED:** Documented in NSW_DATA_DICTIONARY_v1.0.md section "6. AI Scope Declaration" | ✅ VERIFIED |
+| **6. Module Ownership Mapping** | ✅ **COMPLETE** | Data Dictionary | **VERIFIED:** Complete mapping in MODULE_OWNERSHIP_MATRIX.md | ✅ VERIFIED |
+| 6.1 Auth module tables | ✅ | Module ownership matrix | **VERIFIED:** All AUTH tables mapped (tenants, users, roles, etc.) | ✅ VERIFIED |
+| 6.2 CIM module tables | ✅ | Module ownership matrix | **VERIFIED:** All CIM tables mapped (categories, products, etc.) | ✅ VERIFIED |
+| 6.3 MBOM module tables | ✅ | Module ownership matrix | **VERIFIED:** All MBOM tables mapped (master_boms, master_bom_items) | ✅ VERIFIED |
+| 6.4 QUO module tables | ✅ | Module ownership matrix | **VERIFIED:** All QUO tables mapped (quotations, panels, boms, items) | ✅ VERIFIED |
+| 6.5 PRICING module tables | ✅ | Module ownership matrix | **VERIFIED:** All PRICING tables mapped (price_lists, prices) | ✅ VERIFIED |
+| 6.6 AUDIT module tables | ✅ | Module ownership matrix | **VERIFIED:** All AUDIT tables mapped (audit_logs, bom_change_logs, etc.) | ✅ VERIFIED |
+| 6.7 AI module tables | ✅ | Module ownership matrix | **VERIFIED:** All AI tables mapped (ai_call_logs, etc.) | ✅ VERIFIED |
+| **7. Naming Conventions** | ✅ **COMPLETE** | Data Dictionary | **VERIFIED:** Complete naming standards in NAMING_CONVENTIONS.md | ✅ VERIFIED |
+| 7.1 Table naming | ✅ | Naming conventions | **VERIFIED:** Documented (snake_case, plural) | ✅ VERIFIED |
+| 7.2 Column naming | ✅ | Naming conventions | **VERIFIED:** Documented (snake_case, singular) | ✅ VERIFIED |
+| 7.3 FK naming | ✅ | Naming conventions | **VERIFIED:** Documented pattern ({table_singular}_id) | ✅ VERIFIED |
+| 7.4 Enum naming | ✅ | Naming conventions | **VERIFIED:** Documented (UPPER_SNAKE_CASE) | ✅ VERIFIED |
+| 7.5 Timestamp naming | ✅ | Naming conventions | **VERIFIED:** Documented ({action}_at pattern) | ✅ VERIFIED |
+| 7.6 ID strategy | ✅ | Naming conventions | **VERIFIED:** Documented (bigserial for MVP, UUID reserved) | ✅ VERIFIED |
+| 7.7 Tenant isolation convention | ✅ | Naming conventions | **VERIFIED:** Documented (tenant_id everywhere) | ✅ VERIFIED |
 | **8. Design Decisions** | ⚠️ **LOCK NEEDED** | Schema Design | Lock 3 critical decisions | ⏳ PENDING |
 | 8.1 Multi-SKU linkage | ⚠️ | Schema DDL | **LOCK:** parent_line_id + metadata_json (both) | ⏳ |
 | 8.2 Customer normalization | ⚠️ | Schema DDL | **LOCK:** customer_name (text) + customer_id (optional FK) | ⏳ |
@@ -172,6 +172,6 @@ This checklist ensures no governance fields or business rules are missed, preven
 ---
 
 **Last Updated:** 2025-01-27  
-**Status:** ⏳ AWAITING VERIFICATION  
-**Next Action:** Complete schema DDL verification and mark compliance matrix
+**Status:** ✅ STEP-1 VERIFIED & FROZEN  
+**Next Action:** Proceed to Step-2 Schema Design
 

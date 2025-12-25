@@ -10,6 +10,8 @@ This document provides complete mapping of all four key folders (Features, NSW F
 
 ## Source of Truth
 - **Canonical:** This is the authoritative mapping guide for Phase 4 & 5 alignment
+- **Fundamentals baseline:** See `FUNDAMENTALS_SOURCE_OF_TRUTH.md`
+- **Fundamentals Alignment Plan register:** `01_REFERENCE/NSW_FUNDAMENTALS_ALIGNMENT_PLAN_REGISTER.md`
 
 ---
 
@@ -148,6 +150,7 @@ NSW Fundamental Alignment Plan/
 1. **Master Fundamentals** ⭐
    - **File:** `01_FUNDAMENTALS/MASTER_FUNDAMENTALS_v2.0.md`
    - **Governance:** See `docs/PHASE_5/00_GOVERNANCE/FUNDAMENTALS_SOURCE_OF_TRUTH.md` for authoritative source of truth
+   - **Register:** See `docs/PHASE_5/01_REFERENCE/NSW_FUNDAMENTALS_ALIGNMENT_PLAN_REGISTER.md` for complete folder registration
    - **Why:** Defines core design principles that Phase 5 must align with
    - **Use:** Ensures Data Dictionary follows master design principles
 

@@ -1,6 +1,6 @@
 # NSW Fundamentals Alignment Plan Register
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Date:** 2025-12-25  
 **Status:** CANONICAL  
 **Owner:** Phase 5 Senate  
@@ -15,6 +15,21 @@ This document registers the complete `NSW Fundamental Alignment Plan/` folder an
 4. Formally registered inside Phase-5 senate governance
 
 This register makes the folder's inclusion in Phase-5 governance audit-proof and irreversible.
+
+---
+
+## Update Control Rule (Fundamentals Alignment Plan)
+
+**⚠️ GOVERNANCE ENFORCEMENT:** Any future edits inside `NSW Fundamental Alignment Plan/` must comply with the following requirements:
+
+1. **Version Increment:** The version number in the edited file(s) must be incremented
+2. **Git Commit:** All changes must be committed to git (no uncommitted changes are valid for Phase-5)
+3. **Register Update:** A register update entry must be appended to the Change Log section of this register
+4. **Delta Documentation (if semantic):** If changes affect semantics that impact Phase-5 design, a Phase-5 delta note must be created in `docs/PHASE_5/05_TRACEABILITY/FUNDAMENTALS_TO_PHASE5_DELTA_NOTES.md`
+
+**Explicit Rule:** Uncommitted changes to the Fundamentals Alignment Plan folder are invalid for Phase-5 governance and will not be recognized.
+
+This control rule prevents silent drift and ensures all changes are traceable and auditable.
 
 ---
 
@@ -33,6 +48,16 @@ This register makes the folder's inclusion in Phase-5 governance audit-proof and
 **Files Committed:** 228 files, 69,475 insertions
 
 This commit establishes the complete folder as the Phase-4/5 alignment baseline.
+
+---
+
+## Versioning & Commit Anchors
+
+**Baseline Folder Commit:** `66a3d87` (2025-12-25 19:35:25 +0530)  
+**Register Binding Commit:** `5192eaa` (2025-12-25 19:39:05 +0530)  
+**Fundamentals v2.0 Canonical Path:** `NSW Fundamental Alignment Plan/01_FUNDAMENTALS/MASTER_FUNDAMENTALS_v2.0.md`
+
+These commit anchors provide immutable references for audit and traceability purposes.
 
 ---
 
@@ -354,6 +379,7 @@ These gap analysis actions are reflected in:
 
 ## Change Log
 
+- **v1.1 (2025-12-25):** Added Update Control Rule + commit anchors; governance reinforcement
 - **v1.0 (2025-12-25):** Initial register created after folder integrity audit and git commit `66a3d87`
 
 ---

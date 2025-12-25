@@ -1,0 +1,14 @@
+<mxfile host="app.diagrams.net" modified="2025-01-27T00:00:00.000Z" agent="5.0" version="21.0.0" etag="placeholder" type="device">
+  <diagram name="NSW Schema Canon ER Diagram" id="nsw-er-diagram">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="placeholder" value="ER Diagram Placeholder&#xa;&#xa;This is a placeholder for the NSW Schema Canon ER Diagram.&#xa;&#xa;To generate the actual diagram:&#xa;1. Use the schema definitions in NSW_SCHEMA_CANON_v1.0.md&#xa;2. Create ER diagram showing all tables and relationships&#xa;3. Include all foreign key relationships&#xa;4. Group by module (AUTH, CIM, PRICING, MBOM, QUO, SHARED, AUDIT, AI)&#xa;&#xa;Key relationships to show:&#xa;- tenants (root) to all tenant-scoped tables&#xa;- products to quote_bom_items&#xa;- master_boms to quote_boms (reference only)&#xa;- quote_bom_items hierarchy (parent_line_id)&#xa;- cost_heads to products and quote_bom_items" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="200" y="300" width="800" height="200" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+

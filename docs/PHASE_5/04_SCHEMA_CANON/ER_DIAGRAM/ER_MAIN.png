@@ -1,0 +1,16 @@
+PLACEHOLDER: PNG ER Diagram
+
+This is a placeholder file for the NSW Schema Canon ER Diagram (PNG format).
+
+To generate the actual PNG diagram:
+1. Use a diagramming tool (draw.io, Lucidchart, etc.)
+2. Create ER diagram based on NSW_SCHEMA_CANON_v1.0.md
+3. Export as PNG format
+4. Replace this placeholder file
+
+The ER diagram should include:
+- All tables defined in the schema canon
+- All foreign key relationships
+- Module groupings (AUTH, CIM, PRICING, MBOM, QUO, SHARED, AUDIT, AI)
+- Key relationships highlighted
+
