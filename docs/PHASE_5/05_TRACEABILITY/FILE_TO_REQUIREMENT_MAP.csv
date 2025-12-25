@@ -1,7 +1,7 @@
 file_path,file_type,owner_module,requirements_covered,freeze_status,notes
 00_GOVERNANCE/PHASE_5_CHARTER.md,canon,ALL,R-020,CANONICAL,Phase 5 charter
 00_GOVERNANCE/PHASE_5_SCOPE_FENCE.md,canon,ALL,R-020,FROZEN,Scope definition (frozen)
-00_GOVERNANCE/PHASE_5_PENDING_UPGRADES_INTEGRATION.md,reference,ALL,R-001-R-008,DRAFT,Integration guide
+02_FREEZE_GATE/PHASE_5_PENDING_UPGRADES_INTEGRATION.md,reference,ALL,R-001-R-008,DRAFT,Integration guide
 00_GOVERNANCE/PHASE_5_MODE_POLICY.md,canon,ALL,R-020,CANONICAL,Exploration Mode policy (D-008)
 00_GOVERNANCE/FEATURE_DISCOVERY_LOG.md,canon,ALL,R-020,CANONICAL,Feature discovery tracking
 00_GOVERNANCE/DECISION_CAPTURE_RULES.md,canon,ALL,R-020,CANONICAL,Decision capture standards
@@ -9,6 +9,8 @@ file_path,file_type,owner_module,requirements_covered,freeze_status,notes
 00_GOVERNANCE/STABILIZATION_CHECKPOINT_LOG.md,canon,ALL,R-020,CANONICAL,Weekly checkpoint tracking
 00_GOVERNANCE/PENDING_INPUTS_REGISTER.md,canon,ALL,R-020,CANONICAL,Pending inputs tracking
 00_GOVERNANCE/EXPLORATION_MODE_SETUP_SUMMARY.md,canon,ALL,R-020,CANONICAL,Setup summary
+00_GOVERNANCE/PHASE_5_DECISIONS_REGISTER.md,canon,ALL,R-020,CANONICAL,Decision log (canonical)
+00_GOVERNANCE/FUNDAMENTALS_SOURCE_OF_TRUTH.md,canon,ALL,R-020,CANONICAL,Pins MASTER_FUNDAMENTALS_v2.0 as SoT
 02_FREEZE_GATE/SPEC_5_FREEZE_GATE_CHECKLIST.md,evidence,ALL,R-009-R-015,ACTIVE,Freeze verification (active)
 03_DATA_DICTIONARY/NSW_DATA_DICTIONARY_v1.0.md,canon,ALL,R-001-R-020,FROZEN,Step 1 output (frozen)
 03_DATA_DICTIONARY/VALIDATION_GUARDRAILS_G1_G7.md,canon,ALL,R-003,R-012,FROZEN,Guardrails documentation (frozen)
@@ -18,9 +20,13 @@ file_path,file_type,owner_module,requirements_covered,freeze_status,notes
 03_DATA_DICTIONARY/NAMING_CONVENTIONS.md,canon,ALL,R-015,FROZEN,Naming standards (frozen)
 04_SCHEMA_CANON/NSW_SCHEMA_CANON_v1.0.md,canon,ALL,R-001-R-020,DRAFT,Step 2 output (draft until freeze)
 04_SCHEMA_CANON/TABLE_INVENTORY.csv,canon,ALL,R-001-R-020,DRAFT,Table list
+04_SCHEMA_CANON/SEED_DESIGN_VALIDATION.sql,canon,ALL,R-001-R-020,DRAFT,Seed validation (draft until freeze)
+04_SCHEMA_CANON/ER_DIAGRAM/ER_MAIN.drawio,canon,ALL,R-001-R-020,DRAFT,ER diagram source (draft)
+04_SCHEMA_CANON/ER_DIAGRAM/ER_MAIN.png,canon,ALL,R-001-R-020,DRAFT,ER diagram export placeholder
+04_SCHEMA_CANON/ER_DIAGRAM/ER_MAIN.pdf,canon,ALL,R-001-R-020,DRAFT,ER diagram export placeholder
 05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md,canon,ALL,R-001-R-020,DRAFT,This file
 05_TRACEABILITY/FILE_TO_REQUIREMENT_MAP.csv,canon,ALL,R-001-R-020,DRAFT,This file
 05_TRACEABILITY/LEGACY_TO_CANONICAL_MAP.md,reference,ALL,N/A,DRAFT,Legacy mapping
+01_REFERENCE/NSW_FUNDAMENTALS_ALIGNMENT_PLAN_REGISTER.md,reference,ALL,R-020,CANONICAL,Registers whole Fundamentals folder + commit baseline
 01_REFERENCE/LEGACY_REVIEW/LEGACY_SYSTEM_OVERVIEW.md,reference,ALL,N/A,DRAFT,Legacy analysis
-01_REFERENCE/TFNSW_CONTEXT/ESTIMATION_METHOD_NOTES.md,reference,ALL,R-020,DRAFT,TfNSW context
 
