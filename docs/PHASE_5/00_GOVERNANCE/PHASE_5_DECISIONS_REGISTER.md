@@ -58,6 +58,19 @@ Each decision follows this structure:
 **Impact:** Phase 5 scope remains analysis-only, implementation is post-Phase 5  
 **Status:** ✅ APPROVED
 
+### D-008: Exploration Mode Policy
+**Date:** 2025-01-27  
+**Decision:** Phase 5 operates in OPEN_GATE_EXPLORATION mode with controlled decision capture. Gates remain open to allow learning and discovery, but all changes must be logged in Decision Register or Feature Discovery Log.  
+**Rationale:** For greenfield rebuild, early freezes would lock sub-optimal decisions and force rework. Exploration mode allows intentional discovery while maintaining auditability through decision capture.  
+**Alternatives Considered:** 
+- Option A: Close gates immediately (rejected - too early, locks assumptions before reality understood)
+- Option B: No governance (rejected - loses traceability and auditability)
+- Option C: Open gates with controlled capture (selected - balances flexibility with governance)
+**Impact:** All Phase 5 governance, operating mode, decision capture process  
+**Fundamentals Citation:** N/A (governance decision)  
+**Alignment Status:** N/A  
+**Status:** ✅ APPROVED
+
 ---
 
 ## Pending Decisions
