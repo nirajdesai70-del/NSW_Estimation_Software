@@ -147,6 +147,7 @@ NSW Fundamental Alignment Plan/
 
 1. **Master Fundamentals** ⭐
    - **File:** `01_FUNDAMENTALS/MASTER_FUNDAMENTALS_v2.0.md`
+   - **Governance:** See `docs/PHASE_5/00_GOVERNANCE/FUNDAMENTALS_SOURCE_OF_TRUTH.md` for authoritative source of truth
    - **Why:** Defines core design principles that Phase 5 must align with
    - **Use:** Ensures Data Dictionary follows master design principles
 
