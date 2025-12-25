@@ -27,11 +27,12 @@ This document establishes the operating mode for Phase 5 and defines when transi
 - **Prerequisites:** Reference inputs, not blockers
 - **Decision Capture:** REQUIRED (all changes must be logged)
 - **Freeze:** NOT ALLOWED (premature freezes are blocked)
-- **Schema Changes:** ALLOWED (with decision capture)
-- **Rule Changes:** ALLOWED (with decision capture)
+- **Schema Changes:** ALLOWED (REQUIRES Decision Register entry FIRST)
+- **Rule Changes:** ALLOWED (REQUIRES Decision Register entry FIRST)
 - **New Features:** ALLOWED (with feature discovery log entry)
 
 **Governance Controls:**
+- **Schema/Rule Changes:** MUST create Decision Register entry BEFORE making the change
 - All changes must be logged in Decision Register or Feature Discovery Log
 - All schema changes must reference Fundamentals baseline
 - All divergences from legacy must be documented with rationale
@@ -121,9 +122,11 @@ This document establishes the operating mode for Phase 5 and defines when transi
 
 ### Decision Capture Required
 
+**CRITICAL RULE:** Schema and rule changes MUST create Decision Register entry BEFORE making the change.
+
 **What qualifies as a decision:**
-- Any change to canonical schema (tables, fields, relationships)
-- Any change to business rules or validation guardrails
+- Any change to canonical schema (tables, fields, relationships) → **REQUIRES Decision Register entry FIRST**
+- Any change to business rules or validation guardrails → **REQUIRES Decision Register entry FIRST**
 - Any divergence from Fundamentals baseline
 - Any rejection of legacy pattern
 - Any new feature or capability addition
