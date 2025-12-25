@@ -12,6 +12,7 @@ This document establishes Phase 5 as the canonical definition phase for NSW Esti
 - **Canonical:** This is the authoritative Phase 5 charter
 - **Master Plan Reference:** Aligned with NSW Estimation Software Master Execution Plan
 - **Fundamentals baseline:** see `FUNDAMENTALS_SOURCE_OF_TRUTH.md`
+- **Fundamentals Alignment Plan register:** `01_REFERENCE/NSW_FUNDAMENTALS_ALIGNMENT_PLAN_REGISTER.md`
 
 ## Phase 5 Position in Master Plan
 
