@@ -73,35 +73,49 @@ Each decision follows this structure:
 
 ---
 
-## Pending Decisions
-
 ### D-005: IsLocked Scope
-**Date:** TBD  
-**Decision:** TBD - Which tables should have `is_locked` field?  
-**Options:**
-- Option A: Line-item only (`quote_bom_items`)
-- Option B: All quotation levels (`quotations`, `quote_panels`, `quote_boms`, `quote_bom_items`)
-**Status:** ⏳ PENDING
+**Date:** 2025-01-27  
+**Decision:** Locking applies at line-item level only (`quote_bom_items.is_locked`) for MVP. No locking at quotation, panel, or BOM levels in MVP.  
+**Rationale:** Simplest implementation, sufficient for MVP deletion protection, can be extended later if needed. Aligns with MVP scope to keep initial implementation focused.  
+**Alternatives Considered:** 
+- Option A: Line-item only (selected - MVP scope)
+- Option B: All quotation levels (rejected - too complex for MVP, can be added in future phases)
+**Impact:** QUO module, `quote_bom_items` table, deletion protection logic  
+**Fundamentals Citation:** LOCKING_POLICY.md Section "MVP Scope: Line-Item Level Locking"  
+**Alignment Status:** ALIGNED  
+**Schema Impact:** `quote_bom_items.is_locked` (BOOLEAN NOT NULL DEFAULT false) - only table with locking field  
+**Status:** ✅ APPROVED
 
 ### D-006: CostHead Product Default
-**Date:** TBD  
-**Decision:** TBD - Should `products` table have `cost_head_id` for defaults?  
-**Options:**
-- Option A: Add `products.cost_head_id`
-- Option B: CostHead only at line-item level
-**Status:** ⏳ PENDING
+**Date:** 2025-01-27  
+**Decision:** `products` table includes `cost_head_id` (nullable FK) to provide default CostHead for products. CostHead resolution uses precedence: line-item override → product default → system default.  
+**Rationale:** Enables product-level CostHead defaults, reducing manual assignment at line-item level. Nullable field allows products without defaults to fall back to system default. Supports efficient CostHead resolution in costing engine.  
+**Alternatives Considered:** 
+- Option A: Add `products.cost_head_id` (selected - provides useful defaults)
+- Option B: CostHead only at line-item level (rejected - requires manual assignment for every item)
+**Impact:** CIM module, PRICING module, `products` table, CostHead resolution logic  
+**Fundamentals Citation:** COSTHEAD_RULES.md Section "CostHead Resolution Precedence" (line-item → product → system)  
+**Alignment Status:** ALIGNED  
+**Schema Impact:** `products.cost_head_id` (BIGINT NULL, FK to `cost_heads.id`)  
+**Status:** ✅ APPROVED
 
 ### D-007: Multi-SKU Linkage Strategy
-**Date:** TBD  
-**Decision:** TBD - How to link multi-SKU explosion items?  
-**Options:**
-- Option A: `parent_line_id` only
-- Option B: `metadata_json` only
-- Option C: Both (recommended)
-**Status:** ⏳ PENDING
+**Date:** 2025-01-27  
+**Decision:** Use both `parent_line_id` and `metadata_json` for multi-SKU explosion items. `parent_line_id` provides relational query capability, `metadata_json` provides flexible metadata storage.  
+**Rationale:** Provides both structured query capability (via FK relationship) and flexible metadata storage for complex explosion scenarios. Supports efficient relational queries while allowing extensible metadata without schema changes.  
+**Alternatives Considered:** 
+- Option A: `parent_line_id` only (rejected - loses flexible metadata capability)
+- Option B: `metadata_json` only (rejected - loses efficient relational query capability)
+- Option C: Both (selected - best of both approaches)
+**Impact:** QUO module, `quote_bom_items` table, multi-SKU explosion logic  
+**Fundamentals Citation:** MASTER_FUNDAMENTALS_v2.0.md (multi-SKU explosion requirements)  
+**Alignment Status:** ALIGNED  
+**Schema Impact:** `quote_bom_items.parent_line_id` (BIGINT NULL, self-referencing FK), `quote_bom_items.metadata_json` (JSONB)  
+**Status:** ✅ APPROVED
 
 ---
 
 ## Change Log
-- v1.0: Created decisions register with initial decisions
+- **v1.0 (2025-01-27):** Created decisions register with initial decisions
+- **v1.1 (2025-01-27):** Approved D-005, D-006, D-007 to match schema canon implementation
 
