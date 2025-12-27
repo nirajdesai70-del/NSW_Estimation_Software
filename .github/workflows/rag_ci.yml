@@ -1,0 +1,120 @@
+name: RAG CI (KB Refresh + Index + Tests)
+
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Run full (FAISS + sentence-transformers) pipeline"
+        type: choice
+        options: ["false", "true"]
+        required: false
+        default: "false"
+
+jobs:
+  rag-lite:
+    name: RAG Lite (fast gate)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install test deps
+        run: |
+          python -m pip install -U pip setuptools wheel
+          pip install -r tests/requirements.txt
+
+      - name: KB refresh
+        run: |
+          python tools/kb_refresh/run_kb_refresh.py
+
+      - name: H2 Gate A (relaxed) — KB refresh outputs must exist
+        run: |
+          test -f RAG_KB/phase5_pack/00_INDEX.json
+          test -f RAG_KB/build_reports/DELTA_SINCE_LAST.md
+          test -f RAG_KB/build_reports/RISKS_AND_GAPS.md
+          echo "KB refresh outputs present ✅"
+
+      - name: H3 Gate — Governance integrity
+        run: |
+          python scripts/ci_h3_governance_gate.py
+
+      # Lite mode: run tests that don't require faiss/sentence-transformers
+      - name: Run tests (lite)
+        run: |
+          pytest -q -m "not full"
+
+  rag-full:
+    name: RAG Full (FAISS + embeddings + rebuild + golden)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: rag-lite
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.full == 'true')
+
+    env:
+      HF_HOME: ${{ github.workspace }}/.cache/huggingface
+      TRANSFORMERS_CACHE: ${{ github.workspace }}/.cache/huggingface
+      SENTENCE_TRANSFORMERS_HOME: ${{ github.workspace }}/.cache/sentence_transformers
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Cache HF models
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/huggingface
+            .cache/sentence_transformers
+          key: hf-cache-${{ runner.os }}-${{ hashFiles('services/kb_indexer/requirements.txt', 'services/kb_query/requirements.txt') }}
+
+      - name: Install deps (indexer + query + tests)
+        run: |
+          python -m pip install -U pip setuptools wheel
+          pip install -r services/kb_indexer/requirements.txt
+          pip install -r services/kb_query/requirements.txt
+          pip install -r tests/requirements.txt
+
+      - name: KB refresh
+        run: |
+          python tools/kb_refresh/run_kb_refresh.py
+
+      - name: Rebuild indexes (hard rebuild)
+        run: |
+          python services/kb_indexer/indexer.py --rebuild --verbose
+
+      - name: H2 Gate — Index counts must match
+        run: |
+          python - << 'PY'
+          import json
+          from pathlib import Path
+          p = Path("RAG_INDEX/index_metadata.json")
+          meta = json.loads(p.read_text())
+          kw = meta["indexing_config"]["keyword_doc_count"]
+          vec = meta["indexing_config"]["vector_doc_count"]
+          assert kw == vec, f"H2 GATE FAIL: keyword={kw} vector={vec}"
+          print(f"H2 GATE PASS: keyword == vector == {kw}")
+          PY
+
+      - name: Run full tests (includes consistency + golden)
+        run: |
+          pytest -q
+
