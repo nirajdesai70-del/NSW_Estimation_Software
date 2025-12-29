@@ -1,6 +1,6 @@
 # NSW Schema Canon v1.0
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Date:** 2025-01-27  
 **Status:** DRAFT  
 **Owner:** Phase 5 Senate  
@@ -18,6 +18,11 @@
 - Database-level business rules
 
 **All database implementation must align with this schema. Changes require Phase 5 Senate approval.**
+
+**Related Documents:**
+- **Decision Register:** `docs/PHASE_5/00_GOVERNANCE/PHASE_5_DECISIONS_REGISTER.md` (contains D-005, D-006, D-007, D-009)
+- **Freeze Gate Checklist:** `docs/PHASE_5/02_FREEZE_GATE/SPEC_5_FREEZE_GATE_CHECKLIST.md` (verification evidence)
+- **Data Dictionary:** `docs/PHASE_5/03_DATA_DICTIONARY/NSW_DATA_DICTIONARY_v1.0.md` (business semantics)
 
 ---
 
@@ -416,6 +421,141 @@ CREATE INDEX idx_product_attributes_product_id ON product_attributes(product_id)
 CREATE INDEX idx_product_attributes_attribute_id ON product_attributes(attribute_id);
 ```
 
+#### l1_line_groups
+
+```sql
+CREATE TABLE l1_line_groups (
+    id BIGSERIAL PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    group_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    UNIQUE (tenant_id, group_name)
+);
+
+CREATE INDEX idx_l1_line_groups_tenant_id ON l1_line_groups(tenant_id);
+CREATE INDEX idx_l1_line_groups_group_name ON l1_line_groups(group_name);
+```
+
+#### l1_intent_lines
+
+```sql
+CREATE TABLE l1_intent_lines (
+    id BIGSERIAL PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    category_id BIGINT NOT NULL,
+    subcategory_id BIGINT NULL,
+    product_type_id BIGINT NOT NULL,
+    make_id BIGINT NULL,
+    series_id BIGINT NULL,
+    series_bucket VARCHAR(100),
+    line_type VARCHAR(50) NOT NULL CHECK (line_type IN ('BASE', 'FEATURE')),
+    line_group_id BIGINT NULL,
+    description VARCHAR(500),
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (subcategory_id) REFERENCES subcategories(id) ON DELETE SET NULL,
+    FOREIGN KEY (product_type_id) REFERENCES product_types(id) ON DELETE CASCADE,
+    FOREIGN KEY (make_id) REFERENCES makes(id) ON DELETE SET NULL,
+    FOREIGN KEY (series_id) REFERENCES series(id) ON DELETE SET NULL,
+    FOREIGN KEY (line_group_id) REFERENCES l1_line_groups(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_l1_intent_lines_tenant_id ON l1_intent_lines(tenant_id);
+CREATE INDEX idx_l1_intent_lines_category_id ON l1_intent_lines(category_id);
+CREATE INDEX idx_l1_intent_lines_product_type_id ON l1_intent_lines(product_type_id);
+CREATE INDEX idx_l1_intent_lines_series_bucket ON l1_intent_lines(series_bucket);
+CREATE INDEX idx_l1_intent_lines_line_type ON l1_intent_lines(line_type);
+CREATE INDEX idx_l1_intent_lines_line_group_id ON l1_intent_lines(line_group_id);
+CREATE INDEX idx_l1_intent_lines_is_active ON l1_intent_lines(is_active);
+```
+
+#### l1_attributes
+
+```sql
+CREATE TABLE l1_attributes (
+    id BIGSERIAL PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    l1_intent_line_id BIGINT NOT NULL,
+    attribute_code VARCHAR(100) NOT NULL,
+    value_text TEXT,
+    value_number NUMERIC(15,2),
+    value_unit VARCHAR(50),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (l1_intent_line_id) REFERENCES l1_intent_lines(id) ON DELETE CASCADE,
+    UNIQUE (l1_intent_line_id, attribute_code)
+);
+
+CREATE INDEX idx_l1_attributes_tenant_id ON l1_attributes(tenant_id);
+CREATE INDEX idx_l1_attributes_l1_intent_line_id ON l1_attributes(l1_intent_line_id);
+CREATE INDEX idx_l1_attributes_attribute_code ON l1_attributes(attribute_code);
+```
+
+#### catalog_skus (L2 SKUs)
+
+```sql
+CREATE TABLE catalog_skus (
+    id BIGSERIAL PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    make VARCHAR(100) NOT NULL,
+    oem_catalog_no VARCHAR(255) NOT NULL,
+    oem_series_range VARCHAR(255),
+    series_bucket VARCHAR(100),
+    item_producttype VARCHAR(255),
+    business_subcategory VARCHAR(255),
+    uom VARCHAR(50) NOT NULL DEFAULT 'EA',
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    source_file VARCHAR(255),
+    source_page_or_table_id VARCHAR(255),
+    source_row INTEGER,
+    notes TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    UNIQUE (tenant_id, make, oem_catalog_no)
+);
+
+CREATE INDEX idx_catalog_skus_tenant_id ON catalog_skus(tenant_id);
+CREATE INDEX idx_catalog_skus_make ON catalog_skus(make);
+CREATE INDEX idx_catalog_skus_oem_catalog_no ON catalog_skus(oem_catalog_no);
+CREATE INDEX idx_catalog_skus_series_bucket ON catalog_skus(series_bucket);
+CREATE INDEX idx_catalog_skus_is_active ON catalog_skus(is_active);
+```
+
+**Note:** L2 SKUs are SKU-pure (commercial truth only). No engineering meaning (Duty, Rating, Voltage, etc.) stored here.
+
+#### l1_l2_mappings
+
+```sql
+CREATE TABLE l1_l2_mappings (
+    id BIGSERIAL PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    l1_intent_line_id BIGINT NOT NULL,
+    catalog_sku_id BIGINT NOT NULL,
+    mapping_type VARCHAR(50) NOT NULL CHECK (mapping_type IN ('BASE', 'FEATURE_ADDON', 'FEATURE_INCLUDED', 'FEATURE_BUNDLED')),
+    is_primary BOOLEAN NOT NULL DEFAULT false,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (l1_intent_line_id) REFERENCES l1_intent_lines(id) ON DELETE CASCADE,
+    FOREIGN KEY (catalog_sku_id) REFERENCES catalog_skus(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_l1_l2_mappings_tenant_id ON l1_l2_mappings(tenant_id);
+CREATE INDEX idx_l1_l2_mappings_l1_intent_line_id ON l1_l2_mappings(l1_intent_line_id);
+CREATE INDEX idx_l1_l2_mappings_catalog_sku_id ON l1_l2_mappings(catalog_sku_id);
+CREATE INDEX idx_l1_l2_mappings_mapping_type ON l1_l2_mappings(mapping_type);
+```
+
+**Note:** G8 Guardrail enforced: Multiple L1 lines can map to the same L2 SKU (many-to-one relationship). No unique constraint on `catalog_sku_id`.
+
 ---
 
 ### PRICING Module Tables
@@ -514,6 +654,43 @@ CREATE TABLE import_approval_queue (
 CREATE INDEX idx_import_approval_queue_import_batch_id ON import_approval_queue(import_batch_id);
 CREATE INDEX idx_import_approval_queue_status ON import_approval_queue(status);
 ```
+
+#### sku_prices (L2 Price History)
+
+```sql
+CREATE TABLE sku_prices (
+    id BIGSERIAL PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    catalog_sku_id BIGINT NOT NULL,
+    price_list_id BIGINT NULL,
+    pricelist_ref VARCHAR(255) NOT NULL,
+    rate NUMERIC(15,2) NOT NULL CHECK (rate >= 0),
+    currency VARCHAR(10) NOT NULL DEFAULT 'INR',
+    region VARCHAR(100) NOT NULL DEFAULT 'INDIA',
+    effective_from DATE NOT NULL,
+    effective_to DATE NULL,
+    import_batch_id BIGINT NULL,
+    source_file VARCHAR(255),
+    source_row INTEGER,
+    notes TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (catalog_sku_id) REFERENCES catalog_skus(id) ON DELETE CASCADE,
+    FOREIGN KEY (price_list_id) REFERENCES price_lists(id) ON DELETE SET NULL,
+    FOREIGN KEY (import_batch_id) REFERENCES import_batches(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_sku_prices_tenant_id ON sku_prices(tenant_id);
+CREATE INDEX idx_sku_prices_catalog_sku_id ON sku_prices(catalog_sku_id);
+CREATE INDEX idx_sku_prices_price_list_id ON sku_prices(price_list_id);
+CREATE INDEX idx_sku_prices_pricelist_ref ON sku_prices(pricelist_ref);
+CREATE INDEX idx_sku_prices_effective_from ON sku_prices(effective_from);
+CREATE INDEX idx_sku_prices_effective_to ON sku_prices(effective_to);
+CREATE INDEX idx_sku_prices_lookup ON sku_prices(catalog_sku_id, effective_from, effective_to) WHERE effective_to IS NULL OR effective_to >= CURRENT_DATE;
+```
+
+**Note:** L2 price history is append-only. Never overwrite, always insert new rows. Price lookup: WHERE effective_from <= CURDATE() AND (effective_to IS NULL OR effective_to >= CURDATE()) ORDER BY effective_from DESC LIMIT 1.
 
 ---
 
@@ -990,6 +1167,30 @@ CONSTRAINT chk_quote_bom_item_rate_source CHECK (
 discount_pct NUMERIC(5,2) DEFAULT 0 CHECK (discount_pct >= 0 AND discount_pct <= 100)
 ```
 
+### G8: L1-SKU Reuse is Allowed and Expected
+
+**Enforcement:**
+- Database constraint: **NO unique constraint** on `catalog_sku_id` in `l1_l2_mappings` table (allows many-to-one)
+- Application layer: L1 validation service must NOT reject SKU reuse
+- Business logic: Multiple L1 lines can map to same L2 SKU
+
+**Implementation:**
+```sql
+-- l1_l2_mappings table allows multiple L1 lines → same SKU
+-- No unique constraint on catalog_sku_id
+-- Multiple rows with same catalog_sku_id are allowed ✅
+
+CREATE TABLE l1_l2_mappings (
+    ...
+    catalog_sku_id BIGINT NOT NULL,
+    ...
+    -- NO UNIQUE constraint on catalog_sku_id
+    -- This allows many-to-one relationship (G8)
+);
+```
+
+**Note:** G8 is enforced by the **absence** of a unique constraint, allowing multiple L1 lines to map to the same L2 SKU.
+
 ---
 
 ## Step-2 Design Decisions
@@ -1019,6 +1220,8 @@ discount_pct NUMERIC(5,2) DEFAULT 0 CHECK (discount_pct >= 0 AND discount_pct <=
 
 **Decision:** Support both `customer_id` (optional FK) and `customer_name_snapshot` (text).
 
+**Decision Register:** D-009 (APPROVED) - See `docs/PHASE_5/00_GOVERNANCE/PHASE_5_DECISIONS_REGISTER.md`
+
 **Implementation:**
 - Added `customer_id BIGINT NULL` to `quotations` (optional FK for future customer table)
 - Added `customer_name_snapshot VARCHAR(255)` to `quotations` (text field for historical snapshot)
@@ -1030,8 +1233,8 @@ discount_pct NUMERIC(5,2) DEFAULT 0 CHECK (discount_pct >= 0 AND discount_pct <=
 - Dual approach ensures both structured data and historical accuracy
 
 **Schema Location:**
-- `quotations.customer_id`
-- `quotations.customer_name_snapshot`
+- `quotations.customer_id` (line 784, FK line 792)
+- `quotations.customer_name_snapshot` (line 785)
 
 ---
 
@@ -1108,7 +1311,24 @@ Key composite indexes:
 - **Customers Table:** Added minimal `customers` table (tenant-scoped) and FK from `quotations.customer_id` to `customers.id`
 
 **Status:** FREEZE-READY (Pending final freeze gate approval)  
-**Next Steps:** Final freeze gate verification, mark as FROZEN
+**Next Steps:** Final freeze gate verification complete - see `SPEC_5_FREEZE_GATE_CHECKLIST.md` for verification evidence
+
+**Freeze Gate Verification:**
+- All freeze gate criteria verified (see `docs/PHASE_5/02_FREEZE_GATE/SPEC_5_FREEZE_GATE_CHECKLIST.md`)
+- All design decisions locked (D-005, D-006, D-007, D-009)
+- All required fields and constraints verified in schema DDL
+
+---
+
+### v1.1 (2025-01-27) - UPDATED
+
+**Updates:**
+- Added L1/L2 tables: `l1_line_groups`, `l1_intent_lines`, `l1_attributes`, `catalog_skus`, `l1_l2_mappings`, `sku_prices`
+- Added G8 guardrail constraint notes (many-to-one L1→L2 mapping)
+- Updated indexes for L1/L2 tables
+- Added notes on SKU-pure L2 model and append-only price history
+
+**Change Reason:** Phase 5 impact assessment - L1/L2 differentiation and SKU reuse requirements
 
 ---
 

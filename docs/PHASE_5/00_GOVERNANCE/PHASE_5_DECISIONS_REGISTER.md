@@ -122,9 +122,26 @@ Each decision follows this structure:
 **Schema Impact:** `quote_bom_items.parent_line_id` (BIGINT NULL, self-referencing FK), `quote_bom_items.metadata_json` (JSONB)  
 **Status:** ✅ APPROVED
 
+### D-009: Customer Normalization Strategy
+**Date:** 2025-01-27  
+**Decision:** Support both `customer_id` (nullable FK) and `customer_name_snapshot` (text field) in `quotations` table. `customer_id` provides structured reference for future customer master table integration, while `customer_name_snapshot` preserves historical customer name at quotation creation time.  
+**Rationale:** Dual approach ensures both structured data and historical accuracy. `customer_id` enables future normalization without breaking historical quotations. `customer_name_snapshot` preserves exact customer name at quotation time, preventing historical data corruption if customer master data changes. Forward compatibility without forcing business standard decision on Day-1.  
+**Alternatives Considered:** 
+- Option A: `customer_id` only (rejected - loses historical accuracy, breaks if customer master changes)
+- Option B: `customer_name_snapshot` only (rejected - loses structured reference capability)
+- Option C: Both (selected - best of both approaches, staged normalization)
+**Impact:** QUO module, `quotations` table, customer data model  
+**Fundamentals Citation:** 
+- MASTER_FUNDAMENTALS_v2.0.md (customer data requirements)
+**Alignment Status:** ALIGNED  
+**Schema Reference:** `04_SCHEMA_CANON/NSW_SCHEMA_CANON_v1.0.md` Section "quotations" table (lines 779-802), fields `customer_id` (line 784, FK line 792) and `customer_name_snapshot` (line 785). See also "customers" table (lines 754-768).  
+**Schema Impact:** `quotations.customer_id` (BIGINT NULL, FK to `customers.id`), `quotations.customer_name_snapshot` (VARCHAR(255) NULL)  
+**Status:** ✅ APPROVED
+
 ---
 
 ## Change Log
 - **v1.0 (2025-01-27):** Created decisions register with initial decisions
 - **v1.1 (2025-01-27):** Approved D-005, D-006, D-007 to match schema canon implementation
+- **v1.2 (2025-01-27):** Added D-009 (Customer Normalization Strategy) - approved to match schema canon implementation
 

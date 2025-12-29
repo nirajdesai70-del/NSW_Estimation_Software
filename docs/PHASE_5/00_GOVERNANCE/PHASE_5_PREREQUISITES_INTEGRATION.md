@@ -1,23 +1,31 @@
 # Phase 5 Prerequisites Integration Plan
 
-**Version:** 1.0  
-**Date:** 2025-12-25  
-**Status:** CANONICAL  
+**Version:** 2.0  
+**Date:** 2025-01-27  
+**Status:** CANONICAL — COMPLETE  
 **Owner:** Phase 5 Senate  
 
 ## Purpose
 
-This document maps and integrates the Phase 5 Prerequisites from master documents (`NSW_ESTIMATION_MASTER.md`, `MASTER_EXECUTION_PLAN.md`) into Phase 5 execution plan, task list, and tracking structure.
+This document maps Phase-5 prerequisite knowledge from master documents into decision coverage, governance tracking, and traceability, under OPEN_GATE_EXPLORATION mode.
 
-**Why They Were Kept Separate:**
-- Prerequisites are **entry gate requirements** (must be complete BEFORE Phase 5 starts)
-- Master documents serve as **project-wide reference** (all phases need to reference them)
-- Phase 5 execution plan focuses on **execution work** (what to do AFTER prerequisites are met)
+**Prerequisites Handling Model (Phase-5):**
+
+In Phase-5 Exploration Mode, prerequisites are treated as **mandatory reference inputs and decision triggers**, not blocking entry gates.
+
+- **Prerequisites are not entry gates** — they are tracked as Pending Inputs
+- **Each prerequisite must result in:**
+  - Decision (APPROVED / REJECTED / NOTED), or
+  - Explicit adoption in Step-1 or Step-2 artifacts
+- **Coverage is proven via:**
+  - Decision Register
+  - Data Dictionary (FROZEN)
+  - Schema Canon (DRAFT)
 
 **Integration Goal:**
-- Link prerequisites explicitly to Phase 5 entry gate
-- Create prerequisite completion checklist
-- Map prerequisites to Phase 5 execution tasks where applicable
+- Map prerequisites to decision coverage
+- Track prerequisites via Pending Inputs Register
+- Link prerequisites to approved decisions and frozen artifacts
 
 ---
 
@@ -26,7 +34,7 @@ This document maps and integrates the Phase 5 Prerequisites from master document
 ### 1. NSW_ESTIMATION_MASTER.md - Phase 5 Prerequisites (Section 15)
 
 **Location:** `docs/NSW_ESTIMATION_MASTER.md` (lines 525-606)  
-**Status:** ⚠️ **NOT FULLY INTEGRATED INTO PHASE 5 EXECUTION PLAN**
+**Status:** ✅ **INTEGRATED VIA PENDING INPUTS REGISTER AND DECISIONS**
 
 **Six Prerequisites Defined:**
 
@@ -104,174 +112,79 @@ This document maps and integrates the Phase 5 Prerequisites from master document
 
 ---
 
-## Integration Requirements
+## Integration Status
 
-### Required Integration Actions
+### Actual Integration Actions (Completed)
 
-#### 1. Create Phase 5 Entry Gate Checklist
+All prerequisites have been reviewed, tracked, and absorbed through the Decision Register, Pending Inputs Register, and frozen Step-1 artifacts.
 
-**Action:** Create explicit entry gate checklist that includes all 6 prerequisites from `NSW_ESTIMATION_MASTER.md`
+| Prerequisite | Tracking Mechanism | Evidence | Status |
+|--------------|-------------------|----------|--------|
+| NEPL Canonical Rules | Pending Inputs + Decisions | D-005, PI-001 | ✅ APPLIED |
+| Fundamentals Pack | Source of Truth + Decisions | D-006, D-007, PI-002 | ✅ APPLIED |
+| Gap Registers | Decision Coverage | D-005, PI-003 | ✅ APPLIED |
+| Naming Conventions | Step-1 Frozen | NAMING_CONVENTIONS.md (FROZEN), PI-004 | ✅ APPLIED |
+| Code Reference Review | Reference Only | project/nish/ (read-only), PI-005 | ✅ NOTED |
+| Governance Standards | Mode Policy | D-008, PI-006 | ✅ APPLIED |
 
-**Location:** Add to `PHASE_5_EXECUTION_SUMMARY.md` or create separate `PHASE_5_ENTRY_GATE_CHECKLIST.md`
-
-**Content Needed:**
-- [ ] Prerequisite 1: NEPL_CANONICAL_RULES.md Review (MANDATORY FIRST)
-- [ ] Prerequisite 2: Fundamentals Pack Review
-- [ ] Prerequisite 3: Gap Register Review
-- [ ] Prerequisite 4: Naming Convention Verification
-- [ ] Prerequisite 5: Code Reference Review
-- [ ] Prerequisite 6: Governance Standards Review
-- [ ] Phase 4 Exit Checklist approved
-- [ ] G5 Regression Gate PASSED
-- [ ] Production stability confirmed
-- [ ] Baselines updated and tagged
-
----
-
-#### 2. Update Phase 5 Execution Summary
-
-**Action:** Expand "Prerequisites (Must Complete First)" section to include detailed prerequisites from master document
-
-**Current State:** Generic mention of "v3.0 execution complete"
-
-**Required State:** Detailed list with:
-- Each prerequisite from NSW_ESTIMATION_MASTER.md
-- Location/links to prerequisite documents
-- Estimated effort
-- Priority level
-- Completion criteria
+**Coverage Evidence:**
+- All 6 prerequisites tracked in `PENDING_INPUTS_REGISTER.md`
+- Prerequisites linked to approved decisions (D-005, D-006, D-007, D-008)
+- Naming conventions frozen in Step-1
+- Fundamentals cited in all schema decisions
+- Governance standards embedded in `PHASE_5_MODE_POLICY.md`
 
 ---
 
-#### 3. Map Prerequisites to Phase 5 Execution Tasks
+## Prerequisite-to-Decision Mapping
 
-**Action:** Link prerequisite completion to Phase 5 execution tasks
+The following table shows how each prerequisite was integrated through decisions and artifacts:
 
-**Mapping:**
+| Prerequisite | Covered by Decision | Artifact Evidence | Pending Input ID |
+|--------------|---------------------|-------------------|------------------|
+| NEPL Canonical Rules | D-005 (IsLocked Scope) | Schema canon, Decision Register | PI-001 |
+| Fundamentals Pack | D-006 (CostHead Default), D-007 (Multi-SKU) | Schema canon, Fundamentals citations | PI-002 |
+| Gap Registers | D-005 (IsLocked Scope) | Decision rationale, gap learnings applied | PI-003 |
+| Naming Conventions | (Frozen in Step-1) | NAMING_CONVENTIONS.md (FROZEN) | PI-004 |
+| Code Reference Review | D-002 (Legacy Reference Policy) | project/nish/ (read-only reference) | PI-005 |
+| Governance Standards | D-008 (Exploration Mode Policy) | PHASE_5_MODE_POLICY.md | PI-006 |
 
-| Prerequisite | Maps to Phase 5 Task | Relationship |
-|--------------|---------------------|--------------|
-| Prerequisite 1: NEPL_CANONICAL_RULES Review | Task List Category B (Business Rules) | Prerequisite informs Step 1 tasks |
-| Prerequisite 2: Fundamentals Pack Review | Task List Category B (Entity Definitions) | Prerequisite informs Step 1 entity definitions |
-| Prerequisite 3: Gap Register Review | Task List Category A (Freeze Gate) | Prerequisite informs gap closure requirements |
-| Prerequisite 4: Naming Convention Verification | Task List Category B (Naming Conventions) | Prerequisite informs Step 1 naming standards |
-| Prerequisite 5: Code Reference Review | Task List Category C (Schema Design) | Prerequisite informs Step 2 schema design |
-| Prerequisite 6: Governance Standards Review | All tasks | Prerequisite informs governance approach |
-
----
-
-#### 4. Create Prerequisite Completion Tracker
-
-**Action:** Add prerequisite tracking section to Phase 5 Task List
-
-**Location:** Add new section at top of `PHASE_5_TASK_LIST.md`:
-- "Category 0: Prerequisites (Entry Gate)" section
-- Each prerequisite as a task with completion criteria
-- Links to prerequisite documents
-
----
-
-#### 5. Update Phase 5 Charter
-
-**Action:** Add explicit reference to prerequisites from NSW_ESTIMATION_MASTER.md
-
-**Current State:** Generic "Master Plan Reference"
-
-**Required State:** 
-- Add section: "Phase 5 Entry Prerequisites"
-- Reference: "See `docs/NSW_ESTIMATION_MASTER.md` Section 15 for detailed prerequisites"
-- Link to entry gate checklist
-
----
-
-## Implementation Plan
-
-### Step 1: Create Entry Gate Checklist
-
-Create: `docs/PHASE_5/00_GOVERNANCE/PHASE_5_ENTRY_GATE_CHECKLIST.md`
-
-Include:
-- All 6 prerequisites from NSW_ESTIMATION_MASTER.md
-- Phase 4 exit conditions
-- Completion criteria for each prerequisite
-- Approval workflow
-
----
-
-### Step 2: Update Phase 5 Execution Summary
-
-Update: `docs/PHASE_5/00_GOVERNANCE/PHASE_5_EXECUTION_SUMMARY.md`
-
-Expand "Prerequisites" section (currently line 142) to include:
-- Reference to NSW_ESTIMATION_MASTER.md Section 15
-- List of 6 prerequisites with links
-- Link to Entry Gate Checklist
-
----
-
-### Step 3: Add Prerequisites to Task List
-
-Update: `docs/PHASE_5/00_GOVERNANCE/PHASE_5_TASK_LIST.md`
-
-Add new section at top:
-- "Category 0: Prerequisites (Entry Gate)"
-- Convert each prerequisite to a task with completion criteria
-- Mark as "MUST COMPLETE BEFORE PHASE 5 STARTS"
-
----
-
-### Step 4: Update Phase 5 Charter
-
-Update: `docs/PHASE_5/00_GOVERNANCE/PHASE_5_CHARTER.md`
-
-Add new section:
-- "Phase 5 Entry Prerequisites"
-- Reference to NSW_ESTIMATION_MASTER.md
-- Link to Entry Gate Checklist
-- Link to Prerequisites Integration Plan (this document)
-
----
-
-## Why Prerequisites Were Kept Separate (Original Design Rationale)
-
-**Valid Reasons:**
-1. **Entry Gate vs Execution:** Prerequisites are conditions that must be met BEFORE Phase 5 starts. Execution plan is for work DURING Phase 5.
-2. **Project-Wide Reference:** Master documents serve all phases, not just Phase 5.
-3. **Governance Structure:** Prerequisites defined at project level, execution at phase level.
-
-**However:**
-- Prerequisites were NOT fully integrated into Phase 5 governance
-- Phase 5 execution plan should explicitly reference and track prerequisites
-- Entry gate checklist should exist as part of Phase 5 governance
+**All prerequisites are accounted for** — either through approved decisions, frozen Step-1 artifacts, or documented reference-only status.
 
 ---
 
 ## Integration Status Summary
 
-| Integration Item | Status | Action Required |
-|------------------|--------|-----------------|
-| Entry Gate Checklist | ❌ **MISSING** | Create `PHASE_5_ENTRY_GATE_CHECKLIST.md` |
-| Prerequisites in Execution Summary | ⚠️ **INCOMPLETE** | Expand prerequisites section |
-| Prerequisites in Task List | ❌ **MISSING** | Add Category 0: Prerequisites |
-| Prerequisites in Charter | ⚠️ **INCOMPLETE** | Add explicit prerequisites section |
-| Prerequisite-to-Task Mapping | ❌ **MISSING** | Document mapping table |
-| Prerequisite Completion Tracker | ❌ **MISSING** | Add to Task List |
+| Integration Item | Status | Evidence |
+|------------------|--------|----------|
+| Prerequisites Tracked | ✅ **COMPLETE** | All 6 items in `PENDING_INPUTS_REGISTER.md` |
+| Decision Coverage | ✅ **COMPLETE** | Linked to D-005, D-006, D-007, D-008 |
+| Step-1 Artifacts | ✅ **COMPLETE** | NAMING_CONVENTIONS.md (FROZEN) |
+| Step-2 Schema | ✅ **IN PROGRESS** | Schema canon cites Fundamentals |
+| Governance Integration | ✅ **COMPLETE** | Mode Policy (D-008) operationalizes standards |
+
+**No Entry Gate Checklist Required** — Under OPEN_GATE_EXPLORATION mode, prerequisites are tracked as inputs, not blockers.
 
 ---
 
-## Next Steps
+## Closure Statement
 
-1. **Immediate:** Create Phase 5 Entry Gate Checklist
-2. **Immediate:** Update Phase 5 Execution Summary with detailed prerequisites
-3. **High Priority:** Add prerequisites section to Phase 5 Task List
-4. **High Priority:** Update Phase 5 Charter with prerequisites reference
-5. **Medium Priority:** Create prerequisite completion tracker
+**All Phase-5 prerequisites defined in master documents have been reviewed, tracked, and absorbed through Decision Register entries, frozen Step-1 artifacts, and draft Step-2 schema.**
+
+**Completion Status:**
+- ✅ All 6 prerequisites mapped and tracked
+- ✅ All prerequisites linked to decisions or frozen artifacts
+- ✅ Coverage proven via Decision Register and Pending Inputs Register
+- ✅ No standalone entry gate checklist required under Exploration Mode
+
+**No further action required.** This document serves as the canonical mapping of prerequisite coverage for Phase-5.
 
 ---
 
 ## Change Log
 
 - **v1.0 (2025-12-25):** Initial integration plan created to map master document prerequisites to Phase 5 execution structure
+- **v2.0 (2025-01-27):** Refactored for OPEN_GATE_EXPLORATION mode — prerequisites reframed as reference inputs tracked via Pending Inputs Register, not blocking entry gates. All prerequisites now mapped to decisions and artifacts. Document status updated to completion.
 
 ---
 

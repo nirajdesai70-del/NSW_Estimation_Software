@@ -151,6 +151,18 @@ This document establishes the operating mode for Phase 5 and defines when transi
 - Commit messages must reference decision/feature ID
 - Weekly Change Summary must list all changes
 
+### Prerequisites Handling
+
+**Rule:** Master-document prerequisites are tracked via `PENDING_INPUTS_REGISTER.md`, not as blocking entry gates.
+
+**How it works:**
+- Prerequisites are mandatory reference inputs that must be reviewed
+- Each prerequisite must result in either a decision (APPROVED/REJECTED/NOTED) or explicit adoption in Step-1/Step-2 artifacts
+- Coverage is proven via Decision Register entries and frozen artifacts
+- See `PHASE_5_PREREQUISITES_INTEGRATION.md` for complete mapping
+
+**Why:** Under OPEN_GATE_EXPLORATION mode, prerequisites inform decisions and design, but do not block progress. This maintains exploration flexibility while ensuring nothing is forgotten.
+
 ### Fundamentals Alignment
 
 **Rule:** Every decision must cite at least one of:

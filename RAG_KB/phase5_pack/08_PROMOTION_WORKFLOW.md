@@ -2,8 +2,7 @@
 Source: RAG_KB/phase5_pack/08_PROMOTION_WORKFLOW.md
 KB_Namespace: rag_governance
 Status: CANONICAL
-Version: v1.0
-Last_Updated: 2025-12-27T22:27:22.242430
+Last_Updated: 2025-12-27T23:01:42.952505
 KB_Path: phase5_pack/08_PROMOTION_WORKFLOW.md
 ---
 # Promotion Workflow — WORKING → CANONICAL

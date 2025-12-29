@@ -143,7 +143,7 @@ The NSW Data Dictionary defines the canonical data model for the NSW (New System
 #### Product
 
 **Entity:** `products`  
-**Purpose:** Buyable product master  
+**Purpose:** Buyable product master (Legacy - will be replaced by L2 SKUs)  
 **Owner:** CIM
 
 **Key Attributes:**
@@ -165,6 +165,172 @@ The NSW Data Dictionary defines the canonical data model for the NSW (New System
 - Category is required
 - SKU should be unique within tenant
 - Product can have default CostHead (optional in MVP)
+- **Note:** Legacy entity - will be replaced by L2 SKU model in Phase 5
+
+---
+
+#### L1 Intent Line
+
+**Entity:** `l1_intent_lines`  
+**Purpose:** Engineering interpretation layer (L1) - carries all engineering meaning  
+**Owner:** CIM
+
+**Key Attributes:**
+- `id` - Primary key (bigserial)
+- `tenant_id` - Foreign key to tenants
+- `category_id` - Foreign key to categories
+- `subcategory_id` - Foreign key to subcategories (nullable)
+- `product_type_id` - Foreign key to product_types
+- `make_id` - Foreign key to makes (nullable)
+- `series_id` - Foreign key to series (nullable)
+- `series_bucket` - Series bucket identifier (e.g., LC1E, LC1D, LP1K)
+- `line_type` - Line type (BASE, FEATURE)
+- `line_group_id` - Foreign key to l1_line_groups (nullable, for grouping related L1 lines)
+- `description` - Engineering description
+- `is_active` - Active status
+- `created_at` - Creation timestamp
+- `updated_at` - Update timestamp
+
+**Business Rules:**
+- L1 lines are scoped to tenant
+- L1 carries all engineering meaning (Duty, Rating, Voltage, Poles, etc.)
+- Multiple L1 lines can map to the same L2 SKU (many-to-one relationship)
+- L1 BASE lines represent base product interpretations
+- L1 FEATURE lines represent accessory/feature interpretations
+- **G8 Guardrail:** L1 lines can legally map to the same L2 SKU (SKU reuse is allowed and expected)
+
+---
+
+#### L1 Attribute
+
+**Entity:** `l1_attributes`  
+**Purpose:** Key-Value-Unit (KVU) attributes for L1 intent lines  
+**Owner:** CIM
+
+**Key Attributes:**
+- `id` - Primary key (bigserial)
+- `tenant_id` - Foreign key to tenants
+- `l1_intent_line_id` - Foreign key to l1_intent_lines
+- `attribute_code` - Attribute code (e.g., 'DUTY', 'RATING_AC1', 'RATING_AC3', 'VOLTAGE', 'POLES')
+- `value_text` - Text value (nullable)
+- `value_number` - Numeric value (nullable)
+- `value_unit` - Unit of measure (e.g., 'A', 'V', 'P')
+- `created_at` - Creation timestamp
+- `updated_at` - Update timestamp
+
+**Business Rules:**
+- L1 attributes are scoped to tenant
+- Each L1 line can have multiple attributes (one-to-many)
+- Attributes define engineering meaning (Duty, Rating, Voltage, etc.)
+- Attributes are used for L1 → L2 explosion logic
+
+---
+
+#### L1 Line Group
+
+**Entity:** `l1_line_groups`  
+**Purpose:** Groups related L1 lines (e.g., BASE + FEATURE lines)  
+**Owner:** CIM
+
+**Key Attributes:**
+- `id` - Primary key (bigserial)
+- `tenant_id` - Foreign key to tenants
+- `group_name` - Group name/identifier
+- `description` - Group description
+- `created_at` - Creation timestamp
+- `updated_at` - Update timestamp
+
+**Business Rules:**
+- L1 line groups are scoped to tenant
+- Groups can contain multiple L1 lines (BASE + FEATURE lines)
+- Used for organizing related engineering interpretations
+
+---
+
+#### L2 SKU (Catalog SKU)
+
+**Entity:** `catalog_skus` (also referenced as `l2_skus`)  
+**Purpose:** Commercial SKU layer (L2) - SKU-pure, commercial truth only  
+**Owner:** CIM
+
+**Key Attributes:**
+- `id` - Primary key (bigserial)
+- `tenant_id` - Foreign key to tenants
+- `make` - Make name (e.g., 'Schneider')
+- `oem_catalog_no` - OEM catalog number (SKU) - unique per make
+- `oem_series_range` - OEM series range (e.g., 'Easy TeSys', 'TeSys Deca')
+- `series_bucket` - Series bucket identifier (e.g., LC1E, LC1D, LP1K)
+- `item_producttype` - Item product type (e.g., 'Contactor', 'Control Relay', 'MPCB')
+- `business_subcategory` - Business subcategory (e.g., 'Power Contactor', 'Control Relay')
+- `uom` - Unit of measure (default: 'EA')
+- `is_active` - Active status
+- `created_at` - Creation timestamp
+- `updated_at` - Update timestamp
+
+**Business Rules:**
+- L2 SKUs are scoped to tenant
+- **SKU-pure rule:** One L2 row per distinct OEM catalog number
+- **No engineering meaning:** L2 does NOT contain Duty, Rating, Voltage, Poles, etc.
+- **Unique constraint:** (make, oem_catalog_no) must be unique
+- **Many-to-one mapping:** Multiple L1 lines can map to the same L2 SKU
+- Price lives at L2 SKU level (via sku_prices table)
+
+---
+
+#### L2 Price (SKU Price)
+
+**Entity:** `sku_prices` (also referenced as `l2_prices`)  
+**Purpose:** Price history for L2 SKUs (append-only)  
+**Owner:** PRICING
+
+**Key Attributes:**
+- `id` - Primary key (bigserial)
+- `tenant_id` - Foreign key to tenants
+- `catalog_sku_id` - Foreign key to catalog_skus (L2 SKU)
+- `price_list_id` - Foreign key to price_lists
+- `pricelist_ref` - Price list reference identifier
+- `rate` - Price rate (numeric)
+- `currency` - Currency code (default: 'INR')
+- `region` - Region identifier (default: 'INDIA')
+- `effective_from` - Effective date (date)
+- `effective_to` - Effective to date (nullable)
+- `import_batch_id` - Foreign key to import_batches (nullable)
+- `source_file` - Source file name (nullable)
+- `source_row` - Source row number (nullable)
+- `created_at` - Creation timestamp
+- `updated_at` - Update timestamp
+
+**Business Rules:**
+- L2 prices are scoped to tenant
+- **Append-only rule:** Never overwrite, always insert new rows
+- Price lookup: WHERE effective_from <= CURDATE() AND (effective_to IS NULL OR effective_to >= CURDATE()) ORDER BY effective_from DESC LIMIT 1
+- Multiple prices per SKU allowed (historical price tracking)
+- Price refresh updates L2 SKU prices, automatically reflects in all L1 interpretations
+
+---
+
+#### L1 to L2 Mapping
+
+**Entity:** `l1_l2_mappings`  
+**Purpose:** Maps L1 intent lines to L2 SKUs (many-to-one relationship)  
+**Owner:** CIM
+
+**Key Attributes:**
+- `id` - Primary key (bigserial)
+- `tenant_id` - Foreign key to tenants
+- `l1_intent_line_id` - Foreign key to l1_intent_lines
+- `catalog_sku_id` - Foreign key to catalog_skus (L2 SKU)
+- `mapping_type` - Mapping type (BASE, FEATURE_ADDON, FEATURE_INCLUDED, FEATURE_BUNDLED)
+- `is_primary` - Primary mapping flag (for BASE lines)
+- `created_at` - Creation timestamp
+- `updated_at` - Update timestamp
+
+**Business Rules:**
+- L1 to L2 mappings are scoped to tenant
+- **Many-to-one rule:** Multiple L1 lines can map to the same L2 SKU
+- **G8 Guardrail:** SKU reuse is allowed and expected
+- BASE lines typically have one primary mapping
+- FEATURE lines can have multiple mappings based on feature policy
 
 ---
 
@@ -446,6 +612,20 @@ tenants (AUTH)
 - `products.tenant_id` → `tenants.id`
 - `products.category_id` → `categories.id`
 - `products.cost_head_id` → `cost_heads.id` (optional, future)
+- `l1_intent_lines.tenant_id` → `tenants.id`
+- `l1_intent_lines.category_id` → `categories.id`
+- `l1_intent_lines.product_type_id` → `product_types.id`
+- `l1_intent_lines.make_id` → `makes.id` (nullable)
+- `l1_intent_lines.series_id` → `series.id` (nullable)
+- `l1_intent_lines.line_group_id` → `l1_line_groups.id` (nullable)
+- `l1_attributes.tenant_id` → `tenants.id`
+- `l1_attributes.l1_intent_line_id` → `l1_intent_lines.id`
+- `l1_line_groups.tenant_id` → `tenants.id`
+- `catalog_skus.tenant_id` → `tenants.id`
+- `l1_l2_mappings.tenant_id` → `tenants.id`
+- `l1_l2_mappings.l1_intent_line_id` → `l1_intent_lines.id`
+- `l1_l2_mappings.catalog_sku_id` → `catalog_skus.id`
+- **Many-to-one:** Multiple `l1_intent_lines` → same `catalog_skus` (via `l1_l2_mappings`)
 
 #### MBOM Relationships
 - `master_boms.tenant_id` → `tenants.id`
@@ -469,7 +649,11 @@ tenants (AUTH)
 
 #### PRICING Relationships
 - `prices.tenant_id` → `tenants.id`
-- `prices.product_id` → `products.id`
+- `prices.product_id` → `products.id` (legacy)
+- `sku_prices.tenant_id` → `tenants.id`
+- `sku_prices.catalog_sku_id` → `catalog_skus.id` (L2 SKU)
+- `sku_prices.price_list_id` → `price_lists.id`
+- `sku_prices.import_batch_id` → `import_batches.id` (nullable)
 
 ---
 
@@ -533,6 +717,36 @@ tenants (AUTH)
 - Resolution algorithm checks precedence order
 - See COSTHEAD_RULES.md
 
+#### Rule 7: L1/L2 Differentiation and Explosion
+
+**Rule:** 
+- L2 = Commercial truth only (SKU-pure, one row per OEM catalog number)
+- L1 = Engineering interpretation (carries all engineering meaning)
+- Multiple L1 lines can map to the same L2 SKU (many-to-one)
+- Price lives at L2 SKU level
+- L1 → L2 explosion: Resolve base SKU + feature SKUs (if ADDON required)
+
+**Enforcement:**
+- L2 import: Only SKU-commercial fields allowed (no Duty, Rating, Voltage, etc.)
+- L1 derivation: System derives L1 lines from L2 using engineering rules
+- G8 Guardrail: L1-SKU reuse is allowed and expected
+- Explosion logic: FOR EACH L1 → Resolve base SKU + Resolve feature SKUs (if ADDON)
+- See L1_L2_EXPLOSION_LOGIC.md for detailed rules
+
+#### Rule 8: L1 Validation and SKU Reuse
+
+**Rule:** 
+- Multiple L1 lines can legally map to the same L2 SKU
+- Same SKU can serve multiple L1 interpretations (e.g., AC1 and AC3 ratings)
+- Engineers validate attributes and interpretations, not SKUs or prices
+- SKU reuse is expected and correct behavior
+
+**Enforcement:**
+- G8 Guardrail: L1 validation rules must allow SKU reuse
+- UI must not assume 1 L1 → 1 SKU
+- Validation: Check L1 attributes, not SKU uniqueness
+- See VALIDATION_GUARDRAILS_G1_G8.md for G8 rule details
+
 ---
 
 ## Supporting Documents
@@ -553,6 +767,7 @@ This Data Dictionary references the following supporting documents:
 - G5: UNRESOLVED normalization rules
 - G6: FIXED_NO_DISCOUNT forces Discount=0
 - G7: Discount is percentage-based (0-100)
+- G8: L1-SKU reuse is allowed and expected (many-to-one mapping)
 
 ---
 
@@ -633,6 +848,20 @@ This Data Dictionary references the following supporting documents:
 ---
 
 ## Change Log
+
+### v1.1 (2025-01-27) - UPDATED
+
+**Updates:**
+- Added L1/L2 entities (l1_intent_lines, l1_attributes, l1_line_groups, catalog_skus, sku_prices, l1_l2_mappings)
+- Added L1/L2 differentiation rules (Rule 7)
+- Added L1 validation and SKU reuse rules (Rule 8)
+- Added G8 guardrail reference
+- Updated entity relationships to include L1/L2 mappings
+- Updated pricing relationships to include L2 price model
+
+**Change Reason:** Phase 5 impact assessment - L1/L2 differentiation and SKU reuse requirements
+
+---
 
 ### v1.0 (2025-01-27) - FROZEN
 

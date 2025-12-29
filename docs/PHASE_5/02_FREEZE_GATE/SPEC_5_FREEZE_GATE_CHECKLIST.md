@@ -18,23 +18,23 @@ This checklist ensures no governance fields or business rules are missed, preven
 
 | Required Component | SPEC-5 Status | Verification Location | Action Required | Status |
 |-------------------|---------------|----------------------|-----------------|--------|
-| **1. BOM Tracking Fields** | ⚠️ **VERIFY** | Schema DDL: `quote_boms` table | Check for fields below | ⏳ PENDING |
-| 1.1 `origin_master_bom_id` | ⚠️ | `quote_boms` table | Verify FK to `master_boms.id` | ⏳ |
-| 1.2 `origin_master_bom_version` | ⚠️ | `quote_boms` table | Verify varchar/timestamp field | ⏳ |
-| 1.3 `instance_sequence_no` | ⚠️ | `quote_boms` table | Verify integer field, composite uniqueness | ⏳ |
-| 1.4 `is_modified` | ⚠️ | `quote_boms` table | Verify boolean field, default false | ⏳ |
-| 1.5 `modified_by` | ⚠️ | `quote_boms` table | Verify FK to `users.id` | ⏳ |
-| 1.6 `modified_at` | ⚠️ | `quote_boms` table | Verify timestamp field | ⏳ |
-| **2. IsLocked Fields** | ⚠️ **VERIFY** | Quotation tables | Verify coverage scope | ⏳ PENDING |
-| 2.1 `quote_bom_items.is_locked` | ⚠️ | `quote_bom_items` table | Verify boolean field exists | ⏳ |
-| 2.2 `quote_panels.is_locked` | ⚠️ | `quote_panels` table | **DECIDE:** Add or explicitly exclude | ⏳ |
-| 2.3 `quote_boms.is_locked` | ⚠️ | `quote_boms` table | **DECIDE:** Add or explicitly exclude | ⏳ |
-| 2.4 `quotations.is_locked` | ⚠️ | `quotations` table | **DECIDE:** Add or explicitly exclude | ⏳ |
-| 2.5 Locking scope declaration | ✅ | Data Dictionary | **VERIFIED:** Documented in LOCKING_POLICY.md (line-item level only in MVP) | ✅ VERIFIED |
-| **3. CostHead System** | ⚠️ **VERIFY** | Schema DDL + Data Dictionary | Verify table + FKs + resolution rules | ⏳ PENDING |
-| 3.1 `cost_heads` table | ⚠️ | Schema DDL | Verify table exists with: id, code, name, category, priority | ⏳ |
-| 3.2 `quote_bom_items.cost_head_id` | ⚠️ | `quote_bom_items` table | Verify FK to `cost_heads.id` | ⏳ |
-| 3.3 `products.cost_head_id` (optional) | ⚠️ | `products` table | **DECIDE:** Add for default CostHead or exclude | ⏳ |
+| **1. BOM Tracking Fields** | ✅ **VERIFIED** | Schema DDL: `quote_boms` table | All fields verified in schema | ✅ VERIFIED |
+| 1.1 `origin_master_bom_id` | ✅ | `quote_boms` table | **VERIFIED:** BIGINT NULL, FK to `master_boms.id` (line 843, FK line 856) | ✅ VERIFIED |
+| 1.2 `origin_master_bom_version` | ✅ | `quote_boms` table | **VERIFIED:** VARCHAR(50) NULL (line 844) | ✅ VERIFIED |
+| 1.3 `instance_sequence_no` | ✅ | `quote_boms` table | **VERIFIED:** INTEGER NULL (line 845) | ✅ VERIFIED |
+| 1.4 `is_modified` | ✅ | `quote_boms` table | **VERIFIED:** BOOLEAN NOT NULL DEFAULT false (line 846) | ✅ VERIFIED |
+| 1.5 `modified_by` | ✅ | `quote_boms` table | **VERIFIED:** BIGINT NULL, FK to `users.id` (line 847, FK line 857) | ✅ VERIFIED |
+| 1.6 `modified_at` | ✅ | `quote_boms` table | **VERIFIED:** TIMESTAMP NULL (line 848) | ✅ VERIFIED |
+| **2. IsLocked Fields** | ✅ **VERIFIED** | Quotation tables | Scope explicitly declared per D-005 | ✅ VERIFIED |
+| 2.1 `quote_bom_items.is_locked` | ✅ | `quote_bom_items` table | **VERIFIED:** BOOLEAN NOT NULL DEFAULT false (line 890, index line 926) - D-005 APPROVED | ✅ VERIFIED |
+| 2.2 `quote_panels.is_locked` | ✅ | `quote_panels` table | **EXCLUDED (MVP):** Per D-005, locking only at line-item level in MVP | ✅ EXCLUDED |
+| 2.3 `quote_boms.is_locked` | ✅ | `quote_boms` table | **EXCLUDED (MVP):** Per D-005, locking only at line-item level in MVP | ✅ EXCLUDED |
+| 2.4 `quotations.is_locked` | ✅ | `quotations` table | **EXCLUDED (MVP):** Per D-005, locking only at line-item level in MVP | ✅ EXCLUDED |
+| 2.5 Locking scope declaration | ✅ | Data Dictionary | **VERIFIED:** Documented in LOCKING_POLICY.md (line-item level only in MVP) - D-005 APPROVED | ✅ VERIFIED |
+| **3. CostHead System** | ✅ **VERIFIED** | Schema DDL + Data Dictionary | All components verified | ✅ VERIFIED |
+| 3.1 `cost_heads` table | ✅ | Schema DDL | **VERIFIED:** Table exists with id, code, name, category, priority (lines 964-983) | ✅ VERIFIED |
+| 3.2 `quote_bom_items.cost_head_id` | ✅ | `quote_bom_items` table | **VERIFIED:** BIGINT NULL, FK to `cost_heads.id` (line 891, FK line 906) | ✅ VERIFIED |
+| 3.3 `products.cost_head_id` (optional) | ✅ | `products` table | **VERIFIED:** BIGINT NULL, FK to `cost_heads.id` (D-006 APPROVED, line 367, FK line 378) | ✅ VERIFIED |
 | 3.4 CostHead resolution order | ✅ | Data Dictionary | **VERIFIED:** Documented in COSTHEAD_RULES.md with explicit precedence order | ✅ VERIFIED |
 | **4. Validation Guardrails G1-G7** | ✅ **COMPLETE** | Data Dictionary + Schema notes | **VERIFIED:** All 7 guardrails documented in VALIDATION_GUARDRAILS_G1_G7.md | ✅ VERIFIED |
 | 4.1 G1: Master BOM rejects ProductId | ✅ | Data Dictionary rules | **VERIFIED:** Explicitly documented with enforcement layer | ✅ VERIFIED |
@@ -63,10 +63,10 @@ This checklist ensures no governance fields or business rules are missed, preven
 | 7.5 Timestamp naming | ✅ | Naming conventions | **VERIFIED:** Documented ({action}_at pattern) | ✅ VERIFIED |
 | 7.6 ID strategy | ✅ | Naming conventions | **VERIFIED:** Documented (bigserial for MVP, UUID reserved) | ✅ VERIFIED |
 | 7.7 Tenant isolation convention | ✅ | Naming conventions | **VERIFIED:** Documented (tenant_id everywhere) | ✅ VERIFIED |
-| **8. Design Decisions** | ⚠️ **LOCK NEEDED** | Schema Design | Lock 3 critical decisions | ⏳ PENDING |
+| **8. Design Decisions** | ✅ **LOCKED** | Schema Design | All 3 decisions locked | ✅ VERIFIED |
 | 8.1 Multi-SKU linkage | ✅ | Schema DDL | **LOCKED:** D-007 APPROVED - parent_line_id + metadata_json (both) | ✅ VERIFIED |
-| 8.2 Customer normalization | ⚠️ | Schema DDL | **LOCK:** customer_name (text) + customer_id (optional FK) | ⏳ |
-| 8.3 Resolution level constraints | ⚠️ | Schema DDL + Data Dictionary | **LOCK:** L0/L1/L2 allowed everywhere with explicit rules | ⏳ |
+| 8.2 Customer normalization | ✅ | Schema DDL | **LOCKED:** D-009 APPROVED - customer_name_snapshot (text) + customer_id (nullable FK) | ✅ VERIFIED |
+| 8.3 Resolution level constraints | ✅ | Schema DDL + Data Dictionary | **VERIFIED IN SCHEMA:** master_bom_items.resolution_status (L0/L1), quote_bom_items.resolution_status (L0/L1/L2), CHECK constraint enforces L2 => product_id NOT NULL | ✅ VERIFIED |
 
 ---
 
@@ -93,8 +93,8 @@ This checklist ensures no governance fields or business rules are missed, preven
 
 ### Step 4: Design Decision Lock
 - [x] Lock Multi-SKU linkage strategy (parent_line_id + metadata_json) - **D-007 APPROVED**
-- [ ] Lock Customer normalization approach (customer_name + optional customer_id)
-- [ ] Lock Resolution level constraints (L0/L1/L2 at all levels with rules)
+- [x] Lock Customer normalization approach (customer_name_snapshot + optional customer_id) - **D-009 APPROVED**
+- [x] Lock Resolution level constraints (L0/L1/L2 at all levels with rules) - **VERIFIED IN SCHEMA**
 
 ### Step 5: Documentation Patch
 - [ ] Add missing sections to SPEC-5
@@ -110,11 +110,11 @@ This checklist ensures no governance fields or business rules are missed, preven
 1. ✅ All BOM tracking fields verified in schema
 2. ✅ IsLocked scope explicitly declared (added fields or explicit exclusion)
 3. ✅ CostHead system verified + resolution order documented
-4. ✅ Validation Guardrails G1-G7 explicitly documented in Data Dictionary
+4. ✅ Validation Guardrails G1-G8 explicitly documented in Data Dictionary
 5. ✅ AI scope explicitly declared (schema reservation vs implementation)
 6. ✅ Module ownership matrix complete (all tables mapped)
 7. ✅ Naming conventions documented (all standards written)
-8. ⚠️ Three design decisions locked (Multi-SKU: D-007 ✅, Customer: ⏳, Resolution levels: ⏳)
+8. ✅ Three design decisions locked (Multi-SKU: D-007 ✅, Customer: D-009 ✅, Resolution levels: ✅ VERIFIED)
 
 ---
 
@@ -130,8 +130,8 @@ This checklist ensures no governance fields or business rules are missed, preven
 6. [ ] **Document CostHead resolution order** (item → product → system default)
 7. [ ] **Declare AI scope** (Phase-5 schema reservation, Post-Phase-5 implementation)
 8. [x] **Lock Multi-SKU design decision** (D-007 APPROVED - parent_line_id + metadata_json)
-8b. [ ] **Lock Customer normalization design decision** (customer_name + optional customer_id)
-8c. [ ] **Lock Resolution level constraints design decision** (L0/L1/L2 with explicit rules)
+8b. [x] **Lock Customer normalization design decision** (D-009 APPROVED - customer_name_snapshot + optional customer_id)
+8c. [x] **Lock Resolution level constraints design decision** (VERIFIED IN SCHEMA - master_bom_items L0/L1 only, quote_bom_items L0/L1/L2 with CHECK constraints)
 9. [ ] **Update compliance matrix** with final verification status
 10. [ ] **Get stakeholder approval** for freeze gate criteria
 
@@ -147,17 +147,23 @@ This checklist ensures no governance fields or business rules are missed, preven
 
 ### IsLocked Scope Decision
 
-**Option A:** Add `is_locked` to all quotation tables (panels, boms, quotations)
-- Pros: Full deletion protection at all levels
-- Cons: More fields to manage
+**Decision D-005 (APPROVED):** IsLocked only at line-item level (MVP)
 
-**Option B:** IsLocked only at line-item level (MVP)
-- Pros: Simpler, sufficient for MVP
-- Cons: May need to extend later
+**Locking Scope Declaration:**
+Per Decision D-005, locking is enforced only at `quote_bom_items` (line level) in MVP. Higher-level locking (quotation/panel/bom) is deferred and not part of Phase-5 freeze gate.
 
-**Recommendation:** Document explicit decision in Data Dictionary, either:
-- "IsLocked applies only at line-item level in MVP (quote_bom_items)"
-- OR "IsLocked applies at all quotation levels (quotations, panels, boms, items)"
+**Rationale:**
+- Simpler implementation, sufficient for MVP deletion protection
+- Can be extended later if needed
+- Aligns with MVP scope to keep initial implementation focused
+
+**Implementation:**
+- ✅ `quote_bom_items.is_locked` - VERIFIED in schema (line 890)
+- ❌ `quote_panels.is_locked` - EXCLUDED (MVP)
+- ❌ `quote_boms.is_locked` - EXCLUDED (MVP)
+- ❌ `quotations.is_locked` - EXCLUDED (MVP)
+
+**Decision Register Reference:** D-005 in `docs/PHASE_5/00_GOVERNANCE/PHASE_5_DECISIONS_REGISTER.md`
 
 ### CostHead Product Default
 
@@ -174,6 +180,44 @@ This checklist ensures no governance fields or business rules are missed, preven
 ---
 
 **Last Updated:** 2025-01-27  
-**Status:** ✅ STEP-1 VERIFIED & FROZEN  
-**Next Action:** Proceed to Step-2 Schema Design
+**Status:** ✅ FREEZE GATE VERIFICATION COMPLETE  
+**Next Action:** Final freeze approval (stakeholder sign-off)
+
+## Verification Evidence Summary
+
+### A1: BOM Tracking Fields - ✅ VERIFIED
+**Evidence:** `NSW_SCHEMA_CANON_v1.0.md` `quote_boms` table (lines 832-867):
+- `origin_master_bom_id` BIGINT NULL, FK to `master_boms.id` (line 843, FK line 856)
+- `origin_master_bom_version` VARCHAR(50) NULL (line 844)
+- `instance_sequence_no` INTEGER NULL (line 845)
+- `is_modified` BOOLEAN NOT NULL DEFAULT false (line 846)
+- `modified_by` BIGINT NULL, FK to `users.id` (line 847, FK line 857)
+- `modified_at` TIMESTAMP NULL (line 848)
+
+### A3: CostHead System - ✅ VERIFIED
+**Evidence:** `NSW_SCHEMA_CANON_v1.0.md`:
+- `cost_heads` table exists (lines 964-983) with id, code, name, category, priority
+- `quote_bom_items.cost_head_id` BIGINT NULL, FK to `cost_heads.id` (line 891, FK line 906)
+- `products.cost_head_id` BIGINT NULL, FK to `cost_heads.id` (D-006 APPROVED, line 367, FK line 378)
+- Resolution order documented in `COSTHEAD_RULES.md`
+
+### A9: Customer Normalization - ✅ VERIFIED (D-009 APPROVED)
+**Evidence:** `NSW_SCHEMA_CANON_v1.0.md` `quotations` table (lines 779-802):
+- `customer_id` BIGINT NULL, FK to `customers.id` (line 784, FK line 792)
+- `customer_name_snapshot` VARCHAR(255) NULL (line 785)
+- Decision documented as D-009 in Decision Register
+
+### A10: Resolution Level Constraints - ✅ VERIFIED IN SCHEMA
+**Evidence:** `NSW_SCHEMA_CANON_v1.0.md`:
+- `master_bom_items.resolution_status` VARCHAR(10) CHECK (L0, L1) - L0/L1 only (line 723)
+- `quote_bom_items.resolution_status` VARCHAR(10) CHECK (L0, L1, L2) - L0/L1/L2 allowed (line 892)
+- CHECK constraint `chk_quote_bom_item_resolution` enforces: L2 => product_id NOT NULL (lines 907-910)
+
+### A2: IsLocked Fields - ✅ VERIFIED (Per D-005)
+**Evidence:** `NSW_SCHEMA_CANON_v1.0.md` + Decision Register D-005:
+- `quote_bom_items.is_locked` BOOLEAN NOT NULL DEFAULT false - VERIFIED (line 890)
+- `quote_panels.is_locked` - EXCLUDED (MVP, per D-005)
+- `quote_boms.is_locked` - EXCLUDED (MVP, per D-005)
+- `quotations.is_locked` - EXCLUDED (MVP, per D-005)
+- Locking scope declaration: Documented in LOCKING_POLICY.md and D-005
 

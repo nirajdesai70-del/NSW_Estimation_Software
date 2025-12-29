@@ -1,0 +1,444 @@
+openapi: 3.0.3
+info:
+  title: NSW Catalog (L2-first) API
+  version: 1.0.0
+  description: |
+    API for importing L2 SKU master and price history.
+    L2 is SKU-pure (commercial only). L1 and L0 are derived, not imported.
+    
+    Key Principles:
+    - One OEM catalog number = One L2 row
+    - Multiple L1 rows can map to same L2 SKU
+    - Price lives at L2 only
+    - Engineering meaning (AC1/AC3, ratings) lives at L1
+servers:
+  - url: http://localhost:8011
+    description: Local development server
+  - url: https://api.nsw.example.com
+    description: Production server
+
+paths:
+  /api/v1/catalog/l2/skus/import:
+    post:
+      summary: Import L2 SKU Master (SKU-only)
+      description: |
+        Imports L2 SKU master data from Excel/CSV.
+        One row = one OEM catalog number.
+        Upserts by (Make, OEM_Catalog_No).
+        
+        Does NOT import:
+        - Duty (AC1/AC3)
+        - Rating interpretations
+        - Poles as multipliers
+        - Frame size as multiplier
+        
+        These are engineering interpretations, not commercial truth.
+      operationId: importL2Skus
+      parameters:
+        - in: query
+          name: dry_run
+          schema:
+            type: boolean
+            default: true
+          description: If true, validates only without committing changes
+        - in: query
+          name: tenant_id
+          schema:
+            type: integer
+          required: true
+          description: Tenant ID for multi-tenant isolation
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Excel (.xlsx) or CSV file with L2_SKU_MASTER sheet/data
+      responses:
+        "200":
+          description: Import result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  import_batch_id:
+                    type: string
+                    description: Unique identifier for this import batch
+                  dry_run:
+                    type: boolean
+                    description: Whether this was a dry run
+                  rows_total:
+                    type: integer
+                    description: Total rows in file
+                  rows_valid:
+                    type: integer
+                    description: Rows that passed validation
+                  rows_error:
+                    type: integer
+                    description: Rows with errors
+                  skus_created:
+                    type: integer
+                    description: Number of new SKUs created
+                  skus_updated:
+                    type: integer
+                    description: Number of existing SKUs updated
+                  errors_sample:
+                    type: array
+                    description: Sample of errors (first 10)
+                    items:
+                      type: object
+                      properties:
+                        row_number:
+                          type: integer
+                        field:
+                          type: string
+                        error:
+                          type: string
+        "400":
+          description: Validation error (invalid file format, missing required fields)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: string
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/v1/catalog/l2/prices/import:
+    post:
+      summary: Import L2 Price History (append-only)
+      description: |
+        Imports L2 price history from Excel/CSV.
+        One row = one price record per SKU per price list version.
+        Always inserts new rows (append-only, never overwrites).
+        
+        Creates price_list record if PriceListRef is new.
+        SKU must exist in L2_SKU_MASTER (or auto-create blocked per ADR-005).
+      operationId: importL2Prices
+      parameters:
+        - in: query
+          name: dry_run
+          schema:
+            type: boolean
+            default: true
+          description: If true, validates only without committing changes
+        - in: query
+          name: tenant_id
+          schema:
+            type: integer
+          required: true
+          description: Tenant ID for multi-tenant isolation
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Excel (.xlsx) or CSV file with L2_PRICE_HISTORY sheet/data
+      responses:
+        "200":
+          description: Import result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  import_batch_id:
+                    type: string
+                    description: Unique identifier for this import batch
+                  dry_run:
+                    type: boolean
+                    description: Whether this was a dry run
+                  pricelist_ref:
+                    type: string
+                    description: Price list reference from import
+                  price_list_id:
+                    type: integer
+                    description: ID of price_list record (created or existing)
+                  rows_total:
+                    type: integer
+                    description: Total rows in file
+                  rows_valid:
+                    type: integer
+                    description: Rows that passed validation
+                  rows_error:
+                    type: integer
+                    description: Rows with errors
+                  prices_inserted:
+                    type: integer
+                    description: Number of price records inserted
+                  errors_sample:
+                    type: array
+                    description: Sample of errors (first 10)
+                    items:
+                      type: object
+                      properties:
+                        row_number:
+                          type: integer
+                        field:
+                          type: string
+                        error:
+                          type: string
+        "400":
+          description: Validation error (invalid file format, missing required fields, SKU not found)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: string
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/v1/catalog/l1/derive/from-l2:
+    post:
+      summary: Derive L1 BASE/FEATURE lines from L2 using rule sheets (optional)
+      description: |
+        Uses L1_DERIVATION_RULES, L1_COIL_SUFFIX_RULES, and FEATURE_POLICY sheets
+        to create L1 BASE/FEATURE lines from L2 SKUs.
+        
+        This is optional - L1 can also be created manually by engineers.
+        Multiple L1 lines can map to the same L2 SKU (this is expected and correct).
+      operationId: deriveL1FromL2
+      parameters:
+        - in: query
+          name: tenant_id
+          schema:
+            type: integer
+          required: true
+          description: Tenant ID for multi-tenant isolation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - make
+                - series_bucket
+              properties:
+                make:
+                  type: string
+                  description: Make name (e.g., "Schneider")
+                  example: Schneider
+                series_bucket:
+                  type: string
+                  description: Series bucket code (e.g., "LC1E", "LC1D", "LP1K")
+                  example: LC1E
+                item_producttype:
+                  type: string
+                  description: Optional filter by Item_ProductType
+                  example: Contactor
+                dry_run:
+                  type: boolean
+                  default: true
+                  description: If true, shows preview without committing
+      responses:
+        "200":
+          description: Derivation preview/commit result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dry_run:
+                    type: boolean
+                    description: Whether this was a dry run
+                  l1_groups_created:
+                    type: integer
+                    description: Number of L1 groups created
+                  l1_lines_created:
+                    type: integer
+                    description: Number of L1 lines created (BASE + FEATURE)
+                  l1_base_lines:
+                    type: integer
+                    description: Number of L1 BASE lines created
+                  l1_feature_lines:
+                    type: integer
+                    description: Number of L1 FEATURE lines created
+                  l2_skus_processed:
+                    type: integer
+                    description: Number of L2 SKUs processed
+                  missing_required_attributes:
+                    type: array
+                    description: L1 lines that are missing required attributes
+                    items:
+                      type: object
+                      properties:
+                        l1_id:
+                          type: integer
+                        attribute_code:
+                          type: string
+                        reason:
+                          type: string
+                  preview:
+                    type: array
+                    description: Preview of L1 lines that would be created (dry_run only)
+                    items:
+                      type: object
+                      properties:
+                        l1_line_type:
+                          type: string
+                          enum: [BASE, FEATURE]
+                        category:
+                          type: string
+                        item_producttype:
+                          type: string
+                        l2_sku:
+                          type: string
+                        attributes:
+                          type: object
+                          additionalProperties:
+                            type: string
+        "400":
+          description: Validation error (missing make/series_bucket, no L2 SKUs found)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: string
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  schemas:
+    L2Sku:
+      type: object
+      required:
+        - make
+        - oem_catalog_no
+        - oem_series_range
+        - series_bucket
+        - item_producttype
+        - business_subcategory
+      properties:
+        make:
+          type: string
+          example: Schneider
+        oem_catalog_no:
+          type: string
+          description: SKU (unique identifier)
+          example: LC1E0601
+        oem_series_range:
+          type: string
+          example: Easy TeSys
+        series_bucket:
+          type: string
+          example: LC1E
+        item_producttype:
+          type: string
+          example: Contactor
+        business_subcategory:
+          type: string
+          example: Power Contactor
+        uom:
+          type: string
+          default: EA
+        is_active:
+          type: boolean
+          default: true
+
+    L2Price:
+      type: object
+      required:
+        - make
+        - oem_catalog_no
+        - pricelist_ref
+        - effective_from
+        - currency
+        - region
+        - rate
+      properties:
+        make:
+          type: string
+          example: Schneider
+        oem_catalog_no:
+          type: string
+          example: LC1E0601
+        pricelist_ref:
+          type: string
+          example: Jul-2025
+        effective_from:
+          type: string
+          format: date
+          example: "2025-07-01"
+        currency:
+          type: string
+          default: INR
+          example: INR
+        region:
+          type: string
+          default: INDIA
+          example: INDIA
+        rate:
+          type: number
+          format: double
+          minimum: 0
+          example: 2875.00
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: L2 Import
+    description: L2 SKU and price import endpoints
+  - name: L1 Derivation
+    description: L1 derivation from L2 (optional)
+

@@ -284,6 +284,7 @@ In Phase-4 (S4), we enforce:
 - `docs/PHASE_5/00_GOVERNANCE/ADR-005_MASTER_DATA_GOVERNANCE_FIREWALL.md` - Firewall rules and no auto-create policy
 - `docs/PHASE_5/00_GOVERNANCE/NSW_MASTER_DATA_CREATION_AND_IMPORT_GOVERNANCE.md` - Full governance document
 - `docs/PHASE_5/00_GOVERNANCE/SCOPE_SEPARATION.md` - Phase-5 scope separation
+- `docs/PHASE_5/00_GOVERNANCE/UI_CONTEXT_CLASSIFICATION.md` - UI classification policy (Reference Harness vs Phase-5 UI)
 
 **Related Documents:**
 - `docs/PHASE_5/00_GOVERNANCE/STAKEHOLDER_BRIEF_WHY_NO_LEGACY_MIGRATION.md` - Migration decision rationale
@@ -306,7 +307,7 @@ In Phase-4 (S4), we enforce:
 ---
 
 **Document Status:** ✅ **ACTIVE POLICY**  
-**Last Updated:** 2025-12-24  
+**Last Updated:** 2025-01-27 (Added UI classification policy reference)  
 **Next Review:** After Phase-5 Step-1 completion (Data Dictionary freeze)  
 **Owner:** Phase-4/Phase-5 Governance Team
 

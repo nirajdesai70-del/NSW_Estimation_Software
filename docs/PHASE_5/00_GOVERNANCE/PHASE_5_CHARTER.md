@@ -1,3 +1,11 @@
+---
+Status: CANONICAL
+Version: v1.0
+Owner: Phase 5 Governance
+Updated: 2025-12-27
+Scope: Phase-5
+---
+
 # Phase 5 Charter - NSW Estimation Software Master Plan
 
 **Version:** 1.0  
@@ -93,6 +101,12 @@ Phase 5 currently operates in Exploration Mode with controlled decision capture.
 3. **Primary Objective:**
    - Change / Variation Estimation (TfNSW-grade canonical system)
 
+4. **UI Classification:**
+   - Any UI built in existing NEPL app = **REFERENCE HARNESS ONLY** (validation/testing)
+   - Phase-5 UI design = clean slate after Schema Freeze (future)
+   - See `UI_CONTEXT_CLASSIFICATION.md` for complete policy
+
 ## Change Log
 - v1.0: Created as part of Phase 5 Senate setup
+- v1.1: Added UI classification reference (2025-01-27)
 
