@@ -73,6 +73,23 @@ NSW_<ITEM_OR_SERIES>_WEF_<DATE>_vX.xlsx
 
 **Rule:** Reference sheets must never be consumed by UI or logic.
 
+### 3.1. Sheet Name Normalization Rule
+
+**Purpose:** Different scripts may output different sheet names. This rule ensures SoE consumers can depend on logical sheet roles, not hard-coded names.
+
+**Recognized Equivalents:**
+
+| Logical Role | Primary Name | Alternative Names |
+|--------------|--------------|-------------------|
+| SKU Identity | `NSW_L2_PRODUCTS` | `NSW_SKU_MASTER_CANONICAL` |
+| Price Truth | `NSW_PRICE_MATRIX` | `NSW_PRICE_MATRIX_CANONICAL` |
+| Configuration | `NSW_L1_CONFIG_LINES` | `NSW_L1_LINES` |
+| Variants | `NSW_PRODUCT_VARIANTS` | `NSW_VARIANTS` |
+
+**Rule:** SoE consumers should depend on logical sheet roles (via column presence or sheet metadata), not exact name matching. SoR scripts should prefer primary names, but alternative names are acceptable if they serve the same logical role.
+
+**Exception Process:** If a new sheet name pattern emerges, document it here and review for normalization rule update.
+
 ---
 
 ## 4. Universal Level Discipline (Non-Negotiable)
@@ -209,7 +226,32 @@ NSW_<ITEM_OR_SERIES>_WEF_<DATE>_vX.xlsx
 
 ---
 
-## 11. Change & Versioning Policy
+## 11. SoR Artifact Registry (Required)
+
+**Purpose:** Maintain a registry of all frozen SoR artifacts to prevent teams from accidentally using wrong versions.
+
+**Registry Format:**
+
+| Series / Item | WEF Date | File Name | Status | Notes |
+|---------------|----------|-----------|--------|-------|
+| LC1E | 2025-07-15 | `NSW_LC1E_WEF_2025-07-15_v1.xlsx` | QC-Passed | Phase-5 catalog pipeline, v1.2 CLEAN compliant |
+| | | | | |
+
+**Status Values:**
+- **Draft** — In progress, not yet validated
+- **QC-Passed** — Validated, ready for governance review
+- **Frozen** — Approved and locked (no further changes)
+
+**Maintenance:** Update this registry when:
+- New artifact is created
+- Status changes (Draft → QC-Passed → Frozen)
+- New version is created (add new row, archive old)
+
+**Location:** This registry is maintained in this contract document. For large-scale operations, consider a separate registry file.
+
+---
+
+## 12. Change & Versioning Policy
 
 | Action | Allowed |
 |--------|---------|
@@ -223,7 +265,7 @@ NSW_<ITEM_OR_SERIES>_WEF_<DATE>_vX.xlsx
 
 ---
 
-## 12. Review & Correction Mechanism
+## 13. Review & Correction Mechanism
 
 **When a rule becomes a roadblock:**
 
@@ -243,7 +285,7 @@ NSW_<ITEM_OR_SERIES>_WEF_<DATE>_vX.xlsx
 
 ---
 
-## 13. Final Authority Statement
+## 14. Final Authority Statement
 
 **For all Motor Control Equipment, this SoR defines truth. Anything outside it does not exist.**
 

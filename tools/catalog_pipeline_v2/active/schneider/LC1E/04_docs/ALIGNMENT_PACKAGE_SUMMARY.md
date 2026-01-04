@@ -17,7 +17,7 @@
 
 ### 2. Alignment Documents Created ✅
 
-**A. ALIGNMENT_MATRIX.md**
+**A. ALIGNMENT_MATRIX__PHASE5.md**
 - One-page governance truth
 - Maps freeze rules → implementation → verification
 - Includes review & correction process
@@ -90,15 +90,17 @@
 | Gate E | Capability separation | ✅ SC_Lx ≠ capability | ✅ |
 | Gate F | Layer discipline | ✅ L0/L1/L2 boundaries respected | ✅ |
 | Gate G | Price discipline | ✅ Price only in matrix | ✅ |
+| Gate I | Column contract | ✅ Required columns present per logical role | ✅ |
 
 ---
 
 ## 📁 Document Locations
 
-**Alignment Documents:**
-- `active/schneider/LC1E/04_docs/ALIGNMENT_MATRIX.md`
-- `active/schneider/LC1E/04_docs/SOR_CONTRACT__MOTOR_CONTROL_EQUIPMENT.md`
-- `active/schneider/LC1E/04_docs/SOE_CONSUMPTION_GUIDE__MOTOR_CONTROL_EQUIPMENT.md`
+**Universal Governance Documents (Shared):**
+- `governance/freeze_v1.2_clean/ALIGNMENT_MATRIX__PHASE5.md`
+- `governance/freeze_v1.2_clean/SOR_CONTRACT__MOTOR_CONTROL_EQUIPMENT.md`
+- `governance/freeze_v1.2_clean/SOE_CONSUMPTION_GUIDE__MOTOR_CONTROL_EQUIPMENT.md`
+- `governance/freeze_v1.2_clean/ALIGNMENT_PACKAGE_SUMMARY.md`
 
 **Pipeline Outputs:**
 - `active/schneider/LC1E/02_outputs/NSW_LC1E_WEF_2025-07-15_v1.xlsx` (PRIMARY freeze artifact)
