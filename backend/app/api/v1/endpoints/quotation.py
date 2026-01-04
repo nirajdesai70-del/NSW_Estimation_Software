@@ -94,12 +94,12 @@ def _compute_quote_pricing(
     tax_profile_id = quote.get("tax_profile_id")
     tax_mode_str = quote.get("tax_mode")
 
-    # 2) Load quote lines
+    # 2) Load quote lines (tenant-safe)
     lines = db.execute(
         text("""
             SELECT
                 id,
-                sku_id,
+                product_id,
                 quantity,
                 rate,
                 rate_source,
@@ -107,12 +107,14 @@ def _compute_quote_pricing(
                 discount_source,
                 make_id,
                 series_id,
-                category_id
+                category_id,
+                is_price_missing
             FROM quote_bom_items
             WHERE quotation_id = :qid
+                AND tenant_id = :tenant_id
             ORDER BY id ASC
         """),
-        {"qid": quotation_id}
+        {"qid": quotation_id, "tenant_id": tenant_id}
     ).mappings().all()
 
     # 3) Load discount rules (quote-scoped)
@@ -145,14 +147,41 @@ def _compute_quote_pricing(
     # 4) Engine for discount calculations
     engine = DiscountEngine()
 
-    subtotal = qrate(Decimal("0"))
+    # G-06: Split subtotals - fixed lines excluded from all discounts (including quotation-level)
+    fixed_subtotal = qrate(Decimal("0"))
+    discountable_subtotal = qrate(Decimal("0"))
     flags: List[str] = []
 
     for row in lines:
         qty = Decimal(str(row["quantity"] or 0))
+        rate_source = row.get("rate_source")
+        is_price_missing = bool(row.get("is_price_missing") or False)
+
+        # G-05 + G-03: UNRESOLVED / price-missing must contribute zero
+        if rate_source == "UNRESOLVED" or is_price_missing:
+            applied_rate = qrate(Decimal("0"))
+            net_rate = applied_rate
+            line_amount = engine.compute_line_amount(qty=qty, net_rate=net_rate)
+            # Contributes 0 anyway; keep flags for operator visibility
+            if rate_source == "UNRESOLVED" and "HAS_UNRESOLVED_LINES" not in flags:
+                flags.append("HAS_UNRESOLVED_LINES")
+            if is_price_missing and "HAS_PRICE_MISSING_LINES" not in flags:
+                flags.append("HAS_PRICE_MISSING_LINES")
+            # No need to add to buckets; it will be zero
+            continue
+
         applied_rate = qrate(Decimal(str(row["rate"] or 0)))
 
-        # ----- Phase-5 discount resolution (direct, since make_id/series_id exist on line) -----
+        # G-06: FIXED_NO_DISCOUNT - include in totals, exclude from all discounts
+        if rate_source == "FIXED_NO_DISCOUNT":
+            net_rate = applied_rate  # discount_pct is schema-forced to 0 anyway
+            line_amount = engine.compute_line_amount(qty=qty, net_rate=net_rate)
+            fixed_subtotal = qrate(fixed_subtotal + line_amount)
+            if "HAS_FIXED_NO_DISCOUNT_LINES" not in flags:
+                flags.append("HAS_FIXED_NO_DISCOUNT_LINES")
+            continue
+
+        # Normal discount resolution for PRICELIST, MANUAL_WITH_DISCOUNT
         line_discount_source = row.get("discount_source")
         line_discount_pct = Decimal(str(row["discount_pct"])) if row.get("discount_pct") is not None else None
 
@@ -211,17 +240,22 @@ def _compute_quote_pricing(
         for f in local_flags:
             if f not in flags:
                 flags.append(f)
-        # ----------------------------------------------------------------
 
-        # Compute line amount
+        # Compute line amount and add to discountable subtotal
         line_amount = engine.compute_line_amount(qty=qty, net_rate=net_rate)
-        subtotal = qrate(subtotal + line_amount)
+        discountable_subtotal = qrate(discountable_subtotal + line_amount)
 
-    # Apply quotation-level discount
-    discounted_subtotal = engine.apply_quotation_discount(
-        subtotal=subtotal,
+    # Combine subtotals
+    subtotal = qrate(fixed_subtotal + discountable_subtotal)
+
+    # G-06: Quotation-level discount applies only to discountable subtotal
+    discounted_discountable = engine.apply_quotation_discount(
+        subtotal=discountable_subtotal,
         quotation_discount_pct=quotation_discount_pct,
     )
+
+    # Final discounted subtotal = fixed (no discount) + discounted discountable
+    discounted_subtotal = qrate(fixed_subtotal + discounted_discountable)
 
     # 5) GST compute (if profile + mode set)
     gst_obj: Dict[str, Any] = {}
@@ -561,4 +595,110 @@ async def apply_recalc(
         },
         gst=gst,
     )
+
+
+@router.delete("/{quotation_id}/bom/item/{line_id}")
+async def delete_quote_bom_item(
+    request: Request,
+    quotation_id: int = Path(..., description="Quotation ID"),
+    line_id: int = Path(..., description="Line item ID"),
+    db: Session = Depends(get_db),
+    tenant_id: int = Depends(get_tenant_id_from_request),
+):
+    """
+    Delete a quote BOM line item.
+    
+    A5.2 IsLocked enforcement: Deletion is blocked if is_locked = true.
+    Returns 409 LINE_ITEM_LOCKED if item is locked.
+    
+    Allowed roles: Operator, Reviewer, Approver
+    """
+    user_id = get_user_id_from_request(request)
+    user_roles = get_user_roles_from_request(request)
+    
+    # Role enforcement: Operator, Reviewer, Approver allowed
+    try:
+        assert_bulk_allowed(user_roles)
+    except DiscountPermissionError as e:
+        raise HTTPException(status_code=403, detail=str(e))
+    
+    # Verify line item exists and belongs to quotation + tenant (tenant-filtered SELECT)
+    line = db.execute(
+        text("""
+            SELECT 
+                id, 
+                quotation_id, 
+                is_locked
+            FROM quote_bom_items
+            WHERE id = :line_id 
+                AND quotation_id = :quotation_id 
+                AND tenant_id = :tenant_id
+        """),
+        {"line_id": line_id, "quotation_id": quotation_id, "tenant_id": tenant_id}
+    ).mappings().first()
+    
+    if not line:
+        raise HTTPException(status_code=404, detail="Line item not found")
+    
+    # A5.2: IsLocked enforcement - block deletion if locked
+    if line.get("is_locked"):
+        raise HTTPException(
+            status_code=409,
+            detail="LINE_ITEM_LOCKED"
+        )
+    
+    # Read old values for audit
+    old_values = dict(line)
+    
+    # Delete the line item
+    delete_result = db.execute(
+        text("""
+            DELETE FROM quote_bom_items
+            WHERE id = :line_id 
+                AND quotation_id = :quotation_id
+                AND tenant_id = :tenant_id
+                AND is_locked = false
+        """),
+        {"line_id": line_id, "quotation_id": quotation_id, "tenant_id": tenant_id}
+    )
+    
+    # Verify deletion succeeded (race condition protection)
+    if delete_result.rowcount != 1:
+        # Could be locked between check and delete, or already deleted
+        # Re-check is_locked with tenant-safe query to give more specific error
+        recheck = db.execute(
+            text("""
+                SELECT is_locked
+                FROM quote_bom_items
+                WHERE id = :line_id
+                  AND quotation_id = :quotation_id
+                  AND tenant_id = :tenant_id
+            """),
+            {"line_id": line_id, "quotation_id": quotation_id, "tenant_id": tenant_id}
+        ).mappings().first()
+        
+        if recheck and recheck.get("is_locked"):
+            raise HTTPException(status_code=409, detail="LINE_ITEM_LOCKED")
+        raise HTTPException(status_code=404, detail="Line item not found or already deleted")
+    
+    # Audit
+    AuditLogger.log_event(
+        db=db,
+        tenant_id=tenant_id,
+        actor_id=user_id,
+        action_type="LINE_ITEM_DELETED",
+        resource_type="quote_bom_item",
+        resource_id=line_id,
+        old_values=old_values,
+        new_values=None,
+        metadata={"quotation_id": quotation_id, "actor_roles": user_roles},
+    )
+    
+    db.commit()
+    
+    return {
+        "message": "Line item deleted successfully",
+        "line_id": line_id,
+        "quotation_id": quotation_id,
+    }
 
