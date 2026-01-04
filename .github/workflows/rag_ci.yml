@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
 name: RAG CI (KB Refresh + Index + Tests)
 
 on:
@@ -45,6 +47,17 @@ jobs:
           test -f RAG_KB/build_reports/RISKS_AND_GAPS.md
           echo "KB refresh outputs present ✅"
 
+      - name: H2 Gate A (sanity) — Index.json must be valid and non-empty
+        run: |
+          python - << 'PY'
+          import json
+          from pathlib import Path
+          p = Path("RAG_KB/phase5_pack/00_INDEX.json")
+          j = json.loads(p.read_text())
+          assert isinstance(j, dict) and len(j) > 0, "Index.json empty or invalid"
+          print("Index.json sanity OK")
+          PY
+
       - name: H3 Gate — Governance integrity
         run: |
           python scripts/ci_h3_governance_gate.py
@@ -56,7 +69,7 @@ jobs:
 
       - name: Upload build reports (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: rag-lite-build-reports
           path: |
@@ -69,7 +82,7 @@ jobs:
     timeout-minutes: 45
     needs: rag-lite
     if: |
-      github.event_name == 'push' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.full == 'true')
 
     env:
@@ -93,7 +106,7 @@ jobs:
           path: |
             .cache/huggingface
             .cache/sentence_transformers
-          key: hf-cache-${{ runner.os }}-${{ hashFiles('services/kb_indexer/requirements.txt', 'services/kb_query/requirements.txt') }}
+          key: hf-cache-${{ runner.os }}-py311-all-MiniLM-L6-v2-${{ hashFiles('services/kb_indexer/requirements.txt', 'services/kb_query/requirements.txt') }}
 
       - name: Install deps (indexer + query + tests)
         run: |
@@ -109,6 +122,10 @@ jobs:
       - name: Rebuild indexes (hard rebuild)
         run: |
           python services/kb_indexer/indexer.py --rebuild --verbose
+
+      - name: H2 Gate — Index metadata must exist
+        run: |
+          test -f RAG_INDEX/index_metadata.json || (echo "ERROR: RAG_INDEX/index_metadata.json not found after rebuild" && exit 1)
 
       - name: H2 Gate — Index counts must match
         run: |
@@ -129,7 +146,7 @@ jobs:
 
       - name: Upload build reports (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: rag-full-build-reports
           path: |
@@ -138,7 +155,7 @@ jobs:
 
       - name: Upload index metadata (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: rag-full-index-metadata
           path: |

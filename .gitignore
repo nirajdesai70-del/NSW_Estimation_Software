@@ -54,3 +54,10 @@ build/
 # Database
 *.db
 *.sqlite
+
+# RAG build outputs (generated)
+RAG_INDEX/
+RAG_KB/build_reports/
+RAG_KB/phase5_pack/00_INDEX.json
+RAG_KB/phase5_pack/*.json
+RAG_KB/phase5_pack/**/.DS_Store
