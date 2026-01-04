@@ -138,10 +138,106 @@ Each decision follows this structure:
 **Schema Impact:** `quotations.customer_id` (BIGINT NULL, FK to `customers.id`), `quotations.customer_name_snapshot` (VARCHAR(255) NULL)  
 **Status:** ✅ APPROVED
 
+### D-P5-001: Source of Truth Priority
+**Date:** 2026-01-04  
+**Decision:** Establish priority order: MASTER_FUNDAMENTALS_v2.0.md = semantic truth (what things mean), Backend behavior = operational baseline (what system currently does), Rulebook/Markdown docs = validation/clarification, Excel/historical sheets = reference only. If backend contradicts Fundamentals, raise Decision Register entry and fix code (or explicitly carve out exception).  
+**Rationale:** Preserves stabilization goal and prevents "silent reinterpretation." Ensures Fundamentals define semantics while backend provides regression baseline.  
+**Alternatives Considered:** 
+- Option A: Code is truth (rejected - creates un-auditable spec split)
+- Option B: Fundamentals only (rejected - ignores operational reality)
+- Option C: Priority order with conflict resolution (selected - balances both needs)
+**Impact:** All Phase-5 specs, implementation alignment, regression testing strategy  
+**Fundamentals Citation:** MASTER_FUNDAMENTALS_v2.0.md Section Z.1, Z.2 (Governance Freeze Statements)  
+**Alignment Status:** ALIGNED  
+**Governance Rule:** G-01 (Source of Truth Priority)  
+**Status:** ✅ APPROVED
+
+### D-P5-002: L1/L2 Semantics Correction
+**Date:** 2026-01-04  
+**Decision:** L1 = engineering intent layer (no price ownership), L2 = commercial SKU layer (price ownership at SKU/price table). Manual override is NOT L2 - it is quotation-context rate override tracked via RateSource + override fields.  
+**Rationale:** Prevents semantic drift and confusion. Manual override is separate concept from L2 resolution. Ensures correct understanding of pricing ownership (L2 owns price, L1 does not).  
+**Alternatives Considered:** 
+- Option A: Override as L2 (rejected - breaks Fundamentals semantics)
+- Option B: L1/L2 with override as separate concept (selected - correct semantics)
+**Impact:** Data dictionary, schema design, code implementation, documentation  
+**Fundamentals Citation:** MASTER_FUNDAMENTALS_v2.0.md Section U (Pricing Ownership), Section T (L1→L2 Explosion)  
+**Alignment Status:** ALIGNED  
+**Governance Rule:** G-02 (L1 vs L2 Semantics)  
+**Status:** ✅ APPROVED
+
+### D-P5-003: Manual Override Governance
+**Date:** 2026-01-04  
+**Decision:** Manual override rate is frozen during price refresh/recompute flows, but totals can recalculate using frozen override rate. System must store: RateSource=MANUAL, ManualOverrideReason (required), OverriddenAtStep, OverriddenBy, OverriddenAt, L1DerivedRate and L2SelectedRate snapshots. Role restriction: Reviewer/Approver only.  
+**Rationale:** Balances requested behavior (recalc allowed but deviation flagged) with Fundamentals behavior (overrides not refreshed). Ensures overrides are explicit, audited, and permissioned.  
+**Alternatives Considered:** 
+- Option A: Override frozen completely (rejected - too restrictive)
+- Option B: Override refreshed on price update (rejected - contradicts Fundamentals)
+- Option C: Override frozen but totals recalc (selected - satisfies both requirements)
+**Impact:** QUO module, pricing logic, override flows, audit logging  
+**Fundamentals Citation:** MASTER_FUNDAMENTALS_v2.0.md Section M.4 Step 4 ("Manual overrides remain untouched"), Section Y.1 (Price Override in Quotations)  
+**Alignment Status:** ALIGNED  
+**Governance Rule:** G-03 (Manual Override Behavior)  
+**Status:** ✅ APPROVED
+
+### D-P5-004: Discount Levels Scope
+**Date:** 2026-01-04  
+**Decision:** Phase-5 supports Item-level and Quotation-level discounts only. BOM-level and Feeder-level discounts are NOT in Phase-5 scope. Record "BOM/Feeder discount pipeline" as Phase-6+ enhancement (or Phase-5 extension only if approved as change request).  
+**Rationale:** Current schema/docs indicate only Item + Quotation levels exist. Adding BOM/Feeder discounts would require schema migration + UI updates + test coverage, expanding Phase-5 scope.  
+**Alternatives Considered:** 
+- Option A: Add BOM/Feeder discounts now (rejected - expands scope, not in current implementation)
+- Option B: Item + Quote only, defer BOM/Feeder (selected - aligns with current implementation)
+**Impact:** Discount logic, schema design, UI design, Phase-5 scope  
+**Fundamentals Citation:** features/quotation/discount_rules/31_DISCOUNT_LOGIC.md, features/quotation/costing/20_PRICING_CALCULATION_FLOW.md  
+**Alignment Status:** ALIGNED (with current implementation)  
+**Governance Rule:** G-04 (Discount Order)  
+**Status:** ✅ APPROVED
+
+### D-P5-005: RAG Boundary
+**Date:** 2026-01-04  
+**Decision:** RAG is advisory only, cannot modify totals automatically, failure must not block estimation. RAG output must be tagged advice_only=true. Any "apply suggestion" action becomes explicit user action that triggers audit logs.  
+**Rationale:** RAG is enhancement, not dependency. Estimation is core business function and must work independently. RAG suggestions require explicit user approval to ensure business control.  
+**Alternatives Considered:** 
+- Option A: RAG authoritative (rejected - loses business control)
+- Option B: RAG advisory with explicit actions (selected - safe and controlled)
+**Impact:** RAG integration, estimation flows, audit logging  
+**Fundamentals Citation:** RAG_KB/RAG_RULEBOOK.md  
+**Alignment Status:** N/A (New requirement, not in Fundamentals)  
+**Governance Rule:** G-06 (RAG Boundary)  
+**Status:** ✅ APPROVED
+
+### D-P5-006: Regression & Migration Policy
+**Date:** 2026-01-04  
+**Decision:** Policy-1 adopted: Preserve old totals unless user explicitly "Recalculate with fixes." Existing saved quotations must recompute identically unless bug-fix explicitly declared. New quotations follow corrected rules. Bug-fix protocol: Every bug fix changing totals must have Bug ID/Decision ID, Before/After examples, Scope of impacted quotations, Migration policy.  
+**Rationale:** Zero financial surprises, clean governance, better workflow. Ensures historical quotations don't suddenly change totals. Every change becomes intentional action with audit trail.  
+**Alternatives Considered:** 
+- Option A: Always recompute (rejected - causes financial surprises)
+- Option B: Lock old quotes permanently (rejected - too restrictive)
+- Option C: Policy-1 with explicit recalculation (selected - safe and controlled)
+**Impact:** Regression testing, migration strategy, recalculation flows, audit logging  
+**Fundamentals Citation:** N/A (New requirement, not in Fundamentals)  
+**Alignment Status:** N/A  
+**Governance Rule:** G-07 (Regression Baseline)  
+**Status:** ✅ APPROVED
+
+### D-P5-007: Tax Inclusion (Phase-5)
+**Date:** 2026-01-04  
+**Decision:** Taxes included in Phase-5 with safe design: post-discount, post-override, quote-level only. Percentage-based taxes (GST), multiple tax components (CGST/SGST/IGST as config). Tax rate snapshot at calculation time. Existing quotations: tax_amount=0 (no retroactive application). Explicitly excluded: item-specific tax rules, jurisdiction auto-detection, tax exemptions, reverse charge logic (Phase-6+).  
+**Rationale:** Basic tax support needed for Phase-5 completeness, but scope-limited to prevent expansion. Quote-level only avoids complex item-level logic. Snapshot preserves calculation-time state. No retroactive application preserves regression baseline.  
+**Alternatives Considered:** 
+- Option A: No taxes in Phase-5 (rejected - incomplete for production)
+- Option B: Full tax logic in Phase-5 (rejected - expands scope too much)
+- Option C: Basic quote-level taxes only (selected - balanced approach)
+**Impact:** Tax calculation logic, schema design, calculation pipeline  
+**Fundamentals Citation:** N/A (New requirement, not in Fundamentals)  
+**Alignment Status:** N/A  
+**Governance Rule:** G-08 (Tax Handling Rule)  
+**Status:** ✅ APPROVED
+
 ---
 
 ## Change Log
 - **v1.0 (2025-01-27):** Created decisions register with initial decisions
 - **v1.1 (2025-01-27):** Approved D-005, D-006, D-007 to match schema canon implementation
 - **v1.2 (2025-01-27):** Added D-009 (Customer Normalization Strategy) - approved to match schema canon implementation
+- **v1.3 (2026-01-04):** Added D-P5-001 through D-P5-007 (Phase-5 pricing/estimation logic decisions) - approved per Phase-5 Governance Rules v1.0
 

@@ -27,10 +27,14 @@ This register tracks all **RETAIN** business decisions (blocking items) identifi
 | 4 | Safe partial success (continue on non-fatal errors) | Legacy import behavior | Generic Catalog Importer | Generic Catalog Importer | ⬜ PENDING / ✅ IMPLEMENTED | [Owner] |
 | 5 | Deterministic mapping rules (no silent overwrites) | Legacy import rules | Generic Catalog Importer | Generic Catalog Importer | ⬜ PENDING / ✅ IMPLEMENTED | [Owner] |
 | 6 | Quotation numbering generation rules | Legacy quotation system | [Future build] | Quotation Core | ⬜ PENDING | [Owner] |
-| 7 | Price list precedence logic | Legacy pricing rules | [Future build] | Pricing Engine | ⬜ PENDING | [Owner] |
+| 7 | Price list precedence logic | Legacy pricing rules | Phase 5 Task 5.1 | Pricing Engine | ✅ IMPLEMENTED | Phase 5 Team |
 | 8 | Locking and unlock authority | Legacy locking rules | [Future build] | Locking Module | ⬜ PENDING | [Owner] |
-| 9 | Audit trail requirements | Legacy audit logs | [Future build] | Audit Module | ⬜ PENDING | [Owner] |
-| 10 | Discount governance rules | Legacy discount logic | [Future build] | Pricing Engine | ⬜ PENDING | [Owner] |
+| 9 | Audit trail requirements | Legacy audit logs | Phase 5 Task 5.1 | Audit Module | ✅ IMPLEMENTED | Phase 5 Team |
+| 10 | Discount governance rules | Legacy discount logic | Phase 5 Task 5.1 | Pricing Engine | ✅ IMPLEMENTED | Phase 5 Team |
+| 11 | Manual override requires authorization | Legacy pricing rules | Phase 5 Task 5.1 | Pricing Engine | ✅ IMPLEMENTED | Phase 5 Team |
+| 12 | Tax calculation with CGST/SGST/IGST split | Legacy tax rules | Phase 5 Task 5.1 | Tax Engine | ✅ IMPLEMENTED | Phase 5 Team |
+| 13 | Preview before apply (safe calculation) | Legacy quotation workflow | Phase 5 Task 5.1 | Quotation API | ✅ IMPLEMENTED | Phase 5 Team |
+| 14 | Role-based permissions for recalculation | Legacy approval workflow | Phase 5 Task 5.1 | Quotation API | ✅ IMPLEMENTED | Phase 5 Team |
 
 ---
 
@@ -72,10 +76,11 @@ This register tracks all **RETAIN** business decisions (blocking items) identifi
 - Quotation lifecycle expectations
 
 ### Pricing (Builds: Pricing Engine, etc.)
-- Price list precedence logic
+- Price list precedence logic ✅ (Phase 5)
 - WEF date usage
-- Discount governance rules
-- Price source priority
+- Discount governance rules ✅ (Phase 5)
+- Price source priority ✅ (Phase 5)
+- Manual override authorization ✅ (Phase 5)
 
 ### Control & Locking (Builds: Locking Module, etc.)
 - When locking applies
@@ -83,9 +88,9 @@ This register tracks all **RETAIN** business decisions (blocking items) identifi
 - Approval intent
 
 ### Audit & Compliance (Builds: Audit Module, etc.)
-- User action auditability
-- Traceability expectations
-- Change tracking requirements
+- User action auditability ✅ (Phase 5)
+- Traceability expectations ✅ (Phase 5)
+- Change tracking requirements ✅ (Phase 5)
 
 ---
 
@@ -124,6 +129,7 @@ When you identify a new RETAIN decision:
 
 ---
 
-**Last Updated:** 2026-01-03  
-**Total RETAIN Items:** 10 (5 identified, 5 placeholder for future builds)
+**Last Updated:** 2026-01-27  
+**Total RETAIN Items:** 14 (9 identified and implemented, 5 placeholder for future builds)  
+**Phase 5 RETAIN Items:** 6 items implemented (items #7, #9, #10, #11, #12, #13, #14)
 
