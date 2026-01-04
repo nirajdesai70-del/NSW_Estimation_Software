@@ -1,9 +1,11 @@
 from __future__ import annotations
 import pytest
 from pathlib import Path
-from tests._helpers import REPO_ROOT, assert_exists
+from ._helpers import REPO_ROOT, assert_exists
 
-from services.kb_query.query_service import QueryService
+# Defer QueryService import until test execution to avoid pulling in
+# sentence-transformers/torch dependencies during test collection
+# (this test is marked @pytest.mark.full, so it only runs when requested)
 
 # Golden questions - adjust path if your questions file is elsewhere
 GOLDEN = REPO_ROOT / "tests" / "rag_regression_questions.yaml"
@@ -20,6 +22,12 @@ def test_golden_file_exists():
 def test_golden_questions_return_citations():
     if not GOLDEN.exists():
         pytest.skip(f"Golden questions file not found: {GOLDEN}")
+    
+    # Skip if dependencies aren't available (will only run in "full" mode anyway)
+    pytest.importorskip("sentence_transformers", reason="Requires sentence-transformers (full test mode)")
+    pytest.importorskip("torch", reason="Requires torch (full test mode)")
+    pytest.importorskip("faiss", reason="Requires faiss (full test mode)")
+    from services.kb_query.query_service import QueryService
     
     import yaml
     svc = QueryService()
@@ -39,6 +47,12 @@ def test_golden_questions_return_citations():
 @pytest.mark.order(32)
 @pytest.mark.full
 def test_policy_queries_surface_canonical():
+    # Skip if dependencies aren't available (will only run in "full" mode anyway)
+    pytest.importorskip("sentence_transformers", reason="Requires sentence-transformers (full test mode)")
+    pytest.importorskip("torch", reason="Requires torch (full test mode)")
+    pytest.importorskip("faiss", reason="Requires faiss (full test mode)")
+    from services.kb_query.query_service import QueryService
+    
     svc = QueryService()
 
     policy_queries = [
