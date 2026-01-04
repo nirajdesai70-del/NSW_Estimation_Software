@@ -4,7 +4,7 @@ import time
 import subprocess
 from pathlib import Path
 import pytest
-from tests._helpers import REPO_ROOT, RAG_INDEX
+from ._helpers import REPO_ROOT, RAG_INDEX
 
 KEYWORD_DB = RAG_INDEX / "keyword_index.db"
 VECTOR_FAISS = RAG_INDEX / "vector_index.faiss"

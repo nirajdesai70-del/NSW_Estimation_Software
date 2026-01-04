@@ -1,7 +1,7 @@
 from __future__ import annotations
 import pytest
 from pathlib import Path
-from tests._helpers import REPO_ROOT, MANIFEST, assert_exists, load_json
+from ._helpers import REPO_ROOT, MANIFEST, assert_exists, load_json
 
 # Import from pure stdlib module (safe for lite tests, no FAISS dependencies)
 import sys

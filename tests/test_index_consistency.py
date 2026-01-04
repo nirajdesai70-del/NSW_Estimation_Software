@@ -1,10 +1,9 @@
 from __future__ import annotations
 import pytest
-from tests._helpers import MANIFEST, INDEX_META, assert_exists, load_json
+from ._helpers import MANIFEST, INDEX_META, assert_exists, load_json, REPO_ROOT
 
 import sys
 from pathlib import Path
-from tests._helpers import REPO_ROOT
 sys.path.insert(0, str(Path(__file__).parent.parent / "services" / "kb_indexer"))
 from chunk_universe import build_chunk_universe
 

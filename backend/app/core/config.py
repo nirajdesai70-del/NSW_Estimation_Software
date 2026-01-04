@@ -2,12 +2,19 @@
 Application Configuration
 """
 import os
-from pydantic_settings import BaseSettings
+from functools import lru_cache
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 
 
 class Settings(BaseSettings):
     """Application settings"""
+
+    model_config = SettingsConfigDict(
+        env_file="backend/.env",
+        case_sensitive=True,
+        extra="ignore",  # Ignore unknown env vars (e.g., Laravel's RAG_FEEDBACK_*)
+    )
 
     # Environment
     ENVIRONMENT: str = "development"
@@ -18,15 +25,15 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = int(os.getenv("NSW_BACKEND_PORT", "8003"))
 
-    # Database
-    DATABASE_URL: str
+    # Database - safe defaults for dev/test (override via env in production)
+    DATABASE_URL: str = "sqlite+pysqlite:///:memory:"
     DATABASE_ECHO: bool = False
 
     # Redis (optional)
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6380/0")
 
-    # Security
-    SECRET_KEY: str
+    # Security - safe default for dev/test (override via env in production)
+    SECRET_KEY: str = "dev-only-secret-change-me-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
@@ -44,11 +51,15 @@ class Settings(BaseSettings):
     LEGACY_MYSQL_USER: str = "root"
     LEGACY_MYSQL_PASSWORD: str = ""
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+
+@lru_cache
+def get_settings() -> Settings:
+    """Get cached Settings instance (prevents import-time failures)."""
+    return Settings()
 
 
-settings = Settings()
+# Backwards compatibility: keep settings for code that imports it directly
+# For new code, prefer using get_settings() instead
+settings = get_settings()
 
 
