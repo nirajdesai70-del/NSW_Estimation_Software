@@ -1,9 +1,10 @@
 # NSW Data Dictionary v1.0
 
 **Version:** 1.0  
-**Date:** 2025-01-27  
-**Status:** FROZEN  
+**Date:** 2026-01-27  
+**Status:** ACTIVE (Freeze-in-progress)  
 **Owner:** Phase 5 Senate  
+**Freeze Target:** SPEC-5 v1.0 (after Category A + Category D approvals)  
 **Purpose:** Canonical data dictionary for NSW system - single source of truth for entity definitions, relationships, and business rules
 
 ---
@@ -27,8 +28,9 @@
 2. [Core Entities](#core-entities)
 3. [Entity Relationships](#entity-relationships)
 4. [Business Rules](#business-rules)
-5. [Supporting Documents](#supporting-documents)
-6. [Change Log](#change-log)
+5. [Canonical Validation Guardrails (G-01 to G-08)](#canonical-validation-guardrails-g-01-to-g-08)
+6. [Supporting Documents](#supporting-documents)
+7. [Change Log](#change-log)
 
 ---
 
@@ -401,6 +403,31 @@ The NSW Data Dictionary defines the canonical data model for the NSW (New System
 - `created_at` - Creation timestamp
 - `updated_at` - Update timestamp
 
+#### Quotation commercial + tax fields (Phase-5)
+
+**Purpose:** Store quotation-level commercial parameters (discount + tax selection) and persist apply-recalc snapshots for audit-safe totals.
+
+**Commercial fields (input / selectable):**
+- `discount_pct` — quotation-level discount percent (0–100). Applied **after** line discounts and **before** tax.
+- `tax_profile_id` — selected GST profile (FK → `tax_profiles.id`, nullable).
+- `tax_mode` — `'CGST_SGST'` or `'IGST'` (nullable). Must be explicitly set when tax is used.
+
+**Tax snapshot fields (persisted on Apply-Recalc only):**
+- `taxable_base` — subtotal after line discounts + quotation discount (base for GST).
+- `cgst_pct_snapshot`, `sgst_pct_snapshot`, `igst_pct_snapshot` — GST rate snapshots captured at apply time.
+- `cgst_amount`, `sgst_amount`, `igst_amount` — computed component amounts.
+- `tax_amount_total` — total GST amount (`cgst_amount + sgst_amount + igst_amount`).
+- `grand_total` — final total (`taxable_base + tax_amount_total`).
+
+**Policy contract (locked):**
+- Preview computes totals but **does not** overwrite snapshot fields.
+- Apply-Recalc is an explicit action (Reviewer/Approver only) and **writes** the snapshot fields + logs audit event.
+- Snapshot fields are written only by Apply-Recalc and are not authoritative until Apply-Recalc is executed.
+
+**Ownership:**
+- QUO owns these fields because they are part of the quotation workspace state.
+- TAX owns `tax_profiles` master; QUO consumes it and snapshots the applied rates.
+
 **Business Rules:**
 - Quotations are scoped to tenant
 - Quote number must be unique within tenant
@@ -476,14 +503,17 @@ The NSW Data Dictionary defines the canonical data model for the NSW (New System
 - `quotation_id` - Foreign key to quotations
 - `panel_id` - Foreign key to quote_panels
 - `bom_id` - Foreign key to quote_boms
+- `parent_line_id` - Parent line link for multi-SKU linkage / grouping (nullable)
 - `product_id` - Foreign key to products (required for L2)
 - `make_id` - Foreign key to makes (nullable)
 - `series_id` - Foreign key to series (nullable)
+- `category_id` - Foreign key to categories (nullable; used for CATEGORY discount rule matching)
 - `quantity` - Item quantity per BOM
 - `rate` - Item rate
-- `discount` - Discount percentage (0-100)
-- `net_rate` - Calculated: Rate × (1 - Discount/100)
-- `amount` - Calculated: NetRate × TotalQty
+- `discount_pct` - Discount percentage (0-100)
+- `discount_source` - Discount source marker (e.g., LINE for line override; else rule-based)
+- `net_rate` - (computed) Rate × (1 - DiscountPct/100)
+- `amount` - (computed) NetRate × TotalQty
 - `rate_source` - Rate source enum (PRICELIST, MANUAL_WITH_DISCOUNT, FIXED_NO_DISCOUNT, UNRESOLVED)
 - `is_price_missing` - Price missing flag
 - `is_client_supplied` - Client supplied flag (zero cost)
@@ -491,6 +521,12 @@ The NSW Data Dictionary defines the canonical data model for the NSW (New System
 - `cost_head_id` - Foreign key to cost_heads (nullable, item override)
 - `resolution_status` - Resolution level (L2 for production BOM)
 - `description` - Item description
+- `metadata_json` - Line metadata container (nullable; used for future expansion without schema churn)
+- `sequence_order` - Display/order index inside BOM (nullable; default 0)
+- `override_rate` - Manual override rate (nullable; requires Reviewer/Approver + reason)
+- `override_reason` - Reason for override (nullable; required when override_rate is set)
+- `overridden_by` - User ID who applied override (nullable, FK → users)
+- `overridden_at` - Timestamp of override (nullable)
 - `created_at` - Creation timestamp
 - `updated_at` - Update timestamp
 
@@ -749,6 +785,163 @@ tenants (AUTH)
 
 ---
 
+#### Rule 9: Module Ownership Matrix
+
+**Purpose:** Lock "table → primary owner module" as canonical governance.  
+**Rule:** One table has one owner; only the owner controls schema + write paths; other modules are read-only consumers unless explicitly approved.
+
+**Canonical Source:**
+- **Consolidated matrix:** `docs/PHASE_5/02_FREEZE_GATE/A2_Module_Ownership_Matrix/A2.9_Consolidated_Ownership_Matrix.md`
+- **Module detail:** A2.2–A2.8
+
+**Ownership Table:**
+
+| Table | Primary Owner | Write Authority | Notes |
+|-------|---------------|-----------------|-------|
+| `tenants`, `users`, `roles`, `user_roles` | AUTH | AUTH only | Identity + RBAC |
+| `categories`, `subcategories`, `product_types`, `attributes`, `attribute_options`, `makes`, `series` | CIM | CIM only | Taxonomy + masters |
+| `products` (transitional) | CIM | CIM only | Current `product_id` binding in QUO |
+| `catalog_skus` | CIM | CIM only | L2 identity (SKU-pure) |
+| `l1_intent_lines`, `l1_attributes`, `l1_line_groups`, `l1_l2_mappings` | CIM | CIM only | L1 interpretation + mapping |
+| `master_boms`, `master_bom_items` | MBOM | MBOM only | Templates; **G-01** applies |
+| `quotations`, `quote_panels`, `quote_boms`, `quote_bom_items` | QUO | QUO only | Workspace + snapshots; **Policy-1** |
+| `discount_rules` | QUO | QUO only | Quotation-scoped discount rules |
+| `price_lists`, `sku_prices` (+ `import_*` if present) | PRICING | PRICING only | Price truth (append-only) |
+| `tax_profiles` | TAX | TAX only | Tax masters |
+| `audit_logs` | AUDIT | via AuditLogger | Append-only audit store |
+| `ai_call_logs` (+ reserved AI tables) | AI | AI only | Phase-5 reservation; advisory-only |
+| `cost_heads` | SHARED | SHARED only | Cross-cutting reference master |
+
+**Cross-module contracts (locked):**
+- **PRICING owns price truth (`sku_prices`); QUO only snapshots (`quote_bom_items.rate`).**
+- **MBOM templates copy-never-link into QUO workspaces.**
+- **AUDIT owns storage; all modules write via AuditLogger interface.**
+- **AI is advisory-only; never modifies money fields or bypasses Policy-1.**
+
+**Enforcement:**
+- Owner module approves all schema changes
+- Non-owners are read-only via foreign keys/services
+- Cross-module writes require coordination
+- Audit events written via AuditLogger only
+
+**Reference:** See `A2.9_Consolidated_Ownership_Matrix.md` for complete ownership matrix with detailed notes.
+
+---
+
+## Canonical Validation Guardrails (G-01 to G-08)
+
+This section defines the **non-negotiable validation guardrails** enforced across the NSW Estimation platform.
+These guardrails ensure structural correctness, financial determinism, auditability, and predictable behavior
+across preview and apply workflows (Policy-1).
+
+Each guardrail is enforced at one or more layers:
+- **Schema** (CHECK / FK / type constraints)
+- **Validator / Service**
+- **Compute / Engine**
+- **API workflow**
+- **Audit**
+
+Detailed freeze-gate specifications are maintained under:
+`docs/PHASE_5/02_FREEZE_GATE/A1_Validation_Guardrails/`
+
+---
+
+### G-01 — Master BOM Rejects ProductId
+**Intent:** Preserve template purity.  
+**Rule:** Master BOM items must never reference a concrete product.  
+**Enforcement:** Schema (CHECK), optional service validation.  
+**Reference:** `A1.2_Guardrail_G01_Master_BOM_Rejects_ProductId.md`
+
+---
+
+### G-02 — Production BOM Requires ProductId
+**Intent:** Ensure execution-ready completeness.  
+**Rule:** L2 / Production BOM items must reference a product.  
+**Enforcement:** Schema (CHECK), optional service validation.  
+**Reference:** `A1.3_Guardrail_G02_Production_BOM_Requires_ProductId.md`
+
+---
+
+### G-03 — IsPriceMissing Normalizes Amount
+**Intent:** Prevent misleading totals from unpriced lines.  
+**Rule:** Lines without a resolvable price contribute zero amount.  
+**Enforcement:** Compute layer (shared preview/apply path).  
+**Reference:** `A1.4_Guardrail_G03_IsPriceMissing_Normalizes_Amount.md`
+
+---
+
+### G-04 — RateSource Consistency
+**Intent:** Ensure every rate is explainable and reproducible.  
+**Rule:** Each line's rate must originate from exactly one source
+(PRICELIST or MANUAL / FIXED).  
+**Enforcement:** Validator, resolver/persistence, schema, audit.  
+**Reference:** `A1.5_Guardrail_G04_RateSource_Consistency.md`
+
+---
+
+### G-05 — UNRESOLVED Normalizes Values
+**Intent:** Safely handle partially defined lines.  
+**Rule:** Lines with `rate_source = 'UNRESOLVED'` must not affect totals.  
+**Enforcement:** Schema defaults + compute normalization.  
+**Reference:** `A1.6_Guardrail_G05_UNRESOLVED_Normalizes_Values.md`
+
+---
+
+### G-06 — FIXED_NO_DISCOUNT Forces Discount = 0
+**Intent:** Protect non-discountable pricing.  
+**Rule:** Fixed prices cannot be discounted at any scope.  
+**Enforcement:** Schema (CHECK), compute, audit.  
+**Note:** Applies to both catalog-fixed and quotation-scoped fixed prices.  
+**Reference:** `A1.7_Guardrail_G06_FIXED_NO_DISCOUNT_Forces_Discount_Zero.md`
+
+---
+
+### G-07 — All Discounts Are Percentage-Based
+**Intent:** Keep discount math deterministic and auditable.  
+**Rule:** Discounts are stored and applied only as percentages (0–100).  
+**Enforcement:** Schema, API validation, compute quantization.  
+**Reference:** `A1.8_Guardrail_G07_All_Discounts_Are_Percentage_Based.md`
+
+---
+
+### G-08 — L1–SKU (Product) Reuse Is Allowed and Expected
+**Intent:** Prevent false uniqueness assumptions.  
+**Rule:** The same L2 commercial identity (`product_id` in current schema)
+may appear multiple times across and within quotations.  
+**Enforcement:** Schema (no uniqueness), compute aggregation, audit.  
+**Reference:** `A1.9_Guardrail_G08_L1_SKU_Reuse_Is_Allowed_and_Expected.md`
+
+---
+
+### Guardrail Enforcement Layer Matrix (A1.11)
+
+This matrix explicitly states **where each guardrail is enforced**.
+
+**Legend:**
+- ✅ = Enforced
+- ◻️ = Recommended / Optional (not required for Phase-5 freeze)
+- — = Not applicable
+
+| Guardrail | Schema (DB) | Validator / Service | Compute / Engine | API Workflow | Audit | Primary Enforcement |
+|-----------|-------------|---------------------|------------------|--------------|-------|---------------------|
+| **G-01 Master BOM rejects ProductId** | ✅ CHECK constraint on `master_bom_items.product_id` | ◻️ Recommended pre-save validation | — | — | — | **Schema** |
+| **G-02 Production/L2 requires ProductId** | ✅ CHECK constraint on `quote_bom_items` resolution/product combo | ◻️ Recommended transition/save validation | — | ◻️ Optional "promote/finalize" gate | — | **Schema** |
+| **G-03 IsPriceMissing normalizes Amount** | — | — | ✅ Amount contribution normalized via compute path | ✅ Preview/apply share same compute | — | **Compute** |
+| **G-04 RateSource consistency** | ✅ Allowed values/constraints for `rate_source` | ✅ Manual override permission + reason | ✅ Deterministic rate resolution + quantization | ✅ Apply actions role-gated | ✅ Override/audit events | **Validator + Compute** |
+| **G-05 UNRESOLVED normalizes values** | ✅ `rate_source` includes `UNRESOLVED` (default) | — | ✅ Compute remains safe (rate null/0 → amount 0) | ✅ Preview/apply same compute | — | **Schema + Compute** |
+| **G-06 FIXED_NO_DISCOUNT forces discount=0** | ✅ CHECK constraint (`FIXED_NO_DISCOUNT` ⇒ `discount_pct=0`) | — | ✅ Compute respects fixed pricing (no discount leakage) | — | ✅ Captured in apply/audit context | **Schema** |
+| **G-07 Discounts are % only (0–100)** | ✅ Discount fields are `discount_pct` with range constraints | ✅ API schemas accept only percent fields | ✅ Engine validates & quantizes pct | — | ✅ Audit stores pct only | **Schema + Validator + Compute** |
+| **G-08 L1–SKU/Product reuse allowed** | ✅ No uniqueness constraints on `quote_bom_items.product_id` | — | ✅ Aggregation sums lines; no dedupe-by-product | — | ✅ Line-level audit traceability | **Schema + Compute** |
+
+**Notes:**
+- "Schema" enforcement means DB rejects invalid states (hard fail).
+- "Validator/Service" enforcement means user-friendly checks before DB writes (recommended where noted).
+- "Compute/Engine" enforcement means calculations remain deterministic and safe even if partial inputs exist.
+- "API Workflow" enforcement means endpoints or workflow actions are gated (Policy-1).
+- "Audit" means traceability exists for actions that change pricing outcomes.
+
+---
+
 ## Supporting Documents
 
 This Data Dictionary references the following supporting documents:
@@ -799,7 +992,9 @@ This Data Dictionary references the following supporting documents:
 
 ### 4. Module Ownership Matrix
 
-**Document:** `MODULE_OWNERSHIP_MATRIX.md`
+**Location:** Embedded in [Business Rules - Rule 9: Module Ownership Matrix](#rule-9-module-ownership-matrix) (this document)
+
+**Detailed Reference:** `docs/PHASE_5/02_FREEZE_GATE/A2_Module_Ownership_Matrix/A2.9_Consolidated_Ownership_Matrix.md`
 
 **Purpose:** Maps every table to its owner module.
 
@@ -807,6 +1002,7 @@ This Data Dictionary references the following supporting documents:
 - Single owner per table
 - Owner approves changes
 - Foreign keys require coordination
+- Cross-module contracts are locked
 
 ---
 
