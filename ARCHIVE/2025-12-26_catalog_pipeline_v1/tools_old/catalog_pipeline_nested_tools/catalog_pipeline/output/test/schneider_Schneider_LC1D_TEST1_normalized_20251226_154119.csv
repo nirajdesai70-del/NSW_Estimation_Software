@@ -1,0 +1,5 @@
+import_stage,make,series,sku_code,description,uom,list_price,currency,notes
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D115,TeSys Deca Contactor | Poles=3P,EA,911569,INR,LC1D115 and D150
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D09,TeSys Deca Contactor | Poles=3P,EA,610,INR,LC1D09...D38 (a or c) LC1DT20...DT40 (a or c)
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D80,TeSys Deca Contactor | Poles=3P,EA,620,INR,LC1D80 (4 P a)
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D40A,TeSys Deca Contactor | Poles=3P,EA,3,INR,"LC1D40A, D50A, D65A & LC1DT60A, DT80A"

@@ -1,0 +1,74 @@
+# Schneider Electric Price List Profile
+# Adjust column indexes (0-based) based on your actual XLSX structure
+
+make: "Schneider"
+sheet: 0
+
+# Identify where the data table starts
+start_row_contains_any: ["Unit Reference", "Unit MRP", "Catalog No", "Part No"]
+
+# Stop processing when we hit these keywords
+stop_row_contains_any: ["NOTE", "TERMS", "Conditions", "Page", "Total", "Subtotal"]
+
+# Section markers (e.g., FRAME-3, FRAME-4)
+# These are captured and included in the description
+section_markers:
+  - pattern: "^FRAME[- ]?\\d+"
+    capture_as: "frame"
+
+# Column mapping by index (0-based)
+# IMPORTANT: Adjust these indexes after your first run based on actual XLSX structure
+# You can check by printing the first few rows or examining the Excel file
+columns_by_index:
+  # Example mapping - ADJUST THESE BASED ON YOUR ACTUAL FILE
+  # For the sample you provided: AC1 | AC3 | HP | kW | NO | NC | UnitRef | MRP
+  ac1: 0        # AC-1 rating column
+  ac3: 1        # AC-3 rating column
+  hp: 2         # HP column
+  kw: 3         # kW column
+  aux_no: 4     # Auxiliary NO column
+  aux_nc: 5     # Auxiliary NC column
+  sku_code: 6   # Unit Reference / Catalog No column
+  list_price: 7 # Unit MRP / List Price column
+
+# Default values
+defaults:
+  uom: "EA"
+  currency: "INR"
+  description_prefix: "Contactor"
+
+# Cleaning rules
+cleaning:
+  trim_all: true
+  collapse_spaces: true
+  price_remove_commas: true
+  price_cast_float_or_int: true
+
+# Filtering rules
+filters:
+  drop_if_sku_missing: true
+  drop_if_price_missing: true
+  # Ignore header rows and section titles
+  ignore_if_first_cell_contains_any:
+    - "AC-1"
+    - "AC-3"
+    - "HP"
+    - "kW"
+    - "[Ie]"
+    - "Rated"
+    - "Auxiliary"
+    - "Frame"
+    - "Unit Reference"
+    - "Unit MRP"
+
+# Output schema (standardized)
+output:
+  columns:
+    - make
+    - sku_code
+    - description
+    - uom
+    - list_price
+    - currency
+    - notes
+

@@ -1,0 +1,23 @@
+{
+  "kb_version": "1.0",
+  "kb_last_refresh": "2025-12-28T00:24:18.637878",
+  "index_version": "1.0",
+  "index_timestamp": "2025-12-29T23:30:02.496693",
+  "file_count": 104,
+  "keyword_index": {
+    "document_count": 469,
+    "namespace_count": 7
+  },
+  "vector_index": {
+    "document_count": 469,
+    "dimension": 384,
+    "model": "all-MiniLM-L6-v2"
+  },
+  "indexing_config": {
+    "chunk_size": 1000,
+    "chunk_overlap": 200,
+    "min_chunk_length": 40,
+    "keyword_doc_count": 469,
+    "vector_doc_count": 469
+  }
+}

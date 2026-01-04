@@ -1,0 +1,4 @@
+Validation Report
+Canonical: /Users/nirajdesai/Projects/NSW_Estimation_Software/tools/catalog_pipeline_v2/archives/schneider/LC1E/2025-07-15_WEF/02_outputs/rebuild_check/LC1E_CANONICAL_FINAL.xlsx
+Source: /Users/nirajdesai/Projects/NSW_Estimation_Software/tools/catalog_pipeline_v2/archives/schneider/LC1E/2025-07-15_WEF/00_inputs/Switching _All_WEF 15th Jul 25.xlsx
+Status: PASS

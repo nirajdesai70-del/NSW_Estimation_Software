@@ -1,0 +1,37 @@
+import_stage,make,series,sku_code,description,uom,list_price,currency,notes
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E40B01,TeSys Deca Contactor,EA,7680,INR,LC1E40B01*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E40B10,TeSys Deca Contactor,EA,7680,INR,LC1E40B10*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E120,TeSys Deca Contactor | FRAME-5,EA,29190,INR,LC1E120*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E160,TeSys Deca Contactor,EA,38540,INR,LC1E160*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E200,TeSys Deca Contactor | FRAME-6,EA,53050,INR,LC1E200*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E250,TeSys Deca Contactor,EA,82625,INR,LC1E250*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E300,TeSys Deca Contactor | FRAME-7,EA,86065,INR,LC1E300*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E400,TeSys Deca Contactor,EA,107405,INR,LC1E400*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E500,TeSys Deca Contactor | FRAME-8,EA,151285,INR,LC1E500*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E0601,TeSys Deca Contactor,EA,2875,INR,LC1E0601* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E0610,TeSys Deca Contactor,EA,2875,INR,LC1E0610* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E0901,TeSys Deca Contactor,EA,2875,INR,LC1E0901* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E0910,TeSys Deca Contactor,EA,2875,INR,LC1E0910* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E1201,TeSys Deca Contactor,EA,2975,INR,LC1E1201* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E1210,TeSys Deca Contactor,EA,2975,INR,LC1E1210* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E1801,TeSys Deca Contactor,EA,3470,INR,LC1E1801* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E1810,TeSys Deca Contactor,EA,3470,INR,LC1E1810* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E2501,TeSys Deca Contactor,EA,4760,INR,LC1E2501* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E2510,TeSys Deca Contactor,EA,4760,INR,LC1E2510* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E3201,TeSys Deca Contactor,EA,10415,INR,LC1E3201* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E3210,TeSys Deca Contactor,EA,10415,INR,LC1E3210* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E3801,TeSys Deca Contactor,EA,11905,INR,LC1E3801* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E3810,TeSys Deca Contactor,EA,11905,INR,LC1E3810* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E40,TeSys Deca Contactor,EA,19280,INR,LC1E40** 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E50,TeSys Deca Contactor | FRAME-3,EA,19485,INR,LC1E50**
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E65,TeSys Deca Contactor,EA,20385,INR,LC1E65** 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E80,TeSys Deca Contactor,EA,26295,INR,LC1E80** 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E95,TeSys Deca Contactor,EA,28720,INR,LC1E95** 0
+TEST,Schneider,EOCRS,EOCRSSD-05S,TeSys Deca Contactor,EA,11525,INR,EOCRSSD-05S
+TEST,Schneider,EOCRS,EOCRSSD-05W,TeSys Deca Contactor,EA,14195,INR,EOCRSSD-05W
+TEST,Schneider,EOCRS,EOCRSSD-30S,TeSys Deca Contactor,EA,11525,INR,EOCRSSD-30S
+TEST,Schneider,EOCRS,EOCRSSD-30W,TeSys Deca Contactor,EA,12300,INR,EOCRSSD-30W
+TEST,Schneider,EOCRS,EOCRSSD-60S,TeSys Deca Contactor,EA,11525,INR,EOCRSSD-60S
+TEST,Schneider,EOCRS,EOCRSSD-60W,TeSys Deca Contactor,EA,12300,INR,EOCRSSD-60W
+TEST,Schneider,GV6P,GV6P320H,TeSys Deca Contactor,EA,77815,INR,GV6P320H
+TEST,Schneider,GV6P,GV6P500H,TeSys Deca Contactor,EA,107210,INR,GV6P500H

@@ -1,0 +1,87 @@
+import_stage,make,series,sku_code,description,uom,list_price,currency,notes
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1DT20,TeSys Deca Contactor,EA,4080,INR,LC1DT20**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1D098,TeSys Deca Contactor,EA,4445,INR,LC1D098**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1DT25,TeSys Deca Contactor,EA,4905,INR,LC1DT25**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1D128,TeSys Deca Contactor,EA,6400,INR,LC1D128**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1DT32,TeSys Deca Contactor,EA,5390,INR,LC1DT32**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1D188,TeSys Deca Contactor,EA,7290,INR,LC1D188**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1DT40,TeSys Deca Contactor,EA,8450,INR,LC1DT40**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1D258,TeSys Deca Contactor,EA,11140,INR,LC1D258**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LP1D40008,TeSys Deca Contactor,EA,22220,INR,LP1D40008**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LP1D65008,TeSys Deca Contactor,EA,29875,INR,LP1D65008**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LP1D80004,TeSys Deca Contactor,EA,32360,INR,LP1D80004**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LP1D80008,TeSys Deca Contactor,EA,37335,INR,LP1D80008**
+TEST,Schneider,"For other coil voltage ratings contactors, please contact Customer Care. * Reference to be completed by adding coil voltage code TeSys Deca Power Contactors (4 Pole AC & DC Control) • Conformance to IEC, UL, CSA • Available with AC (50/60Hz Dual frequency), DC & DC low consumption(1) coil options • High Operating ambient temperature, no derating upto 60 deg C",LC1D1150046,TeSys Deca Contactor,EA,47920,INR,LC1D1150046**
+TEST,Schneider,TeSys Deca Advanced Power Contactors (4 Pole AC & DC Control),LC1DT60A,TeSys Deca Contactor,EA,16910,INR,LC1DT60A
+TEST,Schneider,TeSys Deca Advanced Power Contactors (4 Pole AC & DC Control),LC1DT80A,TeSys Deca Contactor,EA,25225,INR,LC1DT80A
+TEST,Schneider,TeSys Deca Advanced Power Contactors (4 Pole AC & DC Control),LC1DT200A,TeSys Deca Contactor,EA,47305,INR,LC1DT200A
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",LA4DT2U,TeSys Deca Contactor,EA,7165,INR,LA4DT2U
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",LA4DT0U,TeSys Deca Contactor,EA,7165,INR,LA4DT0U
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",LA4DFB,TeSys Deca Contactor,EA,6600,INR,LA4DFB
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",LA4DT4U,TeSys Deca Contactor,EA,8025,INR,LA4DT4U
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",LAD8N11,TeSys Deca Contactor,EA,2420,INR,LAD8N11
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",LADT4,TeSys Deca Contactor,EA,4580,INR,LADT4
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",LADS2,TeSys Deca Contactor,EA,4885,INR,LADS2 0
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",LADR0,TeSys Deca Contactor,EA,4580,INR,LADR0
+TEST,Schneider,Accessories,LA4DA1U,TeSys Deca Contactor,EA,2210,INR,LA4DA1U
+TEST,Schneider,Accessories,LA4DC1U,TeSys Deca Contactor,EA,2475,INR,LA4DC1U
+TEST,Schneider,Accessories,LAD4VE,TeSys Deca Contactor,EA,2145,INR,LAD4VE
+TEST,Schneider,Accessories,LAD4RCE,TeSys Deca Contactor,EA,2145,INR,LAD4RCE
+TEST,Schneider,Accessories,LAD4RCG,TeSys Deca Contactor,EA,1935,INR,LAD4RCG
+TEST,Schneider,Accessories,LAD4RCU,TeSys Deca Contactor,EA,2145,INR,LAD4RCU 0
+TEST,Schneider,Accessories,LAD4VU,TeSys Deca Contactor,EA,2145,INR,LAD4VU
+TEST,Schneider,Accessories,LA4DC3U,TeSys Deca Contactor,EA,2210,INR,LA4DC3U
+TEST,Schneider,Accessories,LA4DE2U,TeSys Deca Contactor,EA,2110,INR,LA4DE2U
+TEST,Schneider,Accessories,LA4DA2E,TeSys Deca Contactor,EA,2110,INR,LA4DA2E
+TEST,Schneider,Accessories,LA4DA2G,TeSys Deca Contactor,EA,3330,INR,LA4DA2G
+TEST,Schneider,Accessories,LA4DA2U,TeSys Deca Contactor,EA,2210,INR,LA4DA2U
+TEST,Schneider,Accessories,LA4DA2N,TeSys Deca Contactor,EA,3330,INR,LA4DA2N
+TEST,Schneider,Accessories,LA4DE3E,TeSys Deca Contactor,EA,2210,INR,LA4DE3E
+TEST,Schneider,TeSys Giga Power Contactors (3 Pole AC/DC),LC1G115,TeSys Deca Contactor,EA,32935,INR,LC1G115****
+TEST,Schneider,TeSys Giga Power Contactors (3 Pole AC/DC),LC1G150,TeSys Deca Contactor,EA,43440,INR,LC1G150****
+TEST,Schneider,TeSys Giga Power Contactors (3 Pole AC/DC),LC1G185,TeSys Deca Contactor,EA,53835,INR,LC1G185****
+TEST,Schneider,TeSys Giga Power Contactors (3 Pole AC/DC),LC1G225,TeSys Deca Contactor,EA,57930,INR,LC1G225****
+TEST,Schneider,TeSys Giga Power Contactors (3 Pole AC/DC),LC1G265,TeSys Deca Contactor,EA,71205,INR,LC1G265****
+TEST,Schneider,TeSys Giga Power Contactors (3 Pole AC/DC),LC1G330,TeSys Deca Contactor,EA,86105,INR,LC1G330****
+TEST,Schneider,TeSys Giga Power Contactors (3 Pole AC/DC),LC1G400,TeSys Deca Contactor,EA,104065,INR,LC1G400****
+TEST,Schneider,TeSys Giga Power Contactors (3 Pole AC/DC),LC1G500,TeSys Deca Contactor,EA,144365,INR,LC1G500****
+TEST,Schneider,Accessories,LAG8N113P,TeSys Deca Contactor,EA,1575,INR,LAG8N113P
+TEST,Schneider,Accessories,LAG8N203P,TeSys Deca Contactor,EA,2035,INR,LAG8N203P
+TEST,Schneider,Accessories,LAG8N113,TeSys Deca Contactor,EA,1575,INR,LAG8N113
+TEST,Schneider,Accessories,LAG8N203,TeSys Deca Contactor,EA,2035,INR,LAG8N203
+TEST,Schneider,Thermal Overload Relays - Tesys K Series (Direct Mounting),MRP,TeSys Deca Contactor,EA,901,INR,Unit MRP [`] 2860
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",3DM2-WRDUWZ,TeSys Deca Contactor,EA,24315,INR,3DM2-WRDUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",FDM2-WRDUWZ,TeSys Deca Contactor,EA,26295,INR,FDM2-WRDUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",3MZ2-WRAUWZ,TeSys Deca Contactor,EA,24640,INR,3MZ2-WRAUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",3MZ2-WRCUWZ,TeSys Deca Contactor,EA,24640,INR,3MZ2-WRCUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",FMZ2-WRAUWZ,TeSys Deca Contactor,EA,29585,INR,FMZ2-WRAUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",FMZ2-WRCUWZ,TeSys Deca Contactor,EA,29585,INR,FMZ2-WRCUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",I3DM-WRDUWZ,TeSys Deca Contactor,EA,39065,INR,I3DM-WRDUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",IFDM-WRDUWZ,TeSys Deca Contactor,EA,39320,INR,IFDM-WRDUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",I3MZ-WRAUWZ,TeSys Deca Contactor,EA,41545,INR,I3MZ-WRAUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",I3MZ-WRCUWZ,TeSys Deca Contactor,EA,41545,INR,I3MZ-WRCUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",IFMZ-WRAUWZ,TeSys Deca Contactor,EA,47055,INR,IFMZ-WRAUWZ
+TEST,Schneider,"For details on non standard references, technical parameters, accessories, compatibility, stockable and non stockable status please contact Customer Care",IFMZ-WRCUWZ,TeSys Deca Contactor,EA,47055,INR,IFMZ-WRCUWZ
+TEST,Schneider,"• Conformance to IEC 60947 -1,-2,-4 • Magnetic circuit breakers range from 0.1-80 Amps • High Breaking capacity up to 100kA • Wide range of accessories",GV2L07,TeSys Deca Contactor,EA,69606960,INR,GV2L07 GV2L08
+TEST,Schneider,"• Conformance to IEC 60947 -1,-2,-4 • Magnetic circuit breakers range from 0.1-80 Amps • High Breaking capacity up to 100kA • Wide range of accessories",GV2L20,TeSys Deca Contactor,EA,6960,INR,GV2L20
+TEST,Schneider,"• Conformance to IEC 60947 -1,-2,-4 • Magnetic circuit breakers range from 0.1-80 Amps • High Breaking capacity up to 100kA • Wide range of accessories",GV2P14,TeSys Deca Contactor,EA,7770,INR,GV2P14 0
+TEST,Schneider,"• Conformance to IEC 60947 -1,-2,-4 • Magnetic circuit breakers range from 0.1-80 Amps • High Breaking capacity up to 100kA • Wide range of accessories",C16N3MA150,TeSys Deca Contactor,EA,70150515051875,INR,C16N3MA150
+TEST,Schneider,"• Conformance to IEC 60947 -1,-2,-4 • Magnetic circuit breakers range from 0.1-80 Amps • High Breaking capacity up to 100kA • Wide range of accessories",C40N31M320,TeSys Deca Contactor,EA,6320,INR,C40N31M320
+TEST,Schneider,"• Conformance to IEC 60947 -1,-2,-4 • Magnetic circuit breakers range from 0.1-80 Amps • High Breaking capacity up to 100kA • Wide range of accessories",C63N31M500,TeSys Deca Contactor,EA,6500,INR,C63N31M500
+TEST,Schneider,Note: All other accessories are same as of GV2.,GVAS225,TeSys Deca Contactor,EA,4785,INR,GVAS225
+TEST,Schneider,"Vario Switch Disconnectors Complete Enclosed Switches t Range 12 to 175A, IP 65 Sealable and Lockable 10 3P 4 kW VCF02GE 4620 20 3P 7.5 kW VCF0GE 6110 32 3P 15 kW VCF2GE 7675 63 3P 30 kW VCF4GE 13890 * Rated Power at 415V",KCF1PZ,TeSys Deca Contactor,EA,1365,INR,KCF1PZ
+TEST,Schneider,"Vario Switch Disconnectors Complete Enclosed Switches t Range 12 to 175A, IP 65 Sealable and Lockable 10 3P 4 kW VCF02GE 4620 20 3P 7.5 kW VCF0GE 6110 32 3P 15 kW VCF2GE 7675 63 3P 30 kW VCF4GE 13890 * Rated Power at 415V",KCF2PZ,TeSys Deca Contactor,EA,1445,INR,KCF2PZ
+TEST,Schneider,"Vario Switch Disconnectors Complete Enclosed Switches t Range 12 to 175A, IP 65 Sealable and Lockable 10 3P 4 kW VCF02GE 4620 20 3P 7.5 kW VCF0GE 6110 32 3P 15 kW VCF2GE 7675 63 3P 30 kW VCF4GE 13890 * Rated Power at 415V",KCF3PZ,TeSys Deca Contactor,EA,5845,INR,KCF3PZ
+TEST,Schneider,Accessories,VZ02,TeSys Deca Contactor,EA,1355,INR,- VZ02
+TEST,Schneider,Accessories,VZ01,TeSys Deca Contactor,EA,1375,INR,- VZ01
+TEST,Schneider,Accessories,VZ0,TeSys Deca Contactor,EA,1470,INR,- VZ0
+TEST,Schneider,Accessories,VZ1,TeSys Deca Contactor,EA,1430,INR,- VZ1
+TEST,Schneider,Accessories,VZ2,TeSys Deca Contactor,EA,1535,INR,- VZ2
+TEST,Schneider,Accessories,VZ3,TeSys Deca Contactor,EA,1995,INR,- VZ3
+TEST,Schneider,Accessories,VZ11,TeSys Deca Contactor,EA,1650,INR,- VZ11
+TEST,Schneider,Accessories,VZ12,TeSys Deca Contactor,EA,2205,INR,- VZ12
+TEST,Schneider,Accessories,VZ13,TeSys Deca Contactor,EA,4555,INR,- VZ13
+TEST,Schneider,Accessories,VZ14,TeSys Deca Contactor,EA,1620,INR,- VZ14
+TEST,Schneider,Accessories,VZ15,TeSys Deca Contactor,EA,1915,INR,- VZ15
+TEST,Schneider,Accessories,VZ16,TeSys Deca Contactor,EA,2975,INR,- VZ16
+TEST,Schneider,Accessories,2NO,TeSys Deca Contactor,EA,1695,INR,2NO VZ20

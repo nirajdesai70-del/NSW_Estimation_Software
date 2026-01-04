@@ -1,0 +1,82 @@
+# Schneider LP1K (TeSys K Control Relays) — DC control SKUs
+# Handles wide XLSX sheets by collapsing rows to non-empty cells first
+# Scope: LP1K DC control SKUs only (BD/FD/MD prices)
+# FROZEN: Do not edit this profile. Create v2 for changes.
+
+make: "Schneider"
+sheet: 0
+
+start_row_contains_any:
+  - "DC Control Reference"
+  - "LP1K"
+
+series:
+  heading_patterns:
+    - "TeSys K Control Relays"
+  sku_prefix_mappings:
+    LP1K: "TeSys K Control Relays (LP1K)"
+  aliases:
+    "TeSys K Control Relays": "TeSys K Control Relays (LP1K)"
+
+section_markers: []  # not needed for this table
+
+# Strategy: collapse to non-empty cells, then map by index.
+# Expected collapsed row pattern (based on sample):
+# [0]=Aux Contacts (1NC/1NO), [1]=AC ref (LC1K...), [2..]=AC prices..., [x]=DC ref (LP1K...), [y]=BD(24V), [z]=FD(110V), [w]=MD(220V)
+#
+# For v1 we will:
+# - take sku_raw from DC ref position
+# - take list_price from first available among BD/FD/MD (prefer BD, else FD, else MD)
+columns_by_index:
+  aux_contacts: 0
+  sku_raw: 6          # DC Control Reference column (LP1K...)
+  list_price: 7       # Base index (fallback will scan forward from SKU position if pricing.scan_forward_from_sku_raw is true)
+
+defaults:
+  uom: "EA"
+  currency: "INR"
+  description_prefix: "TeSys K Control Relay"
+
+pricing:
+  scan_forward_from_sku_raw: true
+  scan_window: 25
+
+diagnostics:
+  enable: true
+  max_rows: 30
+
+cleaning:
+  trim_all: true
+  collapse_spaces: true
+  price_remove_commas: true
+
+filters:
+  ignore_if_contains_any:
+    - "Motor Power"
+    - "Auxiliary Contacts"
+    - "AC Control Reference"
+    - "DC Control Reference"
+    - "Unit MRP"
+    - "BD"
+    - "FD"
+    - "MD"
+    - "B7"
+    - "F7"
+    - "M7"
+    - "N7"
+  drop_if_missing: ["sku_raw", "list_price"]
+
+scope:
+  include_series_contains_any:
+    - "TeSys K Control Relays (LP1K)"
+
+output:
+  columns:
+    - make
+    - sku_code
+    - description
+    - uom
+    - list_price
+    - currency
+    - notes
+

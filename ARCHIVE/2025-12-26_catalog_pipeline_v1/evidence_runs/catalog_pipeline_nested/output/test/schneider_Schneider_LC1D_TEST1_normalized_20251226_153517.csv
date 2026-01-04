@@ -1,0 +1,17 @@
+import_stage,make,series,sku_code,description,uom,list_price,currency,notes
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1DT20,TeSys Deca Contactor | Poles=4P,EA,4080,INR,LC1DT20**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D098,TeSys Deca Contactor | Poles=4P,EA,4445,INR,LC1D098**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1DT25,TeSys Deca Contactor | Poles=4P,EA,4905,INR,LC1DT25**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D128,TeSys Deca Contactor | Poles=4P,EA,6400,INR,LC1D128**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1DT32,TeSys Deca Contactor | Poles=4P,EA,5390,INR,LC1DT32**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D188,TeSys Deca Contactor | Poles=4P,EA,7290,INR,LC1D188**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1DT40,TeSys Deca Contactor | Poles=4P,EA,8450,INR,LC1DT40**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D258,TeSys Deca Contactor | Poles=4P,EA,11140,INR,LC1D258**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LP1D40008,TeSys Deca Contactor | Poles=4P | AC1=- | AC3=-,EA,22220,INR,LP1D40008**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LP1D65008,TeSys Deca Contactor | Poles=4P | AC1=- | AC3=-,EA,29875,INR,LP1D65008**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LP1D80004,TeSys Deca Contactor | Poles=4P | AC1=- | AC3=-,EA,32360,INR,LP1D80004**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LP1D80008,TeSys Deca Contactor | Poles=4P | AC1=- | AC3=-,EA,37335,INR,LP1D80008**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1D1150046,TeSys Deca Contactor | Poles=4P,EA,47920,INR,LC1D1150046**
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1DT60A,TeSys Deca Contactor | Poles=4P,EA,16910,INR,LC1DT60A
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1DT80A,TeSys Deca Contactor | Poles=4P,EA,25225,INR,LC1DT80A
+TEST,Schneider,TeSys Deca Power Contactors (LC1D),LC1DT200A,TeSys Deca Contactor | Poles=4P,EA,47305,INR,LC1DT200A

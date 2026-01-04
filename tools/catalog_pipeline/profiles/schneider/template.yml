@@ -1,0 +1,82 @@
+# Template for creating new OEM profiles
+# Copy this file and rename to {make}.yml (e.g., abb.yml, siemens.yml)
+
+make: "OEM_NAME"
+sheet: 0
+
+# Keywords to identify where the data table starts
+start_row_contains_any: ["Part No", "SKU", "Catalog", "List Price"]
+
+# Stop processing when we hit these keywords
+stop_row_contains_any: ["NOTE", "TERMS", "Conditions", "Page", "Total"]
+
+# Series detection (Tier 1: heading-based, Tier 2: SKU-prefix fallback)
+series:
+  # Heading patterns that indicate a new series (Tier 1)
+  heading_patterns:
+    - "Product Family Name"
+    - "Series Name"
+  
+  # SKU prefix mappings (Tier 2 fallback when heading not found)
+  # Example: "ABC123" -> extract "ABC" prefix, map to series name
+  sku_prefix_mappings:
+    # PREFIX: "Series Name"
+    # ABC: "Product Family A"
+    # XYZ: "Product Family B"
+
+# Section markers (optional) - e.g., "FRAME-3", "CATEGORY A"
+section_markers:
+  - pattern: "^SECTION_NAME"
+    capture_as: "section"
+
+# Column mapping by index (0-based)
+# IMPORTANT: After collapsing row to non-empty cells, map by position
+# Example: If collapsed row is [AC1, AC3, HP, SKU, Price], then:
+#   sku_raw: 3, list_price: 4
+columns_by_index:
+  sku_raw: 0       # Adjust to match your file (after collapsing)
+  list_price: 1   # Adjust to match your file (after collapsing)
+  # Optional fields for description building:
+  # ac1: 0
+  # ac3: 1
+  # description: 2
+
+# Default values
+defaults:
+  uom: "EA"
+  currency: "INR"
+  description_prefix: ""
+
+# Cleaning rules
+cleaning:
+  trim_all: true
+  collapse_spaces: true
+  price_remove_commas: true
+  price_cast_float_or_int: true
+
+# Filtering rules
+filters:
+  # Drop rows missing these required fields
+  drop_if_missing: ["sku_raw", "list_price"]
+  # Ignore header rows and section titles (checks entire row text)
+  ignore_if_contains_any:
+    - "Part No"
+    - "SKU"
+    - "Description"
+    - "Price"
+    - "Header"
+
+# Output schema (standardized - do not change)
+# Note: import_stage and series are automatically added by the normalizer
+output:
+  columns:
+    - import_stage
+    - make
+    - series
+    - sku_code
+    - description
+    - uom
+    - list_price
+    - currency
+    - notes
+

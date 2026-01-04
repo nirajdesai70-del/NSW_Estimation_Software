@@ -1,0 +1,6 @@
+import_stage,make,series,sku_code,description,uom,list_price,currency,notes
+TEST,Schneider,TeSys K Control Relays (LP1K),LP1K0601,TeSys K Control Relay,EA,3455,INR,LP1K0601**
+TEST,Schneider,TeSys K Control Relays (LP1K),LP1K0610,TeSys K Control Relay,EA,3455,INR,LP1K0610**
+TEST,Schneider,TeSys K Control Relays (LP1K),LP1K0901,TeSys K Control Relay,EA,3110,INR,LP1K0901**
+TEST,Schneider,TeSys K Control Relays (LP1K),LP1K0910,TeSys K Control Relay,EA,3110,INR,LP1K0910**
+TEST,Schneider,TeSys K Control Relays (LP1K),LP1K1210,TeSys K Control Relay,EA,4360,INR,LP1K1210**

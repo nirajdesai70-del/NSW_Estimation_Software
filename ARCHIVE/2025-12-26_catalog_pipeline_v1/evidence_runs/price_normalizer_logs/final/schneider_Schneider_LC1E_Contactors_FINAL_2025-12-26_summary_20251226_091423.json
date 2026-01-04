@@ -1,0 +1,21 @@
+{
+  "make": "Schneider",
+  "mode": "final",
+  "input_file": "tools/price_normalizer/input/final/Schneider_LC1E_Contactors_FINAL_2025-12-26.xlsx",
+  "output_csv": "tools/price_normalizer/output/final/schneider_Schneider_LC1E_Contactors_FINAL_2025-12-26_normalized_20251226_091423.csv",
+  "errors_file": "tools/price_normalizer/errors/final/schneider_Schneider_LC1E_Contactors_FINAL_2025-12-26_errors_20251226_091423.xlsx",
+  "counts": {
+    "rows_seen": 1077,
+    "rows_output": 23,
+    "rows_error": 16,
+    "rows_dropped": 178,
+    "duplicates_skipped": 18,
+    "rows_candidate_sku": 71,
+    "rows_invalid_sku": 16,
+    "rows_non_sku_skipped": 842
+  },
+  "series_coverage": {
+    "rows_with_series": 23,
+    "rows_without_series": 0
+  }
+}

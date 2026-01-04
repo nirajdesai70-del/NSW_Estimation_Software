@@ -1,0 +1,51 @@
+# RAG Regression Test Questions
+# These are "golden questions" used to validate RAG system functionality
+# Expected: Answers return citations pointing to correct KB paths with no "global" knowledge leakage
+
+questions:
+  - id: 1
+    query: "What is the latest-only per folder ingestion rule?"
+    description: "Tests understanding of KB refresh rules"
+    expected_citations:
+      - should_contain: "kb_refresh"
+      - should_contain: "latest"
+      - should_contain: "folder"
+    namespace_filter: null
+    authority_filter: null
+    
+  - id: 2
+    query: "Where are feature flags captured?"
+    description: "Tests knowledge of feature flag documentation location"
+    expected_citations:
+      - should_contain: "FEATURE_FLAGS"
+      - should_contain: "phase5_pack"
+    namespace_filter: null
+    authority_filter: null
+    
+  - id: 3
+    query: "What is authority policy for chat_mirror?"
+    description: "Tests understanding of chat_mirror governance rules"
+    expected_citations:
+      - should_contain: "chat_mirror"
+      - should_contain: "WORKING"
+      - should_contain: "authority"
+    namespace_filter: null
+    authority_filter: null
+
+# Validation criteria
+validation:
+  citation_quality:
+    - "All citations must point to valid KB paths"
+    - "Citations should include source_path, kb_path, and authority"
+    - "No citations should reference files outside RAG_KB/"
+  
+  answer_quality:
+    - "Answers should be relevant to the query"
+    - "Answers should include document references"
+    - "No generic 'I don't know' responses for valid KB content"
+  
+  kb_boundaries:
+    - "No answers should reference general knowledge not in KB"
+    - "All information should be traceable to KB source documents"
+    - "Answers should respect namespace and authority filters"
+
