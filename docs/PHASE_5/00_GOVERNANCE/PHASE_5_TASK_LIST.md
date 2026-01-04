@@ -28,12 +28,12 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 - [ ] **A1.3:** Document G2: Production BOM requires ProductId (explicit business rule)
 - [ ] **A1.4:** Document G3: IsPriceMissing normalizes Amount (explicit business rule)
 - [ ] **A1.5:** Document G4: RateSource consistency (explicit business rule)
-- [ ] **A1.6:** Document G5: UNRESOLVED normalizes values (explicit business rule)
-- [ ] **A1.7:** Document G6: FIXED_NO_DISCOUNT forces Discount=0 (explicit business rule)
-- [ ] **A1.8:** Document G7: All discounts are percentage-based (explicit business rule)
-- [ ] **A1.9:** Document G8: L1-SKU reuse is allowed and expected (explicit business rule)
-- [ ] **A1.10:** Add "Canonical Validation Guardrails" section to Data Dictionary
-- [ ] **A1.11:** Specify enforcement layer for each guardrail (business rule / DB constraint / service-level check)
+- [x] **A1.6:** Document G5: UNRESOLVED normalizes values (explicit business rule)
+- [x] **A1.7:** Document G6: FIXED_NO_DISCOUNT forces Discount=0 (explicit business rule)
+- [x] **A1.8:** Document G7: All discounts are percentage-based (explicit business rule)
+- [x] **A1.9:** Document G8: L1-SKU reuse is allowed and expected (explicit business rule)
+- [x] **A1.10:** Add "Canonical Validation Guardrails" section to Data Dictionary
+- [x] **A1.11:** Specify enforcement layer for each guardrail (business rule / DB constraint / service-level check)
 
 **Deliverable:** Guardrails section in Data Dictionary with all 8 rules explicitly documented
 
@@ -49,7 +49,7 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 - [ ] **A2.7:** Map AUDIT module tables (audit_log, bom_change_logs if exists)
 - [ ] **A2.8:** Map AI module tables (ai_call_logs, etc.)
 - [ ] **A2.9:** Create ownership matrix table/document
-- [ ] **A2.10:** Add to Data Dictionary Step 1 deliverable
+- [x] **A2.10:** Add to Data Dictionary Step 1 deliverable
 
 **Deliverable:** Complete module ownership matrix mapping all tables to owner modules
 
@@ -64,7 +64,7 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 - [ ] **A3.6:** Document ID strategy (bigserial vs UUID)
 - [ ] **A3.7:** Document tenant isolation convention (tenant_id everywhere)
 - [ ] **A3.8:** Create naming conventions section
-- [ ] **A3.9:** Add to Data Dictionary Step 1 deliverable
+- [x] **A3.9:** Add to Data Dictionary Step 1 deliverable
 
 **Deliverable:** Complete naming conventions documentation with all standards
 

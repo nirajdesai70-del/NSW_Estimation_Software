@@ -2,9 +2,9 @@
 
 **Version:** 1.0  
 **Date:** 2026-01-27  
-**Status:** ACTIVE (Freeze-in-progress)  
+**Status:** FROZEN  
 **Owner:** Phase 5 Senate  
-**Freeze Target:** SPEC-5 v1.0 (after Category A + Category D approvals)  
+**Frozen:** 2026-01-27 after Phase-5 Senate review  
 **Purpose:** Canonical data dictionary for NSW system - single source of truth for entity definitions, relationships, and business rules
 
 ---
