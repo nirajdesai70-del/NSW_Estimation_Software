@@ -53,12 +53,36 @@ class VersionResponse(BaseModel):
 class HealthResponse(BaseModel):
     """Health check response model"""
     status: str
+    keyword_backend: str
+    kb_version: str
+    index_version: str
+    keyword_docs: int
 
 
 @app.get("/health", response_model=HealthResponse, tags=["system"])
 def health():
-    """Health check endpoint"""
-    return {"status": "ok"}
+    """Health check endpoint with backend and index stats"""
+    try:
+        # Get stats from keyword index
+        stats = query_service.keyword_index.get_stats()
+        keyword_doc_count = stats.get("document_count", 0)
+        
+        return {
+            "status": "ok",
+            "keyword_backend": "bm25",
+            "kb_version": query_service._get_kb_version(),
+            "index_version": query_service._get_index_version(),
+            "keyword_docs": keyword_doc_count,
+        }
+    except Exception as e:
+        # Return error status if stats unavailable
+        return {
+            "status": "error",
+            "keyword_backend": "bm25",
+            "kb_version": "unknown",
+            "index_version": "unknown",
+            "keyword_docs": 0,
+        }
 
 
 @app.post("/query", response_model=QueryResponse, tags=["query"])
