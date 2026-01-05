@@ -287,6 +287,7 @@ class QueryService:
         return {
             "answer": "\n".join(answer_parts),
             "citations": citations,
+            "keyword_backend": "bm25",
             "kb_version": self._get_kb_version(),
             "index_version": self._get_index_version(),
             "result_count": len(top_results),

@@ -6,6 +6,7 @@ for fast, accurate keyword search without requiring a database.
 """
 
 import json
+import os
 from pathlib import Path
 from typing import Dict, List, Optional
 from datetime import datetime
@@ -39,6 +40,9 @@ class KeywordIndex:
         # Metadata file
         self.metadata_file = index_path.parent / f"{index_path.stem}_metadata.json"
         
+        # Dirty flag for deferred rebuild
+        self._dirty = False
+        
     def _tokenize(self, text: str) -> List[str]:
         """Simple tokenization (split on whitespace, lowercase)"""
         return text.lower().split()
@@ -48,8 +52,11 @@ class KeywordIndex:
         self._load_metadata()
     
     def close(self):
-        """Close index (save metadata)"""
-        self._save_metadata()
+        """Close index (rebuild if dirty, then save)."""
+        if getattr(self, "_dirty", False):
+            self.rebuild()
+        else:
+            self._save_metadata_atomic()
     
     def _load_metadata(self):
         """Load metadata from disk"""
@@ -61,6 +68,12 @@ class KeywordIndex:
                     self.doc_ids = data.get('doc_ids', [])
                     self.corpus = data.get('corpus', [])
                     
+                    # Normalize ordering to be deterministic
+                    if self.doc_ids and self.corpus and len(self.doc_ids) == len(self.corpus):
+                        pairs = sorted(zip(self.doc_ids, self.corpus), key=lambda x: x[0])
+                        self.doc_ids = [p[0] for p in pairs]
+                        self.corpus = [p[1] for p in pairs]
+                    
                     # Rebuild BM25 index if we have corpus
                     if self.corpus:
                         self.bm25 = BM25Okapi(self.corpus)
@@ -70,15 +83,25 @@ class KeywordIndex:
                 self.corpus = []
     
     def _save_metadata(self):
-        """Save metadata to disk"""
+        """Save metadata to disk (legacy method, use _save_metadata_atomic)"""
+        self._save_metadata_atomic()
+    
+    def _save_metadata_atomic(self):
+        """Save metadata atomically to disk (write temp, fsync, rename)."""
         data = {
             'metadata': self.metadata,
             'doc_ids': self.doc_ids,
             'corpus': self.corpus,
             'updated_at': datetime.now().isoformat(),
         }
-        with open(self.metadata_file, 'w') as f:
+        
+        tmp_file = self.metadata_file.with_suffix(self.metadata_file.suffix + ".tmp")
+        with open(tmp_file, 'w') as f:
             json.dump(data, f, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        
+        tmp_file.replace(self.metadata_file)
     
     def create_tables(self):
         """Create/initialize index (no-op for file-based, kept for compatibility)"""
@@ -119,8 +142,8 @@ class KeywordIndex:
                     'last_modified': metadata.get('last_modified', ''),
                     'indexed_at': datetime.now().isoformat(),
                 }
-                # Rebuild BM25 index
-                self.bm25 = BM25Okapi(self.corpus)
+                # Mark index dirty; rebuild will occur in rebuild() / close()
+                self._dirty = True
                 return
             except ValueError:
                 pass  # Not found, will add new
@@ -140,8 +163,8 @@ class KeywordIndex:
             'indexed_at': datetime.now().isoformat(),
         }
         
-        # Rebuild BM25 index
-        self.bm25 = BM25Okapi(self.corpus)
+        # Mark index dirty; rebuild will occur in rebuild() / close()
+        self._dirty = True
     
     def search(
         self, 
@@ -210,13 +233,24 @@ class KeywordIndex:
         return results
     
     def rebuild(self):
-        """Rebuild the index (clear all data)"""
-        self.bm25 = None
-        self.corpus = []
-        self.doc_ids = []
-        self.metadata = {}
-        if self.metadata_file.exists():
-            self.metadata_file.unlink()
+        """Rebuild BM25 index deterministically and persist state."""
+        if not RANK_BM25_AVAILABLE:
+            raise ImportError("rank-bm25 not installed")
+        
+        if not self.corpus or not self.doc_ids:
+            self.bm25 = None
+            self._dirty = False
+            self._save_metadata_atomic()
+            return
+        
+        # Enforce deterministic ordering by doc_id
+        pairs = sorted(zip(self.doc_ids, self.corpus), key=lambda x: x[0])
+        self.doc_ids = [p[0] for p in pairs]
+        self.corpus = [p[1] for p in pairs]
+        
+        self.bm25 = BM25Okapi(self.corpus)
+        self._dirty = False
+        self._save_metadata_atomic()
     
     def get_stats(self) -> Dict:
         """Get index statistics"""

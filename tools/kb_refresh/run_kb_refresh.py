@@ -195,11 +195,13 @@ class KBRefresher:
         return None
 
     def _compute_file_hash(self, file_path: Path) -> str:
-        """Compute SHA256 hash of file content for change detection"""
+        """Compute SHA256 hash of file content for change detection (streaming)."""
         try:
+            h = hashlib.sha256()
             with open(file_path, "rb") as f:
-                content = f.read()
-            return hashlib.sha256(content).hexdigest()
+                for chunk in iter(lambda: f.read(1024 * 1024), b""):  # 1MB chunks
+                    h.update(chunk)
+            return h.hexdigest()
         except Exception as e:
             if self.verbose:
                 print(f"Warning: Could not compute hash for {file_path}: {e}")
@@ -744,15 +746,14 @@ This document provides a human-readable map of the Phase 5 folder structure, sho
             for k in set(prev_files.keys()) & set(curr_files.keys()):
                 prev = prev_files[k]
                 curr = curr_files[k]
-                # Use SHA256 hash for more reliable change detection
+                # Use SHA256 hash for more reliable change detection (strict policy)
                 prev_hash = prev.get("content_hash", "")
                 curr_hash = curr.get("content_hash", "")
-                if prev_hash and curr_hash and prev_hash != curr_hash:
+                if not prev_hash or not curr_hash:
+                    # If hashing missing, treat as updated to avoid false negatives (conservative)
                     updated_files.append({"filename": curr["filename"], "previous": prev, "current": curr})
-                elif not prev_hash or not curr_hash:
-                    # Fallback to mtime if hash not available
-                    if prev.get("last_modified") != curr.get("last_modified"):
-                        updated_files.append({"filename": curr["filename"], "previous": prev, "current": curr})
+                elif prev_hash != curr_hash:
+                    updated_files.append({"filename": curr["filename"], "previous": prev, "current": curr})
 
             delta_content = f"""# Delta Report - KB Refresh
 
