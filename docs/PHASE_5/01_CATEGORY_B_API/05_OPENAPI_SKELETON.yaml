@@ -259,6 +259,45 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /bom/explode:
+    post:
+      tags:
+        - bom
+      summary: BOM explode (L1 → L2)
+      description: |
+        Explodes L1 intent lines into L2 catalog SKUs.
+
+        **G-08:** Many L1 lines may map to the same SKU (aggregation supported).
+
+        **Option A:** Unmapped L1 lines are returned in `unmapped[]` (non-fatal).
+      operationId: bomExplode
+      parameters:
+        - name: X-Tenant-ID
+          in: header
+          required: true
+          description: Tenant ID (stub mode; JWT later)
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BomExplodeRequest'
+      responses:
+        '200':
+          description: Exploded BOM result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BomExplodeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
   /quotation/{quotation_id}/discount/quotation:
     put:
       tags:
@@ -652,6 +691,130 @@ components:
         value:
           type: string
 
+    BomExplodeRequest:
+      type: object
+      required:
+        - l1_intent_line_ids
+      properties:
+        l1_intent_line_ids:
+          type: array
+          minItems: 1
+          items:
+            type: integer
+          description: List of L1 intent line IDs to explode.
+        include_attributes:
+          type: boolean
+          default: false
+          description: If true, include L1 attribute KVU data (future enhancement).
+        include_sku:
+          type: boolean
+          default: true
+          description: If true, include SKU meta fields from catalog_skus.
+        aggregate_by_sku:
+          type: boolean
+          default: true
+          description: If true, aggregate results by catalog_sku_id (G-08 supported).
+
+    BomExplodeL1Source:
+      type: object
+      properties:
+        l1_intent_line_id:
+          type: integer
+        mapping_type:
+          type: string
+          description: Mapping type (BASE, FEATURE_ADDON, FEATURE_INCLUDED, FEATURE_BUNDLED)
+        is_primary:
+          type: boolean
+
+    BomExplodeItem:
+      type: object
+      properties:
+        catalog_sku_id:
+          type: integer
+
+        # Canonical fields (match catalog_skus)
+        make:
+          type: string
+          nullable: true
+          description: SKU make (catalog_skus.make)
+        oem_catalog_no:
+          type: string
+          nullable: true
+          description: OEM catalog number (catalog_skus.oem_catalog_no)
+        uom:
+          type: string
+          nullable: true
+          description: Unit of measure (catalog_skus.uom)
+
+        # Backward-compatible aliases
+        sku_code:
+          type: string
+          nullable: true
+          description: Alias of oem_catalog_no (compatibility)
+        name:
+          type: string
+          nullable: true
+          description: Alias of make (compatibility)
+
+        mapping_count:
+          type: integer
+          description: Number of mappings contributing to this SKU.
+        mapping_types:
+          type: array
+          items:
+            type: string
+        l1_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/BomExplodeL1Source'
+
+    BomExplodeUnmapped:
+      type: object
+      properties:
+        l1_intent_line_id:
+          type: integer
+        reason:
+          type: string
+          enum: [L1_NOT_FOUND, NO_L2_MAPPING]
+
+    BomExplodeResponse:
+      type: object
+      properties:
+        tenant_id:
+          type: integer
+        input:
+          type: object
+          properties:
+            l1_intent_line_ids:
+              type: array
+              items:
+                type: integer
+        summary:
+          type: object
+          properties:
+            l1_lines_requested:
+              type: integer
+            l1_lines_found:
+              type: integer
+            mappings_found:
+              type: integer
+            skus_found:
+              type: integer
+            unmapped_l1_lines:
+              type: integer
+        unmapped:
+          type: array
+          items:
+            $ref: '#/components/schemas/BomExplodeUnmapped'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BomExplodeItem'
+        warnings:
+          type: array
+          items:
+            type: string
+
     QuotationDiscountSetRequest:
       type: object
       required:
@@ -879,7 +1042,7 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
           example:
-            detail: Query failed: Database connection error
+            detail: "Query failed: Database connection error"
             error_code: INTERNAL_QUERY_FAILED
             request_id: 123e4567-e89b-12d3-a456-426614174000
             version: v1

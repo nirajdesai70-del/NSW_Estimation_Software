@@ -132,7 +132,7 @@ def explode_bom(
         sku_rows = (
             db.execute(
                 text("""
-                    SELECT id, sku_code, name, uom
+                    SELECT id, make, oem_catalog_no, uom
                     FROM catalog_skus
                     WHERE tenant_id = :tenant_id AND id = ANY(:sku_ids)
                 """),
@@ -184,11 +184,22 @@ def explode_bom(
         # Convert bucket to list; attach SKU meta
         for sku_id, bucket in sku_bucket.items():
             meta = sku_meta.get(sku_id, {}) if payload.include_sku else {}
+
+            make = meta.get("make")
+            oem_catalog_no = meta.get("oem_catalog_no")
+
             item = {
                 "catalog_sku_id": sku_id,
-                "sku_code": meta.get("sku_code"),
-                "name": meta.get("name"),
+
+                # Canonical fields (match schema)
+                "make": make,
+                "oem_catalog_no": oem_catalog_no,
                 "uom": meta.get("uom"),
+
+                # Backward-compatible aliases (optional but helpful)
+                "sku_code": oem_catalog_no,
+                "name": make,
+
                 "mapping_count": bucket["mapping_count"],
                 "mapping_types": sorted(list(bucket["mapping_types"])),
                 "l1_sources": sorted(bucket["l1_sources"], key=lambda x: x["l1_intent_line_id"]),
@@ -204,15 +215,25 @@ def explode_bom(
             for mp in maps:
                 sku_id = mp["catalog_sku_id"]
                 meta = sku_meta.get(sku_id, {}) if payload.include_sku else {}
+
+                make = meta.get("make")
+                oem_catalog_no = meta.get("oem_catalog_no")
+
                 items.append(
                     {
                         "l1_intent_line_id": l1_id,
                         "catalog_sku_id": sku_id,
                         "mapping_type": mp["mapping_type"],
                         "is_primary": mp["is_primary"],
-                        "sku_code": meta.get("sku_code"),
-                        "name": meta.get("name"),
+
+                        # Canonical fields
+                        "make": make,
+                        "oem_catalog_no": oem_catalog_no,
                         "uom": meta.get("uom"),
+
+                        # Backward-compatible aliases
+                        "sku_code": oem_catalog_no,
+                        "name": make,
                     }
                 )
 

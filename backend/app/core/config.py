@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     PORT: int = int(os.getenv("NSW_BACKEND_PORT", "8003"))
 
     # Database - safe defaults for dev/test (override via env in production)
-    DATABASE_URL: str = "sqlite+pysqlite:///:memory:"
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+pysqlite:///:memory:")
     DATABASE_ECHO: bool = False
 
     # Redis (optional)

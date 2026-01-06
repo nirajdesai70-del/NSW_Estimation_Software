@@ -190,14 +190,16 @@ if len(sku_code) < 3 or not any(c.isalpha() for c in sku_code):
 | DB Constraint | API Validation | Endpoint | Status |
 |---------------|----------------|----------|--------|
 | No UNIQUE on `catalog_sku_id` in `l1_l2_mappings` | Allow many L1 lines → same SKU | `POST /api/v1/bom/explode` | ✅ Implemented |
+| `catalog_skus` schema: `make`, `oem_catalog_no`, `uom` | SKU meta fields use `make` + `oem_catalog_no` per Schema Canon | `POST /api/v1/bom/explode` | ✅ Implemented |
 
-**Parity:** ✅ API supports many L1 lines mapping to same SKU (aggregation supported, non-fatal unmapped handling).
+**Parity:** ✅ API supports many L1 lines mapping to same SKU (aggregation supported, non-fatal unmapped handling). SKU meta fields align with Schema Canon (`make`, `oem_catalog_no`, `uom`).
 
 **Code Reference:**
 ```python
 # bom.py:aggregate_by_sku mode
 # Multiple L1 lines can map to same catalog_sku_id
 # Provenance preserved via l1_sources[] array
+# SKU fields: make, oem_catalog_no, uom (with backward-compatible aliases)
 ```
 
 ---

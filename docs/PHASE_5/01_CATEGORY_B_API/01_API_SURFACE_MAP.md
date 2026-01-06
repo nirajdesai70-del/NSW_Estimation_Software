@@ -51,7 +51,7 @@ Scope: Phase-5 Category-B API Surface Inventory
 
 | Endpoint | Method | Purpose | Source Tables | Guardrails | Response Shape | Owner | Status |
 |----------|--------|---------|---------------|------------|-----------------|-------|--------|
-| `/api/v1/bom/explode` | POST | BOM explosion (L1→L2) | `l1_intent_lines`, `l1_l2_mappings`, `catalog_skus` | G-08: many L1→same SKU | `{tenant_id, input, summary, unmapped[], items[], warnings[]}` | BOM | ✅ Implemented |
+| `/api/v1/bom/explode` | POST | BOM explosion (L1→L2) | `l1_intent_lines`, `l1_l2_mappings`, `catalog_skus` | G-08: many L1→same SKU | `{tenant_id, input, summary, unmapped[], items[], warnings[]}`<br/>SKU fields: `make`, `oem_catalog_no`, `uom` (+ aliases `sku_code`, `name`) | BOM | ✅ Implemented |
 | `/api/v1/bom/{bom_id}` | GET | Get BOM by ID | `master_boms`, `master_bom_items` | G-01: tenant_id | TBD | BOM | ⏳ Stubbed |
 
 **BOM Notes:**
