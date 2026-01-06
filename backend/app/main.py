@@ -1,11 +1,18 @@
 """
 FastAPI Application Entry Point
 """
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
 from app.core.config import settings
+from app.core.middleware.request_id import RequestIDMiddleware
+from app.core.exceptions import (
+    http_exception_handler,
+    validation_exception_handler,
+    unhandled_exception_handler,
+)
 from app.api.v1.router import api_router
 
 app = FastAPI(
@@ -17,6 +24,9 @@ app = FastAPI(
     openapi_url="/openapi.json",
 )
 
+# Request ID Middleware (must be before CORS to ensure request_id is available)
+app.add_middleware(RequestIDMiddleware)
+
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
@@ -25,6 +35,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Exception Handlers (standardize all error responses)
+app.add_exception_handler(HTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(Exception, unhandled_exception_handler)
 
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_PREFIX)

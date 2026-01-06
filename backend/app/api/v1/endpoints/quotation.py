@@ -4,6 +4,9 @@ Quotation endpoints
 from typing import List, Dict, Any
 from decimal import Decimal
 from fastapi import APIRouter, Depends, HTTPException, Path, Request
+
+from app.core.raise_api_error import raise_api_error
+from app.core.error_codes import ErrorCodes
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
@@ -88,7 +91,11 @@ def _compute_quote_pricing(
     ).mappings().first()
 
     if not quote:
-        raise HTTPException(status_code=404, detail="Quotation not found for tenant")
+        raise_api_error(
+            status_code=404,
+            error_code=ErrorCodes.NOT_FOUND_QUOTATION,
+            detail="Quotation not found for tenant",
+        )
 
     quotation_discount_pct = Decimal(str(quote.get("discount_pct") or 0))
     tax_profile_id = quote.get("tax_profile_id")
@@ -263,7 +270,11 @@ def _compute_quote_pricing(
 
     if tax_profile_id and tax_mode_str:
         if tax_mode_str not in (TaxMode.CGST_SGST.value, TaxMode.IGST.value):
-            raise HTTPException(status_code=400, detail="Invalid tax_mode on quotation")
+            raise_api_error(
+                status_code=422,
+                error_code=ErrorCodes.SEMANTIC_INVALID_TAX_MODE,
+                detail="Invalid tax_mode on quotation",
+            )
 
         profile = TaxProfileLookup(db).get_profile(
             tenant_id=tenant_id,
@@ -343,7 +354,11 @@ async def set_quotation_discount(
     try:
         assert_bulk_allowed(user_roles)  # Operator, Reviewer, Approver
     except DiscountPermissionError as e:
-        raise HTTPException(status_code=403, detail=str(e))
+        raise_api_error(
+            status_code=403,
+            error_code=ErrorCodes.PERMISSION_INSUFFICIENT_ROLE,
+            detail=str(e),
+        )
 
     # verify quotation exists + tenant-safe
     q = db.execute(
@@ -351,7 +366,11 @@ async def set_quotation_discount(
         {"qid": quotation_id, "tenant_id": tenant_id},
     ).mappings().first()
     if not q:
-        raise HTTPException(status_code=404, detail="Quotation not found for tenant")
+        raise_api_error(
+            status_code=404,
+            error_code=ErrorCodes.NOT_FOUND_QUOTATION,
+            detail="Quotation not found for tenant",
+        )
 
     old_pct = q.get("discount_pct")
 
@@ -366,7 +385,11 @@ async def set_quotation_discount(
     )
 
     if res.rowcount != 1:
-        raise HTTPException(status_code=409, detail="Quotation discount update failed (rowcount mismatch)")
+        raise_api_error(
+            status_code=409,
+            error_code=ErrorCodes.CONFLICT_UPDATE_FAILED,
+            detail="Quotation discount update failed (rowcount mismatch)",
+        )
 
     # audit
     AuditLogger.log_event(
@@ -449,7 +472,11 @@ async def apply_recalc(
     try:
         assert_apply_recalc_allowed(user_roles)
     except ApplyRecalcPermissionError as e:
-        raise HTTPException(status_code=403, detail=str(e))
+        raise_api_error(
+            status_code=403,
+            error_code=ErrorCodes.PERMISSION_INSUFFICIENT_ROLE,
+            detail=str(e),
+        )
 
     # Ensure quotation exists + belongs to tenant (also get tax profile info for audit)
     qrow = db.execute(
@@ -462,7 +489,11 @@ async def apply_recalc(
     ).mappings().first()
     
     if not qrow:
-        raise HTTPException(status_code=404, detail="Quotation not found for tenant")
+        raise_api_error(
+            status_code=404,
+            error_code=ErrorCodes.NOT_FOUND_QUOTATION,
+            detail="Quotation not found for tenant",
+        )
 
     # Capture tax profile info for audit
     tax_profile_id_at_compute = qrow.get("tax_profile_id")
@@ -554,9 +585,10 @@ async def apply_recalc(
 
     # Verify UPDATE actually affected 1 row (prevents silent no-op)
     if update_result.rowcount != 1:
-        raise HTTPException(
+        raise_api_error(
             status_code=409,
-            detail="Apply-Recalc failed: quotation not updated (rowcount mismatch)"
+            error_code=ErrorCodes.CONFLICT_APPLY_RECALC_FAILED,
+            detail="Apply-Recalc failed: quotation not updated (rowcount mismatch)",
         )
 
     # Audit
@@ -620,7 +652,11 @@ async def delete_quote_bom_item(
     try:
         assert_bulk_allowed(user_roles)
     except DiscountPermissionError as e:
-        raise HTTPException(status_code=403, detail=str(e))
+        raise_api_error(
+            status_code=403,
+            error_code=ErrorCodes.PERMISSION_INSUFFICIENT_ROLE,
+            detail=str(e),
+        )
     
     # Verify line item exists and belongs to quotation + tenant (tenant-filtered SELECT)
     line = db.execute(
@@ -638,13 +674,18 @@ async def delete_quote_bom_item(
     ).mappings().first()
     
     if not line:
-        raise HTTPException(status_code=404, detail="Line item not found")
+        raise_api_error(
+            status_code=404,
+            error_code=ErrorCodes.NOT_FOUND_LINE_ITEM,
+            detail="Line item not found",
+        )
     
     # A5.2: IsLocked enforcement - block deletion if locked
     if line.get("is_locked"):
-        raise HTTPException(
+        raise_api_error(
             status_code=409,
-            detail="LINE_ITEM_LOCKED"
+            error_code=ErrorCodes.CONFLICT_LINE_ITEM_LOCKED,
+            detail="LINE_ITEM_LOCKED",
         )
     
     # Read old values for audit
@@ -678,8 +719,16 @@ async def delete_quote_bom_item(
         ).mappings().first()
         
         if recheck and recheck.get("is_locked"):
-            raise HTTPException(status_code=409, detail="LINE_ITEM_LOCKED")
-        raise HTTPException(status_code=404, detail="Line item not found or already deleted")
+            raise_api_error(
+                status_code=409,
+                error_code=ErrorCodes.CONFLICT_LINE_ITEM_LOCKED,
+                detail="LINE_ITEM_LOCKED",
+            )
+        raise_api_error(
+            status_code=404,
+            error_code=ErrorCodes.NOT_FOUND_LINE_ITEM,
+            detail="Line item not found or already deleted",
+        )
     
     # Audit
     AuditLogger.log_event(

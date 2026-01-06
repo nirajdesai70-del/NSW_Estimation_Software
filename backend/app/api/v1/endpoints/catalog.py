@@ -11,6 +11,9 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query, UploadFile, File, HTTPException
+
+from app.core.raise_api_error import raise_api_error
+from app.core.error_codes import ErrorCodes
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
@@ -101,7 +104,11 @@ def get_item(item_id: int, db: Session = Depends(get_db)):
     """
     item = db.query(CatalogItem).filter(CatalogItem.id == item_id).one_or_none()
     if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise_api_error(
+            status_code=404,
+            error_code=ErrorCodes.NOT_FOUND_ITEM,
+            detail="Item not found",
+        )
 
     skus = (
         db.query(CatalogSku)
@@ -205,7 +212,11 @@ def get_sku(sku_id: int, db: Session = Depends(get_db)):
     """
     sku = db.query(CatalogSku).filter(CatalogSku.id == sku_id).one_or_none()
     if not sku:
-        raise HTTPException(status_code=404, detail="SKU not found")
+        raise_api_error(
+            status_code=404,
+            error_code=ErrorCodes.NOT_FOUND_SKU,
+            detail="SKU not found",
+        )
 
     prices = (
         db.query(SkuPrice)
@@ -265,14 +276,22 @@ def import_skus(
     - dry_run=False: reject if any errors, else commit
     """
     if not file.filename:
-        raise HTTPException(status_code=400, detail="No file provided")
+        raise_api_error(
+            status_code=400,
+            error_code=ErrorCodes.VALIDATION_MISSING_REQUIRED,
+            detail="No file provided",
+        )
 
     # Read file content
     content = file.file.read()
     try:
         text = content.decode("utf-8")
     except Exception:
-        raise HTTPException(status_code=400, detail="File must be UTF-8 CSV")
+        raise_api_error(
+            status_code=400,
+            error_code=ErrorCodes.VALIDATION_ERROR,
+            detail="File must be UTF-8 CSV",
+        )
 
     # Parse CSV
     reader = csv.DictReader(io.StringIO(text))
@@ -281,9 +300,10 @@ def import_skus(
     # Validate required columns
     missing_cols = REQUIRED_COLUMNS - cols
     if missing_cols:
-        raise HTTPException(
+        raise_api_error(
             status_code=400,
-            detail=f"Missing required columns: {sorted(list(missing_cols))}"
+            error_code=ErrorCodes.VALIDATION_MISSING_REQUIRED,
+            detail=f"Missing required columns: {sorted(list(missing_cols))}",
         )
 
     batch_id = str(uuid.uuid4())
@@ -382,12 +402,13 @@ def import_skus(
 
     # Reject commit if errors exist (strict governance)
     if errors:
-        raise HTTPException(
+        raise_api_error(
             status_code=400,
+            error_code=ErrorCodes.CONFLICT_IMPORT_HAS_ERRORS,
             detail={
                 "message": "Cannot commit import with validation errors. Fix errors first.",
-                "summary": summary
-            }
+                "summary": summary,
+            },
         )
 
     # --- DB writes (upsert) ---
