@@ -3,17 +3,7 @@
 name: RAG CI (KB Refresh + Index + Tests)
 
 on:
-  pull_request:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
-    inputs:
-      full:
-        description: "Run full (FAISS + sentence-transformers) pipeline"
-        type: choice
-        options: ["false", "true"]
-        required: false
-        default: "false"
 
 jobs:
   rag-lite:
