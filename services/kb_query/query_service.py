@@ -42,6 +42,9 @@ class QueryService:
         
         # Load indexes
         self._load_indexes()
+        
+        # Connect keyword index to load metadata (rank-bm25 needs explicit connect)
+        self.keyword_index.connect()
 
     def _load_indexes(self):
         """Load keyword and vector indexes"""
