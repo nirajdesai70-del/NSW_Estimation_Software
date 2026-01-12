@@ -1,0 +1,34 @@
+# CODEOWNERS - Role-based approval routing (D-0030 aligned)
+#
+# Minimal setup: All changes require review from @nirajdesai70-del
+# Expand later by uncommenting and customizing role-specific sections below
+#
+# Reference: D-0030 (Access Control and Role-Based Approval for Releases)
+
+# ============================
+# Global default (all changes)
+# ============================
+* @nirajdesai70-del
+
+# ============================
+# Future expansion (uncomment and customize when ready)
+# ============================
+#
+# Governance & Decisions
+# /governance/decisions/ @governance-owners
+#
+# RAG & Gate Infrastructure
+# /tools/gates/ @ops-owners
+# /.github/workflows/ @ops-owners
+# /docker-compose*.yml @ops-owners
+# /services/kb_query/ @ops-owners
+# /services/kb_indexer/ @ops-owners
+#
+# Schema & Data Governance
+# /db/ @schema-owners
+# /migrations/ @schema-owners
+# /data/seeds/ @data-owners
+#
+# Catalog / Estimation Domain
+# /catalog/ @catalog-owners
+# /estimation/ @catalog-owners

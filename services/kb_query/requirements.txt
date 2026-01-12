@@ -1,0 +1,13 @@
+# KB Query Service Dependencies
+
+# Web framework
+fastapi>=0.100.0  # Modern, async, auto-docs
+uvicorn[standard]>=0.23.0  # ASGI server for FastAPI
+pydantic>=2.0.0  # Data validation (required by FastAPI)
+
+# Dependencies from indexer (shared)
+rank-bm25>=0.2.2  # BM25 keyword search
+sentence-transformers>=2.2.0  # For generating query embeddings
+faiss-cpu>=1.7.4  # Vector search (use faiss-gpu for GPU support)
+numpy>=1.21.0  # Required by sentence-transformers and faiss
+

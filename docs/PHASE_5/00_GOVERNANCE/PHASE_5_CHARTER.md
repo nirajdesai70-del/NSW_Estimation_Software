@@ -1,3 +1,11 @@
+---
+Status: CANONICAL
+Version: v1.0
+Owner: Phase 5 Governance
+Updated: 2025-12-27
+Scope: Phase-5
+---
+
 # Phase 5 Charter - NSW Estimation Software Master Plan
 
 **Version:** 1.0  
@@ -66,6 +74,18 @@ To prevent confusion:
 - Create ER diagram and table inventory
 - Output: `NSW_SCHEMA_CANON_v1.0.md` + ERD
 
+## Current Operating Mode
+
+**Mode:** 🔓 OPEN_GATE_EXPLORATION (as of 2025-01-27)
+
+Phase 5 currently operates in Exploration Mode with controlled decision capture. See `PHASE_5_MODE_POLICY.md` for details.
+
+**Key Operating Rules:**
+- Schema and rule changes require Decision Register entry FIRST
+- All changes must be logged (Decision Register or Feature Discovery Log)
+- Prerequisites are reference inputs, not blockers
+- See `EXPLORATION_MODE_SETUP_SUMMARY.md` for complete setup details
+
 ## Critical Rules
 
 1. **Three-Truth Model:**
@@ -81,6 +101,14 @@ To prevent confusion:
 3. **Primary Objective:**
    - Change / Variation Estimation (TfNSW-grade canonical system)
 
+4. **UI Classification:**
+   - Any UI built in existing NEPL app = **REFERENCE HARNESS ONLY** (validation/testing)
+   - Phase-5 UI design = clean slate after Schema Freeze (future)
+   - See `UI_CONTEXT_CLASSIFICATION.md` for complete policy
+
 ## Change Log
 - v1.0: Created as part of Phase 5 Senate setup
+- v1.1: Added UI classification reference (2025-01-27)
 
+
+# Test modification for strict hash test - Mon Jan  5 23:44:03 IST 2026

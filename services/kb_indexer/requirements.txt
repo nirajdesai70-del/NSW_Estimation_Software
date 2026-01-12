@@ -1,0 +1,13 @@
+# KB Indexer Dependencies
+
+# Keyword search
+rank-bm25>=0.2.2  # BM25 keyword search (replaces SQLite FTS5)
+
+# Vector embeddings
+sentence-transformers>=2.2.0  # For generating embeddings
+faiss-cpu>=1.7.4  # Local vector search (use faiss-gpu for GPU support)
+
+# Utilities
+tqdm>=4.65.0  # Progress bars (optional, for better UX)
+numpy>=1.21.0  # Required by sentence-transformers and faiss
+

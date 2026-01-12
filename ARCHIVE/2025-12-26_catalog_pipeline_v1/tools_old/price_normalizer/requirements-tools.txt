@@ -1,0 +1,10 @@
+# Price Normalizer Tool Dependencies
+# Install with: pip install -r requirements-tools.txt
+
+# Core data processing
+pandas>=2.0.0
+openpyxl>=3.1.0  # For Excel read/write
+
+# Configuration
+pyyaml>=6.0
+

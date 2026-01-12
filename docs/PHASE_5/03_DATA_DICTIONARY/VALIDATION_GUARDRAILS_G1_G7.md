@@ -1,6 +1,6 @@
-# Validation Guardrails G1-G7
+# Validation Guardrails G1-G8
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Date:** 2025-01-27  
 **Status:** FROZEN  
 **Owner:** Phase 5 Senate  
@@ -10,7 +10,7 @@
 
 ## Purpose
 
-This document defines the seven validation guardrails (G1-G7) that enforce data integrity and business rules across the NSW system. These guardrails are **non-negotiable** and must be enforced at the appropriate layer (database, service, or worker).
+This document defines the eight validation guardrails (G1-G8) that enforce data integrity and business rules across the NSW system. These guardrails are **non-negotiable** and must be enforced at the appropriate layer (database, service, or worker).
 
 ---
 
@@ -321,6 +321,63 @@ NetRate: 50.00  // Rate unchanged
 
 ---
 
+### G8: L1-SKU Reuse is Allowed and Expected
+
+**What it means:**
+- Multiple L1 intent lines can legally map to the same L2 SKU (many-to-one relationship)
+- Same SKU can serve multiple L1 interpretations (e.g., AC1 and AC3 ratings for same SKU)
+- SKU reuse is expected and correct behavior, not an error
+- Engineers validate attributes and interpretations, not SKU uniqueness
+
+**When it applies:**
+- When creating or updating L1 intent lines
+- When mapping L1 lines to L2 SKUs
+- During L1 → L2 explosion logic
+- During L1 validation
+
+**Normalization rules:**
+- Multiple L1 lines can map to the same `catalog_sku_id` in `l1_l2_mappings` table
+- L1 validation must NOT reject SKU reuse
+- UI must NOT assume 1 L1 → 1 SKU relationship
+- Validation should check L1 attributes (Duty, Rating, Voltage, etc.), not SKU uniqueness
+- Example: LC1E0601 SKU can map to:
+  - L1-A: AC1, 20A, 3P, 220V
+  - L1-B: AC3, 6A, 3P, 220V
+  - L1-C: AC1, 20A, 3P, 415V
+  - L1-D: AC3, 6A, 3P, 415V
+  - All map to same SKU (LC1E0601) ✅
+
+**Enforcement layer:**
+- **Primary:** Service validation (L1 validation service)
+- **Secondary:** Business logic in L1 → L2 explosion
+- **Validation point:** On L1 creation/update, on L1 → L2 mapping, during explosion
+
+**Example:**
+```php
+// Valid: Multiple L1 lines mapping to same SKU
+L1 Line A:
+  Duty: AC1
+  Rating: 20A
+  Voltage: 220V
+  Poles: 3P
+  → Maps to SKU: LC1E0601 ✅
+
+L1 Line B:
+  Duty: AC3
+  Rating: 6A
+  Voltage: 220V
+  Poles: 3P
+  → Maps to SKU: LC1E0601 ✅ (Same SKU, different interpretation)
+
+// Invalid: Rejecting SKU reuse
+L1 Line A → SKU: LC1E0601
+L1 Line B → SKU: LC1E0601
+// ❌ System rejects: "SKU already mapped" (WRONG - violates G8)
+// ✅ System allows: SKU reuse is expected
+```
+
+---
+
 ## Enforcement Summary
 
 | Guardrail | Primary Enforcement | Secondary Enforcement | Validation Point |
@@ -332,18 +389,32 @@ NetRate: 50.00  // Rate unchanged
 | G5 | Service (Pricing) | Business Logic | On RateSource change |
 | G6 | Service (Discount) | Business Logic | On discount update |
 | G7 | DB Constraint | Service (Discount) | On discount update, on save |
+| G8 | Service (L1 Validation) | Business Logic | On L1 creation/update, on L1→L2 mapping |
 
 ---
 
 ## References
 
 - `PHASE_5_PENDING_UPGRADES_INTEGRATION.md` - Section 1.2 (Validation Guardrails)
-- `SPEC_5_FREEZE_GATE_CHECKLIST.md` - Section 4 (Validation Guardrails G1-G7)
+- `SPEC_5_FREEZE_GATE_CHECKLIST.md` - Section 4 (Validation Guardrails G1-G8)
 - `ITEM_MASTER_DETAILED_DESIGN.md` - Resolution Status and Guardrail Implementation
+- `L1_L2_EXPLOSION_LOGIC.md` - L1/L2 differentiation and explosion rules
+- `PHASE_5_PRICE_LIST_IMPACT_ASSESSMENT.md` - L1/L2 differentiation requirements
 
 ---
 
 ## Change Log
+
+### v1.1 (2025-01-27) - UPDATED
+
+**Updates:**
+- Added G8: L1-SKU reuse is allowed and expected
+- Updated enforcement summary table
+- Updated references to include L1/L2 documents
+
+**Change Reason:** Phase 5 impact assessment - L1/L2 differentiation and SKU reuse requirements
+
+---
 
 ### v1.0 (2025-01-27) - FROZEN
 

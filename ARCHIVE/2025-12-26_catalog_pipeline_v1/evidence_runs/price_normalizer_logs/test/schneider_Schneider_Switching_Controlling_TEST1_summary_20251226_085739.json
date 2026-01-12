@@ -1,0 +1,21 @@
+{
+  "make": "Schneider",
+  "mode": "test",
+  "input_file": "tools/price_normalizer/input/test/Schneider_Switching_Controlling_TEST1.xlsx",
+  "output_csv": "tools/price_normalizer/output/test/schneider_Schneider_Switching_Controlling_TEST1_normalized_20251226_085739.csv",
+  "errors_file": "tools/price_normalizer/errors/test/schneider_Schneider_Switching_Controlling_TEST1_errors_20251226_085739.xlsx",
+  "counts": {
+    "rows_seen": 1077,
+    "rows_output": 5,
+    "rows_error": 844,
+    "rows_dropped": 196,
+    "duplicates_skipped": 18,
+    "rows_candidate_sku": 899,
+    "rows_invalid_sku": 844,
+    "rows_non_sku_skipped": 14
+  },
+  "series_coverage": {
+    "rows_with_series": 5,
+    "rows_without_series": 0
+  }
+}

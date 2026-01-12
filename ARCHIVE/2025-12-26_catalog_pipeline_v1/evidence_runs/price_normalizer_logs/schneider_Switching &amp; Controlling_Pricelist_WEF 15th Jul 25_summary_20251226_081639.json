@@ -1,0 +1,13 @@
+{
+  "make": "Schneider",
+  "input_file": "tools/price_normalizer/input/Switching &amp; Controlling_Pricelist_WEF 15th Jul 25.xlsx",
+  "output_csv": "tools/price_normalizer/output/schneider_Switching &amp; Controlling_Pricelist_WEF 15th Jul 25_normalized_20251226_081639.csv",
+  "errors_file": "tools/price_normalizer/errors/schneider_Switching &amp; Controlling_Pricelist_WEF 15th Jul 25_errors_20251226_081639.xlsx",
+  "counts": {
+    "rows_seen": 1229,
+    "rows_output": 79,
+    "rows_error": 913,
+    "rows_dropped": 201,
+    "duplicates_skipped": 36
+  }
+}

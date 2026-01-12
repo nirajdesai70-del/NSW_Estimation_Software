@@ -1,0 +1,109 @@
+# Schneider Electric Contactors Price List Profile v2
+# Handles wide XLSX sheets by collapsing rows to non-empty cells first
+# Scope: ALL LC1E contactors (2P, 3P, 4P - all pole configurations)
+# Updated: 2025-12-26 - Removed 3P restriction to include all contactors
+
+make: "Schneider"
+sheet: 0
+
+# Look for header text to start parsing (optional; tool also works without it)
+start_row_contains_any: ["Unit Reference", "Unit MRP", "MRP"]
+
+# Series detection (Tier 1: heading-based, Tier 2: SKU-prefix fallback)
+series:
+  # Heading patterns that indicate a new series
+  heading_patterns:
+    - "Power Contactors LC1E"
+    - "Power Contactors LC1E (3 Pole AC Control)"
+    - "Power Contactors LC1E (4 Pole AC Control)"
+    - "Easy TeSys Power Contactors"
+    - "Easy TeSys"
+    - "TeSys (4 Pole AC Control)"
+    - "TeSys K Control Relays"
+    - "TeSys K Power Contactors"
+    - "TeSys Deca"
+    - "TeSys Giga"
+    - "TeSys Overload Relay"
+    - "TeSys Motor Circuit Breakers"
+    - "TeSys Switches"
+  
+  # SKU prefix mappings (Tier 2 fallback when heading not found)
+  sku_prefix_mappings:
+    LC1E: "Easy TeSys Power Contactors (LC1E)"
+    LP1K: "TeSys K Control Relays"
+    LC1K: "TeSys K Power Contactors"
+    LC1D: "TeSys Deca Power Contactors"
+    LC1G: "TeSys Giga Power Contactors"
+    LRD: "TeSys Overload Relay"
+    GV: "TeSys Motor Circuit Breakers"
+
+  # Normalize headings to canonical series labels
+  aliases:
+    "Power Contactors LC1E (3 Pole AC Control)": "Easy TeSys Power Contactors (LC1E)"
+    "Power Contactors LC1E (4 Pole AC Control)": "Easy TeSys Power Contactors (LC1E)"
+    "Easy TeSys Power Contactors": "Easy TeSys Power Contactors (LC1E)"
+    "Easy TeSys": "Easy TeSys Power Contactors (LC1E)"
+    "TeSys (4 Pole AC Control)": "Easy TeSys Power Contactors (LC1E)"
+
+# Section markers like FRAME-3 (optional)
+section_markers:
+  - pattern: "^FRAME"
+    capture_as: "frame"
+
+# After collapsing row to non-empty cells, map by position:
+# [0]=AC1, [1]=AC3, [2]=HP, [3]=kW, [4]=NO, [5]=NC, [6]=SKU, [7]=MRP
+columns_by_index:
+  ac1: 0
+  ac3: 1
+  hp: 2
+  kw: 3
+  aux_no: 4
+  aux_nc: 5
+  sku_raw: 6
+  list_price: 7
+
+defaults:
+  uom: "EA"
+  currency: "INR"
+  description_prefix: "Contactor"
+
+cleaning:
+  trim_all: true
+  collapse_spaces: true
+  price_remove_commas: true
+
+filters:
+  # drop header-like rows
+  ignore_if_contains_any:
+    - "[Ie]"
+    - "Rated"
+    - "Operational"
+    - "Auxiliary"
+    - "Contacts"
+    - "Reference"
+    - "MRP"
+    - "AC-1"
+    - "AC-3"
+    - "HP"
+    - "kW"
+    - "NOTE"
+    - "TERMS"
+    - "Page"
+    - "WEF"
+  drop_if_missing: ["sku_raw", "list_price"]
+
+# Scope filtering - include ALL LC1E contactors (no pole restriction)
+scope:
+  include_series_contains_any:
+    - "Easy TeSys Power Contactors (LC1E)"
+
+output:
+  columns:
+    - make
+    - sku_code
+    - description
+    - uom
+    - list_price
+    - currency
+    - notes
+

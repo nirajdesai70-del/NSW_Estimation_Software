@@ -22,19 +22,20 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 
 **Status:** ⚠️ BLOCKING — Cannot freeze SPEC-5 v1.0 until complete
 
-#### A1. Validation Guardrails G1-G7 Documentation
+#### A1. Validation Guardrails G1-G8 Documentation
 - [ ] **A1.1:** Review existing guardrail implementations
 - [ ] **A1.2:** Document G1: Master BOM rejects ProductId (explicit business rule)
 - [ ] **A1.3:** Document G2: Production BOM requires ProductId (explicit business rule)
 - [ ] **A1.4:** Document G3: IsPriceMissing normalizes Amount (explicit business rule)
 - [ ] **A1.5:** Document G4: RateSource consistency (explicit business rule)
-- [ ] **A1.6:** Document G5: UNRESOLVED normalizes values (explicit business rule)
-- [ ] **A1.7:** Document G6: FIXED_NO_DISCOUNT forces Discount=0 (explicit business rule)
-- [ ] **A1.8:** Document G7: All discounts are percentage-based (explicit business rule)
-- [ ] **A1.9:** Add "Canonical Validation Guardrails" section to Data Dictionary
-- [ ] **A1.10:** Specify enforcement layer for each guardrail (business rule / DB constraint / service-level check)
+- [x] **A1.6:** Document G5: UNRESOLVED normalizes values (explicit business rule)
+- [x] **A1.7:** Document G6: FIXED_NO_DISCOUNT forces Discount=0 (explicit business rule)
+- [x] **A1.8:** Document G7: All discounts are percentage-based (explicit business rule)
+- [x] **A1.9:** Document G8: L1-SKU reuse is allowed and expected (explicit business rule)
+- [x] **A1.10:** Add "Canonical Validation Guardrails" section to Data Dictionary
+- [x] **A1.11:** Specify enforcement layer for each guardrail (business rule / DB constraint / service-level check)
 
-**Deliverable:** Guardrails section in Data Dictionary with all 7 rules explicitly documented
+**Deliverable:** Guardrails section in Data Dictionary with all 8 rules explicitly documented
 
 ---
 
@@ -48,7 +49,7 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 - [ ] **A2.7:** Map AUDIT module tables (audit_log, bom_change_logs if exists)
 - [ ] **A2.8:** Map AI module tables (ai_call_logs, etc.)
 - [ ] **A2.9:** Create ownership matrix table/document
-- [ ] **A2.10:** Add to Data Dictionary Step 1 deliverable
+- [x] **A2.10:** Add to Data Dictionary Step 1 deliverable
 
 **Deliverable:** Complete module ownership matrix mapping all tables to owner modules
 
@@ -63,7 +64,7 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 - [ ] **A3.6:** Document ID strategy (bigserial vs UUID)
 - [ ] **A3.7:** Document tenant isolation convention (tenant_id everywhere)
 - [ ] **A3.8:** Create naming conventions section
-- [ ] **A3.9:** Add to Data Dictionary Step 1 deliverable
+- [x] **A3.9:** Add to Data Dictionary Step 1 deliverable
 
 **Deliverable:** Complete naming conventions documentation with all standards
 
@@ -173,16 +174,22 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 - [ ] **B1.2:** Define SubCategory entity
 - [ ] **B1.3:** Define Type/Item entity
 - [ ] **B1.4:** Define Attribute entity
-- [ ] **B1.5:** Define Product entity (Generic L1 / Specific L2)
-- [ ] **B1.6:** Define Master BOM entity
-- [ ] **B1.7:** Define Master BOM Item entity (L0/L1 only, no ProductId)
-- [ ] **B1.8:** Define Quotation entity
-- [ ] **B1.9:** Define Panel entity
-- [ ] **B1.10:** Define BOM Group/Feeder entity
-- [ ] **B1.11:** Define Quotation BOM Item entity
-- [ ] **B1.12:** Define all other entities (Customer, Price, etc.)
+- [ ] **B1.5:** Define Product entity (Legacy - will be replaced by L2 SKUs)
+- [ ] **B1.6:** Define L1 Intent Line entity (engineering interpretation layer)
+- [ ] **B1.7:** Define L1 Attribute entity (KVU attributes for L1 lines)
+- [ ] **B1.8:** Define L1 Line Group entity (groups related L1 lines)
+- [ ] **B1.9:** Define L2 SKU (Catalog SKU) entity (SKU-pure, commercial truth only)
+- [ ] **B1.10:** Define L2 Price (SKU Price) entity (append-only price history)
+- [ ] **B1.11:** Define L1 to L2 Mapping entity (many-to-one relationship)
+- [ ] **B1.12:** Define Master BOM entity
+- [ ] **B1.13:** Define Master BOM Item entity (L0/L1 only, no ProductId)
+- [ ] **B1.14:** Define Quotation entity
+- [ ] **B1.15:** Define Panel entity
+- [ ] **B1.16:** Define BOM Group/Feeder entity
+- [ ] **B1.17:** Define Quotation BOM Item entity
+- [ ] **B1.18:** Define all other entities (Customer, Price, etc.)
 
-**Deliverable:** Complete entity definitions in Data Dictionary
+**Deliverable:** Complete entity definitions in Data Dictionary (including L1/L2 entities)
 
 ---
 
@@ -205,14 +212,17 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 - [ ] **B3.2:** Document full editability after copy rule
 - [ ] **B3.3:** Document history retention rules
 - [ ] **B3.4:** Document multi-SKU explosion rules
-- [ ] **B3.5:** Document master data governance rules (no auto-create, approval queue)
-- [ ] **B3.6:** Document resolution level rules (L0/L1/L2 at all levels)
-- [ ] **B3.7:** Document BOM hierarchy rules (any BOM can be parent/child)
-- [ ] **B3.8:** Document tenant isolation rules
-- [ ] **B3.9:** Document pricing rules (effective dating, RateSource semantics)
-- [ ] **B3.10:** Include Validation Guardrails G1-G7 (from Category A1)
+- [ ] **B3.5:** Document L1/L2 differentiation rules (L2 = SKU-pure, L1 = engineering meaning)
+- [ ] **B3.6:** Document L1 → L2 explosion logic (many-to-one mapping, SKU reuse)
+- [ ] **B3.7:** Document L1 validation rules (SKU reuse allowed, validate attributes not SKU uniqueness)
+- [ ] **B3.8:** Document master data governance rules (no auto-create, approval queue)
+- [ ] **B3.9:** Document resolution level rules (L0/L1/L2 at all levels)
+- [ ] **B3.10:** Document BOM hierarchy rules (any BOM can be parent/child)
+- [ ] **B3.11:** Document tenant isolation rules
+- [ ] **B3.12:** Document pricing rules (effective dating, RateSource semantics, L2 price model)
+- [ ] **B3.13:** Include Validation Guardrails G1-G8 (from Category A1)
 
-**Deliverable:** Complete business rules section in Data Dictionary
+**Deliverable:** Complete business rules section in Data Dictionary (including L1/L2 rules)
 
 ---
 
@@ -249,12 +259,14 @@ This task list is derived from the Phase-5 Readiness Review and organizes work i
 
 #### C1. Translate Data Dictionary to Schema
 - [ ] **C1.1:** Create table list from entity definitions
-- [ ] **C1.2:** Map each entity to table structure
-- [ ] **C1.3:** Define column data types
-- [ ] **C1.4:** Define column constraints (NOT NULL, DEFAULT, etc.)
-- [ ] **C1.5:** Review against SPEC-5 schema DDL
+- [ ] **C1.2:** Map each entity to table structure (including L1/L2 entities)
+- [ ] **C1.3:** Define L1/L2 tables: `l1_line_groups`, `l1_intent_lines`, `l1_attributes`, `catalog_skus`, `l1_l2_mappings`, `sku_prices`
+- [ ] **C1.4:** Define column data types
+- [ ] **C1.5:** Define column constraints (NOT NULL, DEFAULT, etc.)
+- [ ] **C1.6:** Ensure many-to-one L1→L2 mapping (no unique constraint on `catalog_sku_id` in `l1_l2_mappings`)
+- [ ] **C1.7:** Review against SPEC-5 schema DDL
 
-**Deliverable:** Complete table structure design
+**Deliverable:** Complete table structure design (including L1/L2 tables)
 
 ---
 

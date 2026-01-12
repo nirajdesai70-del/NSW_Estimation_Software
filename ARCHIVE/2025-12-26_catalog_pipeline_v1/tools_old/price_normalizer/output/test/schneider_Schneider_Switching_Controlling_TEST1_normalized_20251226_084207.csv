@@ -1,0 +1,24 @@
+import_stage,make,series,sku_code,description,uom,list_price,currency,notes
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E0601,Contactor | FRAME-1 | AC1=20 A | AC3=6 A | HP=3 | kW=2.2 | Aux(NO/NC)=-/1,EA,1580,INR,LC1E0601* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E0610,Contactor | FRAME-1 | AC1=20 A | AC3=6 A | HP=3 | kW=2.2 | Aux(NO/NC)=1/-,EA,1580,INR,LC1E0610* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E0901,Contactor | FRAME-1 | AC1=25 A | AC3=9 A | HP=5.5 | kW=4 | Aux(NO/NC)=-/1,EA,1620,INR,LC1E0901* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E0910,Contactor | FRAME-1 | AC1=25 A | AC3=9 A | HP=5.5 | kW=4 | Aux(NO/NC)=1/-,EA,1620,INR,LC1E0910* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E1201,Contactor | FRAME-1 | AC1=25 A | AC3=12 A | HP=7.5 | kW=5.5 | Aux(NO/NC)=-/1,EA,1850,INR,LC1E1201* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E1210,Contactor | FRAME-1 | AC1=25 A | AC3=12 A | HP=7.5 | kW=5.5 | Aux(NO/NC)=1/-,EA,1850,INR,LC1E1210* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E1801,Contactor | FRAME-1 | AC1=32 A | AC3=18 A | HP=12 | kW=9 | Aux(NO/NC)=-/1,EA,2135,INR,LC1E1801* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E1810,Contactor | FRAME-1 | AC1=32 A | AC3=18 A | HP=12 | kW=9 | Aux(NO/NC)=1/-,EA,2135,INR,LC1E1810* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E2501,Contactor | FRAME-1 | AC1=36 A | AC3=25 A | HP=15 | kW=11 | Aux(NO/NC)=-/1,EA,2905,INR,LC1E2501* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E2510,Contactor | FRAME-1 | AC1=36 A | AC3=25 A | HP=15 | kW=11 | Aux(NO/NC)=1/-,EA,2905,INR,LC1E2510* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E3201,Contactor | FRAME-1 | AC1=50 A | AC3=32 A | HP=20 | kW=15 | Aux(NO/NC)=-/1,EA,6090,INR,LC1E3201* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E3210,Contactor | FRAME-1 | AC1=50 A | AC3=32 A | HP=20 | kW=15 | Aux(NO/NC)=1/-,EA,6090,INR,LC1E3210* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E3801,Contactor | FRAME-1 | AC1=50 A | AC3=38 A | HP=25 | kW=18.5 | Aux(NO/NC)=-/1,EA,7105,INR,LC1E3801* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E3810,Contactor | FRAME-1 | AC1=50 A | AC3=38 A | HP=25 | kW=18.5 | Aux(NO/NC)=1/-,EA,7105,INR,LC1E3810* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E40B01,Contactor | FRAME-1 | AC1=50 A | AC3=40 A | HP=29 | kW=22 | Aux(NO/NC)=-/1,EA,7680,INR,LC1E40B01*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E40B10,Contactor | FRAME-1 | AC1=50 A | AC3=40 A | HP=29 | kW=22 | Aux(NO/NC)=1/-,EA,7680,INR,LC1E40B10*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E40,Contactor | FRAME-1 | AC1=60 A | AC3=40 A | HP=29 | kW=22 | Aux(NO/NC)=1/1,EA,9535,INR,LC1E40* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E65,Contactor | FRAME-3 | AC1=80 A | AC3=65 A | HP=50 | kW=37 | Aux(NO/NC)=1/1,EA,15720,INR,LC1E65* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E80,Contactor | FRAME-3 | AC1=110 A | AC3=80 A | HP=60 | kW=45 | Aux(NO/NC)=1/1,EA,20445,INR,LC1E80* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E95,Contactor | FRAME-3 | AC1=120 A | AC3=95 A | HP=60 | kW=45 | Aux(NO/NC)=1/1,EA,24500,INR,LC1E95* 0
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E160,Contactor | FRAME-5 | AC1=200 A | AC3=160 A | HP=120 | kW=90 | Aux(NO/NC)=1/1,EA,38540,INR,LC1E160*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E250,Contactor | FRAME-6 | AC1=300 A | AC3=250 A | HP=175 | kW=132 | Aux(NO/NC)=-/-,EA,82625,INR,LC1E250*
+TEST,Schneider,Power Contactors LC1E (3 Pole AC Control),LC1E400,Contactor | FRAME-7 | AC1=500 A | AC3=400 A | HP=295 | kW=220 | Aux(NO/NC)=-/-,EA,107405,INR,LC1E400*

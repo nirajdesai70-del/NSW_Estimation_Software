@@ -1,0 +1,1073 @@
+openapi: 3.1.0
+info:
+  title: NSW Estimation Software API
+  description: |
+    API contracts for NSW Estimation Software (Phase-5 Category-B).
+    
+    **Read-Only Inputs:**
+    - Schema Canon v1.0 (Category-C, frozen)
+    - RAG KB v1.0 (BM25 + strict SHA256, tagged)
+    
+    **Version:** v1.0
+    **Status:** DRAFT
+  version: 1.0.0
+  contact:
+    name: Phase 5 Senate
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:8003/api/v1
+    description: Development server
+  - url: https://api.example.com/api/v1
+    description: Production server (example)
+
+tags:
+  - name: system
+    description: System endpoints (health, root)
+  - name: catalog
+    description: Catalog management (items, SKUs, import)
+  - name: bom
+    description: Bill of Materials operations
+  - name: pricing
+    description: Pricing and discount rules
+  - name: quotation
+    description: Quotation management and pricing
+  - name: audit
+    description: Audit logs and change tracking
+  - name: auth
+    description: Authentication and authorization
+
+paths:
+  /:
+    get:
+      tags:
+        - system
+      summary: Root endpoint
+      description: Returns API information
+      operationId: root
+      responses:
+        '200':
+          description: API information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RootResponse'
+
+  /health:
+    get:
+      tags:
+        - system
+      summary: Health check
+      description: Returns health status
+      operationId: health
+      responses:
+        '200':
+          description: Health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /catalog/items:
+    get:
+      tags:
+        - catalog
+      summary: List catalog items
+      description: List catalog items with pagination and search
+      operationId: listItems
+      parameters:
+        - name: q
+          in: query
+          description: Search query (matches item_code or name)
+          schema:
+            type: string
+        - name: make
+          in: query
+          description: Filter by make
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of results
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 200
+        - name: offset
+          in: query
+          description: Offset for pagination
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: List of items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /catalog/items/{item_id}:
+    get:
+      tags:
+        - catalog
+      summary: Get catalog item by ID
+      description: Returns item details with associated SKUs
+      operationId: getItem
+      parameters:
+        - name: item_id
+          in: path
+          required: true
+          description: Item ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /catalog/skus:
+    get:
+      tags:
+        - catalog
+      summary: List SKUs
+      description: List SKUs (pricing truth) with pagination and search
+      operationId: listSkus
+      parameters:
+        - name: q
+          in: query
+          description: Search query (matches sku_code, name, or description)
+          schema:
+            type: string
+        - name: make
+          in: query
+          description: Filter by make
+          schema:
+            type: string
+        - name: item_id
+          in: query
+          description: Filter by item ID
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Maximum number of results
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 200
+        - name: offset
+          in: query
+          description: Offset for pagination
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: List of SKUs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /catalog/skus/{sku_id}:
+    get:
+      tags:
+        - catalog
+      summary: Get SKU by ID
+      description: Returns SKU details with price history
+      operationId: getSku
+      parameters:
+        - name: sku_id
+          in: path
+          required: true
+          description: SKU ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: SKU details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /catalog/skus/import:
+    post:
+      tags:
+        - catalog
+      summary: Import SKUs from CSV
+      description: |
+        Import SKUs from a FINAL CSV price list.
+        - SKU is the pricing truth (ADR-0001)
+        - Auto-creates CatalogItem grouped by series
+        - Upserts CatalogSku (make+sku_code unique)
+        - Creates PriceList for the batch
+        - Archives prices in SkuPrice
+        - Updates CatalogSku.current_price for fast quoting
+      operationId: importSkus
+      parameters:
+        - name: dry_run
+          in: query
+          description: Validate only, do not write
+          schema:
+            type: boolean
+            default: true
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Import summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /bom/explode:
+    post:
+      tags:
+        - bom
+      summary: BOM explode (L1 → L2)
+      description: |
+        Explodes L1 intent lines into L2 catalog SKUs.
+
+        **G-08:** Many L1 lines may map to the same SKU (aggregation supported).
+
+        **Option A:** Unmapped L1 lines are returned in `unmapped[]` (non-fatal).
+      operationId: bomExplode
+      parameters:
+        - name: X-Tenant-ID
+          in: header
+          required: true
+          description: Tenant ID (stub mode; JWT later)
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BomExplodeRequest'
+      responses:
+        '200':
+          description: Exploded BOM result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BomExplodeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quotation/{quotation_id}/discount/quotation:
+    put:
+      tags:
+        - quotation
+      summary: Set quotation-level discount
+      description: |
+        Set quotation-level discount percentage (Operator+ allowed).
+        This is the quotation-wide discount applied AFTER line discounts and BEFORE tax.
+      operationId: setQuotationDiscount
+      parameters:
+        - name: quotation_id
+          in: path
+          required: true
+          description: Quotation ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotationDiscountSetRequest'
+      responses:
+        '200':
+          description: Discount set successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotationDiscountSetResponse'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quotation/{quotation_id}/pricing/preview:
+    post:
+      tags:
+        - quotation
+      summary: Preview pricing calculation
+      description: |
+        Preview pricing calculation for a quotation (Policy-1: preview only, no DB overwrite).
+        
+        Computes:
+        - Line-level discounts (rule-based precedence)
+        - Subtotal
+        - Quotation-level discount
+        - GST split (CGST/SGST/IGST)
+        - Grand total
+      operationId: pricingPreview
+      parameters:
+        - name: quotation_id
+          in: path
+          required: true
+          description: Quotation ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Pricing preview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingPreviewResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quotation/{quotation_id}/pricing/apply-recalc:
+    post:
+      tags:
+        - quotation
+      summary: Apply pricing recalculation
+      description: |
+        Apply pricing recalculation to a quotation (Policy-1: explicit action, Reviewer/Approver only).
+        
+        Computes pricing using the same logic as preview, then persists snapshots to quotations table.
+        Requires decision_id and reason for audit trail.
+      operationId: applyRecalc
+      parameters:
+        - name: quotation_id
+          in: path
+          required: true
+          description: Quotation ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyRecalcRequest'
+      responses:
+        '200':
+          description: Recalc applied successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplyRecalcResponse'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quotation/{quotation_id}/bom/item/{line_id}:
+    delete:
+      tags:
+        - quotation
+      summary: Delete quote BOM line item
+      description: |
+        Delete a quote BOM line item.
+        
+        A5.2 IsLocked enforcement: Deletion is blocked if is_locked = true.
+        Returns 409 LINE_ITEM_LOCKED if item is locked.
+      operationId: deleteQuoteBomItem
+      parameters:
+        - name: quotation_id
+          in: path
+          required: true
+          description: Quotation ID
+          schema:
+            type: integer
+        - name: line_id
+          in: path
+          required: true
+          description: Line item ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Line item deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteLineItemResponse'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    RootResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: NSW Estimation Software API
+        version:
+          type: string
+          example: 0.1.0
+        status:
+          type: string
+          example: operational
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Health status (e.g., "healthy", "ok")
+          example: healthy
+        service:
+          type: string
+          description: Service identifier
+          example: nsw-api
+      description: |
+        Minimal health check for main API (port 8003).
+        For detailed KB health metrics, use RAG KB service /health endpoint (port 8099).
+
+    ItemListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of items
+        limit:
+          type: integer
+          description: Limit per page
+        offset:
+          type: integer
+          description: Offset for pagination
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemSummary'
+
+    ItemSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        item_code:
+          type: string
+        name:
+          type: string
+        make:
+          type: string
+        category:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ItemDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        item_code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        make:
+          type: string
+        category:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuSummary'
+
+    SkuListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuSummary'
+
+    SkuSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        catalog_item_id:
+          type: integer
+        sku_code:
+          type: string
+        sku_type:
+          type: string
+          enum: [PRIMARY, ALTERNATE]
+        name:
+          type: string
+        make:
+          type: string
+        uom:
+          type: string
+        is_active:
+          type: boolean
+        current_price:
+          type: string
+          format: decimal
+          nullable: true
+        current_currency:
+          type: string
+          nullable: true
+        current_price_updated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    SkuDetailResponse:
+      allOf:
+        - $ref: '#/components/schemas/SkuSummary'
+        - type: object
+          properties:
+            description:
+              type: string
+              nullable: true
+            price_history:
+              type: array
+              items:
+                $ref: '#/components/schemas/PriceHistoryItem'
+
+    PriceHistoryItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        price_list_id:
+          type: integer
+        price:
+          type: string
+          format: decimal
+        currency:
+          type: string
+        effective_from:
+          type: string
+          format: date-time
+        effective_to:
+          type: string
+          format: date-time
+          nullable: true
+        import_batch_id:
+          type: string
+          nullable: true
+        source_file:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    ImportResponse:
+      type: object
+      properties:
+        batch_id:
+          type: string
+          format: uuid
+        source_file:
+          type: string
+        rows_total:
+          type: integer
+        rows_valid:
+          type: integer
+        rows_error:
+          type: integer
+        dry_run:
+          type: boolean
+        errors_sample:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImportError'
+        items_created:
+          type: integer
+          nullable: true
+        skus_created:
+          type: integer
+          nullable: true
+        skus_updated:
+          type: integer
+          nullable: true
+        prices_inserted:
+          type: integer
+          nullable: true
+        price_list_id:
+          type: integer
+          nullable: true
+        price_list_name:
+          type: string
+          nullable: true
+
+    ImportError:
+      type: object
+      properties:
+        row:
+          type: integer
+        field:
+          type: string
+        error:
+          type: string
+        value:
+          type: string
+
+    BomExplodeRequest:
+      type: object
+      required:
+        - l1_intent_line_ids
+      properties:
+        l1_intent_line_ids:
+          type: array
+          minItems: 1
+          items:
+            type: integer
+          description: List of L1 intent line IDs to explode.
+        include_attributes:
+          type: boolean
+          default: false
+          description: If true, include L1 attribute KVU data (future enhancement).
+        include_sku:
+          type: boolean
+          default: true
+          description: If true, include SKU meta fields from catalog_skus.
+        aggregate_by_sku:
+          type: boolean
+          default: true
+          description: If true, aggregate results by catalog_sku_id (G-08 supported).
+
+    BomExplodeL1Source:
+      type: object
+      properties:
+        l1_intent_line_id:
+          type: integer
+        mapping_type:
+          type: string
+          description: Mapping type (BASE, FEATURE_ADDON, FEATURE_INCLUDED, FEATURE_BUNDLED)
+        is_primary:
+          type: boolean
+
+    BomExplodeItem:
+      type: object
+      properties:
+        catalog_sku_id:
+          type: integer
+
+        # Canonical fields (match catalog_skus)
+        make:
+          type: string
+          nullable: true
+          description: SKU make (catalog_skus.make)
+        oem_catalog_no:
+          type: string
+          nullable: true
+          description: OEM catalog number (catalog_skus.oem_catalog_no)
+        uom:
+          type: string
+          nullable: true
+          description: Unit of measure (catalog_skus.uom)
+
+        # Backward-compatible aliases
+        sku_code:
+          type: string
+          nullable: true
+          description: Alias of oem_catalog_no (compatibility)
+        name:
+          type: string
+          nullable: true
+          description: Alias of make (compatibility)
+
+        mapping_count:
+          type: integer
+          description: Number of mappings contributing to this SKU.
+        mapping_types:
+          type: array
+          items:
+            type: string
+        l1_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/BomExplodeL1Source'
+
+    BomExplodeUnmapped:
+      type: object
+      properties:
+        l1_intent_line_id:
+          type: integer
+        reason:
+          type: string
+          enum: [L1_NOT_FOUND, NO_L2_MAPPING]
+
+    BomExplodeResponse:
+      type: object
+      properties:
+        tenant_id:
+          type: integer
+        input:
+          type: object
+          properties:
+            l1_intent_line_ids:
+              type: array
+              items:
+                type: integer
+        summary:
+          type: object
+          properties:
+            l1_lines_requested:
+              type: integer
+            l1_lines_found:
+              type: integer
+            mappings_found:
+              type: integer
+            skus_found:
+              type: integer
+            unmapped_l1_lines:
+              type: integer
+        unmapped:
+          type: array
+          items:
+            $ref: '#/components/schemas/BomExplodeUnmapped'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BomExplodeItem'
+        warnings:
+          type: array
+          items:
+            type: string
+
+    QuotationDiscountSetRequest:
+      type: object
+      required:
+        - discount_pct
+        - reason
+      properties:
+        discount_pct:
+          type: string
+          format: decimal
+          description: Discount percentage (0-100)
+        reason:
+          type: string
+          description: Reason for discount change
+
+    QuotationDiscountSetResponse:
+      type: object
+      properties:
+        quotation_id:
+          type: integer
+        discount_pct:
+          type: string
+          format: decimal
+        message:
+          type: string
+
+    ApplyRecalcRequest:
+      type: object
+      required:
+        - decision_id
+        - reason
+      properties:
+        decision_id:
+          type: string
+          description: Decision ID for audit trail
+        reason:
+          type: string
+          description: Reason for recalculation
+
+    ApplyRecalcResponse:
+      type: object
+      properties:
+        quotation_id:
+          type: integer
+        decision_id:
+          type: string
+        message:
+          type: string
+        totals:
+          $ref: '#/components/schemas/PricingTotals'
+        gst:
+          $ref: '#/components/schemas/GstBreakdown'
+          nullable: true
+
+    PricingPreviewResponse:
+      type: object
+      properties:
+        quotation_id:
+          type: integer
+        subtotal:
+          type: string
+          format: decimal
+        quotation_discount_pct:
+          type: string
+          format: decimal
+        discounted_subtotal:
+          type: string
+          format: decimal
+        gst:
+          $ref: '#/components/schemas/GstBreakdown'
+          nullable: true
+        grand_total:
+          type: string
+          format: decimal
+        flags:
+          type: array
+          items:
+            type: string
+          description: Warning flags (e.g., HAS_UNRESOLVED_LINES, HAS_PRICE_MISSING_LINES)
+
+    PricingTotals:
+      type: object
+      properties:
+        subtotal:
+          type: string
+          format: decimal
+        quotation_discount_pct:
+          type: string
+          format: decimal
+        discounted_subtotal:
+          type: string
+          format: decimal
+        grand_total:
+          type: string
+          format: decimal
+
+    GstBreakdown:
+      type: object
+      properties:
+        tax_profile_id:
+          type: integer
+        tax_mode:
+          type: string
+          enum: [CGST_SGST, IGST]
+        taxable_base:
+          type: string
+          format: decimal
+        cgst_pct:
+          type: string
+          format: decimal
+          nullable: true
+        sgst_pct:
+          type: string
+          format: decimal
+          nullable: true
+        igst_pct:
+          type: string
+          format: decimal
+          nullable: true
+        cgst_amount:
+          type: string
+          format: decimal
+          nullable: true
+        sgst_amount:
+          type: string
+          format: decimal
+          nullable: true
+        igst_amount:
+          type: string
+          format: decimal
+          nullable: true
+        tax_total:
+          type: string
+          format: decimal
+
+    DeleteLineItemResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        line_id:
+          type: integer
+        quotation_id:
+          type: integer
+
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          oneOf:
+            - type: string
+            - type: object
+        error_code:
+          type: string
+        request_id:
+          type: string
+          format: uuid
+        version:
+          type: string
+
+  responses:
+    BadRequest:
+      description: Bad request (validation errors)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            detail: Validation failed
+            error_code: VALIDATION_INVALID_PRICE
+            request_id: 123e4567-e89b-12d3-a456-426614174000
+            version: v1
+
+    Forbidden:
+      description: Forbidden (insufficient permissions)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            detail: Only Reviewer and Approver roles allowed
+            error_code: PERMISSION_INSUFFICIENT_ROLE
+            request_id: 123e4567-e89b-12d3-a456-426614174000
+            version: v1
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            detail: Item not found
+            error_code: NOT_FOUND_ITEM
+            request_id: 123e4567-e89b-12d3-a456-426614174000
+            version: v1
+
+    Conflict:
+      description: Conflict (business rule violation)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            detail: LINE_ITEM_LOCKED
+            error_code: CONFLICT_LINE_ITEM_LOCKED
+            request_id: 123e4567-e89b-12d3-a456-426614174000
+            version: v1
+
+    UnprocessableEntity:
+      description: Unprocessable entity (semantic validation)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            detail: Invalid tax_mode on quotation
+            error_code: SEMANTIC_INVALID_TAX_MODE
+            request_id: 123e4567-e89b-12d3-a456-426614174000
+            version: v1
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            detail: "Query failed: Database connection error"
+            error_code: INTERNAL_QUERY_FAILED
+            request_id: 123e4567-e89b-12d3-a456-426614174000
+            version: v1
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token authentication.
+        
+        **Phase-5 v1.0 (Development/Stub):**
+        - Stub implementation via `X-User-ID` and `X-User-Roles` headers
+        - BearerAuth is declared but NOT required for v1.0 endpoints
+        - Headers are used for development/testing only
+        
+        **Future (Production):**
+        - Will require valid JWT Bearer token
+        - Token must include user_id and roles claims
+        - Stub headers will be removed
+
+security:
+  # Note: BearerAuth is declared but not required for v1.0 (stub mode)
+  # Individual endpoints can opt-in to require auth when ready
+  # - BearerAuth: []
+
+

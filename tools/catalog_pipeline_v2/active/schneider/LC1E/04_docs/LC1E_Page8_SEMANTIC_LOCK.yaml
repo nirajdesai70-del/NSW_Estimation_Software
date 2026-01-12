@@ -1,0 +1,237 @@
+schema_version: "1.0"
+status: "FROZEN"
+oem: "Schneider"
+series_bucket: "LC1E"
+series_name: "Easy TeSys"
+source:
+  document: "Switching _All_WEF 15th Jul 25.pdf"
+  xlsx: "Switching _All_WEF 15th Jul 25.xlsx"
+  page: 8
+  wef: "2025-07-15"
+  currency: "INR"
+  pricelist_ref: "WEF 15 Jul 2025"
+
+# =====================================================================
+# 1) TABLES ON PAGE-8
+# =====================================================================
+tables:
+  - table_id: "P8_T1_3P_AC_M7_N5"
+    title: "LC1E 3P AC Control 6A–95A"
+    poles: "3P"
+    coil_variants:
+      - variant_code: "M7"
+        voltage_type: "AC"
+        voltage_V: 220
+      - variant_code: "N5"
+        voltage_type: "AC"
+        voltage_V: 415
+
+    # Frame semantics are VISUAL (merged cells), must be applied deterministically
+    frame_semantics:
+      type: "carry_forward_with_frozen_ranges"
+      frozen_frame_ranges:
+        - frame_label: "FRAME-1"
+          base_refs: ["LC1E0601","LC1E0610","LC1E0901","LC1E0910","LC1E1201","LC1E1210","LC1E1801","LC1E1810","LC1E2501","LC1E2510"]
+        - frame_label: "FRAME-2"
+          base_refs: ["LC1E3201","LC1E3210","LC1E3801","LC1E3810","LC1E40B01","LC1E40B10"]
+        - frame_label: "FRAME-3"
+          base_refs: ["LC1E40","LC1E50","LC1E65"]
+        - frame_label: "FRAME-4"
+          base_refs: ["LC1E80","LC1E95"]
+
+    # Ratings semantics
+    duty:
+      selection_dimension: true
+      classes: ["AC1","AC3"]
+      catalog_columns:
+        ac1_current: "AC-1"
+        ac3_current: "AC-3"
+      operational_field:
+        duty_current_A:
+          AC1: "catalog_ac1_A"
+          AC3: "catalog_ac3_A"
+
+    hp_kw_semantics:
+      hp_column: "HP"
+      kw_column: "kW"
+      applies_to_all_duties: true
+      range_policy: "min"
+      range_note_format:
+        kw: "KW_RANGE={raw}; motor_kw=min={min}"
+        hp: "HP_RANGE={raw}; motor_hp=min={min}"
+
+    aux_semantics:
+      no_column: "NO"
+      nc_column: "NC"
+      dash_means_zero: true
+
+    pricing_semantics:
+      type: "variant_price_matrix"
+      priced_only: true
+      dash_means_no_price_row: true
+      completed_ref_trace: "{base_ref_clean}{variant_code}"
+
+  - table_id: "P8_T3_3P_AC_HIGH_M7_N5_M5_N7"
+    title: "LC1E 3P AC Control High Ratings (Frames 5–9)"
+    poles: "3P"
+    coil_variants_by_row:
+      # IMPORTANT: coil headers vary by section, follow exactly as printed:
+      # - Some rows are priced under M5/N5
+      # - Some rows are priced under M7/N7
+      allowed_variant_codes: ["M5","N5","M7","N7"]
+      voltage_map:
+        M5: { voltage_type: "AC", voltage_V: 220 }
+        N5: { voltage_type: "AC", voltage_V: 415 }
+        M7: { voltage_type: "AC", voltage_V: 220 }
+        N7: { voltage_type: "AC", voltage_V: 415 }
+
+    frame_semantics:
+      type: "explicit_rows_only"
+      note: "Frame labels are explicit in the high-rating table; apply carry-forward within that table block."
+
+    duty:
+      selection_dimension: true
+      classes: ["AC1","AC3"]
+      catalog_columns:
+        ac1_current: "AC-1"
+        ac3_current: "AC-3"
+      operational_field:
+        duty_current_A:
+          AC1: "catalog_ac1_A"
+          AC3: "catalog_ac3_A"
+
+    hp_kw_semantics:
+      hp_column: "HP"
+      kw_column: "kW"
+      applies_to_all_duties: true
+      range_policy: "min"
+
+    aux_semantics:
+      no_column: "NO"
+      nc_column: "NC"
+      dash_means_zero: true
+
+    pricing_semantics:
+      type: "variant_price_matrix"
+      priced_only: true
+      dash_means_no_price_row: true
+      completed_ref_trace: "{base_ref_clean}{variant_code}"
+
+# =====================================================================
+# 2) BASE REFERENCE NORMALIZATION (MANDATORY)
+# =====================================================================
+base_reference_normalization:
+  cleanup_rules:
+    - name: "trim_whitespace"
+    - name: "remove_trailing_star_block"
+      pattern: "\\*+"
+      position: "end"
+    - name: "remove_trailing_hash"
+      pattern: "#"
+      position: "end"
+    - name: "remove_trailing_zero_artifact"
+      description: "OCR/Export artifact where a trailing 0 appears after reference"
+      examples:
+        - "LC1E0601* 0 -> LC1E0601"
+        - "LC1E40* 0 -> LC1E40"
+  keep_tokens:
+    - "IN"   # only if printed in reference (Page-8 has no IN in 3P tables)
+
+# =====================================================================
+# 3) NSW OUTPUT CONTRACT (WHAT CURSOR MUST GENERATE)
+# =====================================================================
+nsw_contract:
+  final_deliverable:
+    filename_pattern: "NSW_LC1E_WEF_2025-07-15_vX.xlsx"
+    sheets_required:
+      - "NSW_L0_TEMPLATE"
+      - "NSW_L0_L2_ELIGIBILITY"
+      - "NSW_L2_PRODUCTS"
+      - "NSW_VARIANT_MASTER"
+      - "NSW_PRODUCT_VARIANTS"
+      - "NSW_PRICE_MATRIX"
+      - "NSW_L1_CONFIG_LINES"
+
+  l2_rules:
+    identity_fields:
+      - "l2_product_code"     # base_ref_clean
+      - "make"
+      - "series_name"
+      - "series_bucket"
+      - "poles"
+      - "frame_label"
+    must_not_contain:
+      - "variant_code"
+      - "voltage"
+      - "duty"
+      - "price"
+    generic_name_template: "Power Contactor – {series_name} – {poles}"
+
+  variant_rules:
+    variant_type: "COIL_VOLTAGE"
+    variant_master_required: true
+    product_variants_required: true
+
+  price_matrix_rules:
+    key_fields:
+      - "l2_product_code"
+      - "variant_code"
+      - "effective_from"
+    duty_dependent_pricing: false
+    priced_only: true
+
+  l1_rules:
+    generation_rule: "duty_x_voltage"
+    duty_classes: ["AC1","AC3"]
+    required_fields:
+      - "duty_class"
+      - "duty_current_A"
+      - "catalog_ac1_A"
+      - "catalog_ac3_A"
+      - "variant_code"
+      - "voltage_class_code"
+      - "selected_voltage_V"
+      - "selected_voltage_type"
+      - "catalog_voltage_label"
+      - "motor_kw"
+      - "motor_hp"
+      - "poles"
+      - "frame_label"
+      - "aux_no"
+      - "aux_nc"
+      - "generic_descriptor"
+    duty_normalization_rule:
+      AC1: "duty_current_A = catalog_ac1_A"
+      AC3: "duty_current_A = catalog_ac3_A"
+    voltage_normalization_rule:
+      voltage_class_code: "equals variant_code"
+      selected_voltage_V: "derived from variant_code voltage map"
+      selected_voltage_type: "derived from variant_code voltage map"
+      catalog_voltage_label: "{variant_code} ({selected_voltage_V}V {selected_voltage_type})"
+    generic_descriptor_template: >
+      Power Contactor – {series_name} – {poles} | {duty_class} |
+      {selected_voltage_V}V {selected_voltage_type} | {motor_kw}kW @ 415V |
+      Aux {aux_no}NO+{aux_nc}NC
+
+# =====================================================================
+# 4) VALIDATION (MUST PASS)
+# =====================================================================
+validation:
+  must_match_golden_reference:
+    golden_xlsx: "LC1E_Page8_Canonical_and_NSW_Format_v6.xlsx"
+    compare_sheets:
+      - "P8_T1_CANONICAL_ROWS"
+      - "P8_T1_COIL_PRICES"
+      - "P8_T3_CANONICAL_ROWS"
+      - "P8_T3_COIL_PRICES"
+      - "NSW_L2_PRODUCTS"
+      - "NSW_PRICE_MATRIX"
+      - "NSW_L1_CONFIG_LINES"
+  no_inference_allowed: true
+  fail_fast_conditions:
+    - "frame_label missing for any P8_T1 base_ref"
+    - "kW range not resolved to min"
+    - "priced-only violated (dash/blank becomes a price row)"
+    - "L2 contains any voltage/duty/price fields"
+    - "L1 missing any required field"
+

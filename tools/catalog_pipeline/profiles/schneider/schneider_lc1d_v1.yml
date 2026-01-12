@@ -1,0 +1,67 @@
+# Schneider LC1D (TeSys Deca Power Contactors)
+# Scope: ALL LC1D variants - motor duty, capacitor duty, all pole counts, all coil types
+# Catalog ownership rule: If SKU appears under LC1D/TeSys Deca section, it belongs to LC1D family
+# Status: DRAFT (TEST only). Will be FROZEN only after FINAL import.
+# Strategy: Scan-forward pricing (like LP1K) - LC1D has multi-voltage price columns
+
+make: "Schneider"
+sheet: 0
+
+start_row_contains_any:
+  - "LC1D"
+  - "AC Control Reference"
+  - "TeSys Deca"
+
+series:
+  sku_prefix_mappings:
+    LC1D: "TeSys Deca Power Contactors (LC1D)"
+    LC1DT: "TeSys Deca Power Contactors (LC1D)"
+    LP1D: "TeSys Deca Power Contactors (LC1D)"  # When appearing inside LC1D tables
+  aliases:
+    "TeSys Deca Power Contactors": "TeSys Deca Power Contactors (LC1D)"
+    "TeSys Deca": "TeSys Deca Power Contactors (LC1D)"
+
+columns_by_index:
+  sku_raw: 3       # Primary: LC1D SKU at collapsed index 3 (capacitor duty table)
+                   # Fallback: normalize.py will scan cells 0-3 for LC1D patterns (standard motor duty table)
+  list_price: 4    # base index only; scan-forward will pick first numeric price after SKU (M7/N7/F7)
+
+pricing:
+  scan_forward_from_sku_raw: true
+  scan_window: 20
+
+defaults:
+  uom: "EA"
+  currency: "INR"
+  description_prefix: "TeSys Deca Contactor"
+
+cleaning:
+  trim_all: true
+  collapse_spaces: true
+  price_remove_commas: true
+
+filters:
+  ignore_if_contains_any:
+    - "For other coil voltage"
+    - "Customer Care"
+    - "Auxiliary"
+    - "Accessories"
+    - "Control Relay"
+    - "LP1K"  # Exclude pure control relays
+    - "LC1K"  # Exclude LC1K (handled separately)
+  drop_if_missing: ["sku_raw", "list_price"]
+
+scope:
+  include_series_contains_any:
+    - "TeSys Deca"
+    - "LC1D"
+
+output:
+  columns:
+    - make
+    - sku_code
+    - description
+    - uom
+    - list_price
+    - currency
+    - notes

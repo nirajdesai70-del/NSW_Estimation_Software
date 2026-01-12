@@ -1,0 +1,1398 @@
+{
+  "sheet_summary": [
+    {
+      "name": "README_TESYS_EOCR",
+      "columns": [
+        "2026-01-02: Digital EOCR without communication added. Rows=16. Source page 43."
+      ],
+      "row_count_estimate": 5,
+      "type": "README"
+    },
+    {
+      "name": "ITEM_TESYS_EOCR_WORK",
+      "columns": [
+        "business_category",
+        "business_segment",
+        "accessory_family",
+        "item_producttype",
+        "l0_code",
+        "l0_name",
+        "l1_code",
+        "l1_name",
+        "generic_item_code",
+        "generic_item_name",
+        "generic_item_description",
+        "SC_L1",
+        "SC_L2",
+        "SC_L3",
+        "SC_L4",
+        "SC_L5",
+        "SC_L6",
+        "SC_L7",
+        "SC_L8",
+        "ATTR_1_CODE",
+        "ATTR_1_VALUE",
+        "ATTR_1_UNIT",
+        "ATTR_2_CODE",
+        "ATTR_2_VALUE",
+        "ATTR_2_UNIT",
+        "ATTR_3_CODE",
+        "ATTR_3_VALUE",
+        "ATTR_3_UNIT",
+        "make",
+        "oem_series",
+        "series_code",
+        "sku_code",
+        "price_inr",
+        "currency",
+        "wef_date",
+        "price_list_ref",
+        "source_pdf",
+        "source_page",
+        "source_table",
+        "source_notes",
+        "status",
+        "qc_flag",
+        "qc_notes"
+      ],
+      "row_count_estimate": 44,
+      "type": "DATA"
+    },
+    {
+      "name": "README_TESYS_PROTECT",
+      "columns": [
+        "2026-01-02: TeSys K Thermal Overload Relays (LR2K) added. Rows=14."
+      ],
+      "row_count_estimate": 2,
+      "type": "README"
+    },
+    {
+      "name": "ITEM_TESYS_PROTECT_WORK",
+      "columns": [
+        "business_category",
+        "business_segment",
+        "accessory_family",
+        "item_producttype",
+        "l0_code",
+        "l0_name",
+        "l1_code",
+        "l1_name",
+        "generic_item_code",
+        "generic_item_name",
+        "generic_item_description",
+        "SC_L1",
+        "SC_L2",
+        "SC_L3",
+        "SC_L4",
+        "SC_L5",
+        "SC_L6",
+        "SC_L7",
+        "SC_L8",
+        "ATTR_1_CODE",
+        "ATTR_1_VALUE",
+        "ATTR_1_UNIT",
+        "ATTR_2_CODE",
+        "ATTR_2_VALUE",
+        "ATTR_2_UNIT",
+        "ATTR_3_CODE",
+        "ATTR_3_VALUE",
+        "ATTR_3_UNIT",
+        "make",
+        "oem_series",
+        "series_code",
+        "sku_code",
+        "price_inr",
+        "currency",
+        "wef_date",
+        "price_list_ref",
+        "source_pdf",
+        "source_page",
+        "source_table",
+        "source_notes",
+        "status",
+        "qc_flag",
+        "qc_notes"
+      ],
+      "row_count_estimate": 22,
+      "type": "DATA"
+    },
+    {
+      "name": "README_GIGA_SERIES",
+      "columns": [
+        "TeSys Giga Series \u2013 Canonical Notes & Governance",
+        "Unnamed: 1"
+      ],
+      "row_count_estimate": 24,
+      "type": "README"
+    },
+    {
+      "name": "ITEM_GIGA_SERIES_WORK",
+      "columns": [
+        "business_category",
+        "business_segment",
+        "item_producttype",
+        "l0_code",
+        "l0_name",
+        "l1_code",
+        "l1_name",
+        "generic_item_code",
+        "generic_item_name",
+        "generic_item_description",
+        "capability_codes",
+        "SC_L1",
+        "SC_L2",
+        "SC_L3",
+        "SC_L4",
+        "SC_L5",
+        "SC_L6",
+        "SC_L7",
+        "SC_L8",
+        "FIX_1_CODE",
+        "FIX_1_VALUE",
+        "FIX_1_UNIT",
+        "FIX_2_CODE",
+        "FIX_2_VALUE",
+        "FIX_2_UNIT",
+        "FIX_3_CODE",
+        "FIX_3_VALUE",
+        "FIX_3_UNIT",
+        "FIX_4_CODE",
+        "FIX_4_VALUE",
+        "FIX_4_UNIT",
+        "FIX_5_CODE",
+        "FIX_5_VALUE",
+        "FIX_5_UNIT",
+        "FIX_6_CODE",
+        "FIX_6_VALUE",
+        "FIX_6_UNIT",
+        "FIX_7_CODE",
+        "FIX_7_VALUE",
+        "FIX_7_UNIT",
+        "FIX_8_CODE",
+        "FIX_8_VALUE",
+        "FIX_8_UNIT",
+        "ATTR_1_CODE",
+        "ATTR_1_VALUE",
+        "ATTR_1_UNIT",
+        "ATTR_2_CODE",
+        "ATTR_2_VALUE",
+        "ATTR_2_UNIT",
+        "ATTR_3_CODE",
+        "ATTR_3_VALUE",
+        "ATTR_3_UNIT",
+        "ATTR_4_CODE",
+        "ATTR_4_VALUE",
+        "ATTR_4_UNIT",
+        "ATTR_5_CODE",
+        "ATTR_5_VALUE",
+        "ATTR_5_UNIT",
+        "ATTR_6_CODE",
+        "ATTR_6_VALUE",
+        "ATTR_6_UNIT",
+        "ATTR_7_CODE",
+        "ATTR_7_VALUE",
+        "ATTR_7_UNIT",
+        "ATTR_8_CODE",
+        "ATTR_8_VALUE",
+        "ATTR_8_UNIT",
+        "poles",
+        "duty_type",
+        "duty_current",
+        "duty_unit",
+        "coil_type",
+        "coil_voltage",
+        "coil_unit",
+        "aux_contacts",
+        "helper_1",
+        "helper_2",
+        "helper_3",
+        "helper_4",
+        "helper_5",
+        "helper_6",
+        "helper_7",
+        "helper_8",
+        "make",
+        "oem_series",
+        "series_code",
+        "sku_code",
+        "product_type",
+        "generic_id",
+        "make_id",
+        "series_id",
+        "price_inr",
+        "currency",
+        "wef_date",
+        "price_list_ref",
+        "source_pdf",
+        "source_page",
+        "source_table",
+        "source_row",
+        "source_notes",
+        "status",
+        "qc_flag",
+        "qc_notes"
+      ],
+      "row_count_estimate": 40,
+      "type": "DATA"
+    },
+    {
+      "name": "README_ITEM_GOVERNANCE",
+      "columns": [
+        "NSW CANONICAL ITEM DATA GOVERNANCE"
+      ],
+      "row_count_estimate": 90,
+      "type": "README"
+    },
+    {
+      "name": "README_K_SERIES",
+      "columns": [
+        "README_K_SERIES"
+      ],
+      "row_count_estimate": 70,
+      "type": "README"
+    },
+    {
+      "name": "ITEM_K_SERIES_WORK",
+      "columns": [
+        "business_category",
+        "business_segment",
+        "item_producttype",
+        "l0_code",
+        "l0_name",
+        "l1_code",
+        "l1_name",
+        "generic_item_code",
+        "generic_item_name",
+        "generic_item_description",
+        "capability_codes",
+        "SC_L1",
+        "SC_L2",
+        "SC_L3",
+        "SC_L4",
+        "SC_L5",
+        "SC_L6",
+        "SC_L7",
+        "SC_L8",
+        "FIX_1_CODE",
+        "FIX_1_VALUE",
+        "FIX_1_UNIT",
+        "FIX_2_CODE",
+        "FIX_2_VALUE",
+        "FIX_2_UNIT",
+        "FIX_3_CODE",
+        "FIX_3_VALUE",
+        "FIX_3_UNIT",
+        "FIX_4_CODE",
+        "FIX_4_VALUE",
+        "FIX_4_UNIT",
+        "FIX_5_CODE",
+        "FIX_5_VALUE",
+        "FIX_5_UNIT",
+        "FIX_6_CODE",
+        "FIX_6_VALUE",
+        "FIX_6_UNIT",
+        "FIX_7_CODE",
+        "FIX_7_VALUE",
+        "FIX_7_UNIT",
+        "FIX_8_CODE",
+        "FIX_8_VALUE",
+        "FIX_8_UNIT",
+        "ATTR_1_CODE",
+        "ATTR_1_VALUE",
+        "ATTR_1_UNIT",
+        "ATTR_2_CODE",
+        "ATTR_2_VALUE",
+        "ATTR_2_UNIT",
+        "ATTR_3_CODE",
+        "ATTR_3_VALUE",
+        "ATTR_3_UNIT",
+        "ATTR_4_CODE",
+        "ATTR_4_VALUE",
+        "ATTR_4_UNIT",
+        "ATTR_5_CODE",
+        "ATTR_5_VALUE",
+        "ATTR_5_UNIT",
+        "ATTR_6_CODE",
+        "ATTR_6_VALUE",
+        "ATTR_6_UNIT",
+        "ATTR_7_CODE",
+        "ATTR_7_VALUE",
+        "ATTR_7_UNIT",
+        "ATTR_8_CODE",
+        "ATTR_8_VALUE",
+        "ATTR_8_UNIT",
+        "poles",
+        "duty_type",
+        "duty_current",
+        "duty_unit",
+        "coil_type",
+        "coil_voltage",
+        "coil_unit",
+        "aux_contacts",
+        "helper_1",
+        "helper_2",
+        "helper_3",
+        "helper_4",
+        "helper_5",
+        "helper_6",
+        "helper_7",
+        "helper_8",
+        "make",
+        "oem_series",
+        "series_code",
+        "sku_code",
+        "product_type",
+        "generic_id",
+        "make_id",
+        "series_id",
+        "price_inr",
+        "currency",
+        "wef_date",
+        "price_list_ref",
+        "source_pdf",
+        "source_page",
+        "source_table",
+        "source_row",
+        "source_notes",
+        "status",
+        "qc_flag",
+        "qc_notes"
+      ],
+      "row_count_estimate": 83,
+      "type": "DATA"
+    },
+    {
+      "name": "ITEM_CAPACITOR_DUTY_WORK",
+      "columns": [
+        "business_category",
+        "business_segment",
+        "item_producttype",
+        "l0_code",
+        "l0_name",
+        "l1_code",
+        "l1_name",
+        "generic_item_code",
+        "generic_item_name",
+        "generic_item_description",
+        "capability_codes",
+        "SC_L1",
+        "SC_L2",
+        "SC_L3",
+        "SC_L4",
+        "SC_L5",
+        "SC_L6",
+        "SC_L7",
+        "SC_L8",
+        "FIX_1_CODE",
+        "FIX_1_VALUE",
+        "FIX_1_UNIT",
+        "FIX_2_CODE",
+        "FIX_2_VALUE",
+        "FIX_2_UNIT",
+        "FIX_3_CODE",
+        "FIX_3_VALUE",
+        "FIX_3_UNIT",
+        "FIX_4_CODE",
+        "FIX_4_VALUE",
+        "FIX_4_UNIT",
+        "FIX_5_CODE",
+        "FIX_5_VALUE",
+        "FIX_5_UNIT",
+        "FIX_6_CODE",
+        "FIX_6_VALUE",
+        "FIX_6_UNIT",
+        "FIX_7_CODE",
+        "FIX_7_VALUE",
+        "FIX_7_UNIT",
+        "FIX_8_CODE",
+        "FIX_8_VALUE",
+        "FIX_8_UNIT",
+        "ATTR_1_CODE",
+        "ATTR_1_VALUE",
+        "ATTR_1_UNIT",
+        "ATTR_2_CODE",
+        "ATTR_2_VALUE",
+        "ATTR_2_UNIT",
+        "ATTR_3_CODE",
+        "ATTR_3_VALUE",
+        "ATTR_3_UNIT",
+        "ATTR_4_CODE",
+        "ATTR_4_VALUE",
+        "ATTR_4_UNIT",
+        "ATTR_5_CODE",
+        "ATTR_5_VALUE",
+        "ATTR_5_UNIT",
+        "ATTR_6_CODE",
+        "ATTR_6_VALUE",
+        "ATTR_6_UNIT",
+        "ATTR_7_CODE",
+        "ATTR_7_VALUE",
+        "ATTR_7_UNIT",
+        "ATTR_8_CODE",
+        "ATTR_8_VALUE",
+        "ATTR_8_UNIT",
+        "poles",
+        "duty_type",
+        "duty_current",
+        "duty_unit",
+        "coil_type",
+        "coil_voltage",
+        "coil_unit",
+        "aux_contacts",
+        "helper_1",
+        "helper_2",
+        "helper_3",
+        "helper_4",
+        "helper_5",
+        "helper_6",
+        "helper_7",
+        "helper_8",
+        "make",
+        "oem_series",
+        "series_code",
+        "sku_code",
+        "product_type",
+        "generic_id",
+        "make_id",
+        "series_id",
+        "price_inr",
+        "currency",
+        "wef_date",
+        "price_list_ref",
+        "source_pdf",
+        "source_page",
+        "source_table",
+        "source_row",
+        "source_notes",
+        "status",
+        "qc_flag",
+        "qc_notes"
+      ],
+      "row_count_estimate": 13,
+      "type": "DATA"
+    },
+    {
+      "name": "NSW_ITEM_MASTER_ENGINEER_VIEW",
+      "columns": [
+        "business_category",
+        "business_segment",
+        "item_producttype",
+        "l0_code",
+        "l0_name",
+        "l1_code",
+        "l1_name",
+        "generic_item_code",
+        "generic_item_name",
+        "generic_item_description",
+        "capability_codes",
+        "SC_L1",
+        "SC_L2",
+        "SC_L3",
+        "SC_L4",
+        "SC_L5",
+        "SC_L6",
+        "SC_L7",
+        "SC_L8",
+        "FIX_1_CODE",
+        "FIX_1_VALUE",
+        "FIX_1_UNIT",
+        "FIX_2_CODE",
+        "FIX_2_VALUE",
+        "FIX_2_UNIT",
+        "FIX_3_CODE",
+        "FIX_3_VALUE",
+        "FIX_3_UNIT",
+        "FIX_4_CODE",
+        "FIX_4_VALUE",
+        "FIX_4_UNIT",
+        "FIX_5_CODE",
+        "FIX_5_VALUE",
+        "FIX_5_UNIT",
+        "FIX_6_CODE",
+        "FIX_6_VALUE",
+        "FIX_6_UNIT",
+        "FIX_7_CODE",
+        "FIX_7_VALUE",
+        "FIX_7_UNIT",
+        "FIX_8_CODE",
+        "FIX_8_VALUE",
+        "FIX_8_UNIT",
+        "ATTR_1_CODE",
+        "ATTR_1_VALUE",
+        "ATTR_1_UNIT",
+        "ATTR_2_CODE",
+        "ATTR_2_VALUE",
+        "ATTR_2_UNIT",
+        "ATTR_3_CODE",
+        "ATTR_3_VALUE",
+        "ATTR_3_UNIT",
+        "ATTR_4_CODE",
+        "ATTR_4_VALUE",
+        "ATTR_4_UNIT",
+        "ATTR_5_CODE",
+        "ATTR_5_VALUE",
+        "ATTR_5_UNIT",
+        "ATTR_6_CODE",
+        "ATTR_6_VALUE",
+        "ATTR_6_UNIT",
+        "ATTR_7_CODE",
+        "ATTR_7_VALUE",
+        "ATTR_7_UNIT",
+        "ATTR_8_CODE",
+        "ATTR_8_VALUE",
+        "ATTR_8_UNIT",
+        "poles",
+        "duty_type",
+        "duty_current",
+        "duty_unit",
+        "coil_type",
+        "coil_voltage",
+        "coil_unit",
+        "aux_contacts",
+        "helper_1",
+        "helper_2",
+        "helper_3",
+        "helper_4",
+        "helper_5",
+        "helper_6",
+        "helper_7",
+        "helper_8",
+        "make",
+        "oem_series",
+        "series_code",
+        "sku_code",
+        "product_type",
+        "generic_id",
+        "make_id",
+        "series_id",
+        "price_inr",
+        "currency",
+        "wef_date",
+        "price_list_ref",
+        "source_pdf",
+        "source_page",
+        "source_table",
+        "source_row",
+        "source_notes",
+        "status",
+        "qc_flag",
+        "qc_notes"
+      ],
+      "row_count_estimate": 497,
+      "type": "DATA"
+    },
+    {
+      "name": "FIX_ATTRIBUTE_PROFILE",
+      "columns": [
+        "item_producttype",
+        "fix_slot",
+        "fix_code",
+        "fix_name",
+        "unit",
+        "required",
+        "notes"
+      ],
+      "row_count_estimate": 4,
+      "type": "DATA"
+    },
+    {
+      "name": "VARIABLE_ATTRIBUTE_PROFILE",
+      "columns": [
+        "item_producttype",
+        "attr_slot",
+        "attr_code",
+        "meaning",
+        "unit",
+        "required",
+        "notes"
+      ],
+      "row_count_estimate": 4,
+      "type": "DATA"
+    },
+    {
+      "name": "SC_DEFINITION",
+      "columns": [
+        "item_producttype",
+        "sc_slot",
+        "sc_name",
+        "meaning",
+        "allowed_values_example",
+        "notes"
+      ],
+      "row_count_estimate": 2,
+      "type": "DATA"
+    },
+    {
+      "name": "GENERIC_DESCRIPTION_RULES",
+      "columns": [
+        "item_producttype",
+        "l0_name",
+        "include_sc_slots",
+        "include_fix_codes",
+        "include_attr_codes",
+        "format_template",
+        "notes"
+      ],
+      "row_count_estimate": 1,
+      "type": "DATA"
+    },
+    {
+      "name": "README_PAGE_WORKFLOW",
+      "columns": [
+        "NSW PRICE PACK CANONICAL v2.3.1 \u2014 EMPTY MASTER (NO FREEZE)"
+      ],
+      "row_count_estimate": 17,
+      "type": "README"
+    },
+    {
+      "name": "QC_LOG",
+      "columns": [
+        "qc_id",
+        "date",
+        "page",
+        "series",
+        "result",
+        "issues",
+        "fixed_by",
+        "notes"
+      ],
+      "row_count_estimate": 49,
+      "type": "DATA"
+    },
+    {
+      "name": "README_MASTER",
+      "columns": [
+        "README \u2014 NSW Price Pack Canonical v2.3.1"
+      ],
+      "row_count_estimate": 106,
+      "type": "README"
+    },
+    {
+      "name": "DECISION_REGISTER",
+      "columns": [
+        "decision_id",
+        "topic",
+        "decision_locked",
+        "rejected_alternatives",
+        "why",
+        "implications_do",
+        "implications_do_not",
+        "date",
+        "owner",
+        "notes"
+      ],
+      "row_count_estimate": 9,
+      "type": "DATA"
+    },
+    {
+      "name": "GUARDRAILS_DO_NOT",
+      "columns": [
+        "guardrail_id",
+        "rule",
+        "violation_example",
+        "correct_behavior",
+        "severity",
+        "notes"
+      ],
+      "row_count_estimate": 7,
+      "type": "DATA"
+    },
+    {
+      "name": "TERMINOLOGY_ALIASES",
+      "columns": [
+        "term_used_in_code",
+        "canonical_term",
+        "meaning",
+        "allowed_usage",
+        "notes"
+      ],
+      "row_count_estimate": 3,
+      "type": "DATA"
+    },
+    {
+      "name": "PAGE_WORKFLOW_SOP",
+      "columns": [
+        "step_no",
+        "step",
+        "pass_criteria",
+        "evidence_required",
+        "notes"
+      ],
+      "row_count_estimate": 5,
+      "type": "PROCESS"
+    },
+    {
+      "name": "QC_CHECKLIST",
+      "columns": [
+        "qc_id",
+        "check_name",
+        "applies_to",
+        "how_to_check",
+        "pass_criteria",
+        "severity",
+        "notes"
+      ],
+      "row_count_estimate": 5,
+      "type": "DATA"
+    },
+    {
+      "name": "VARIANT_APPLICABILITY",
+      "columns": [
+        "make",
+        "series_code",
+        "base_reference",
+        "variant_code",
+        "allowed",
+        "source_page",
+        "notes"
+      ],
+      "row_count_estimate": 0,
+      "type": "DATA"
+    },
+    {
+      "name": "GENERIC_DESCRIPTION_EXAMPLES",
+      "columns": [
+        "item_producttype",
+        "l0_name",
+        "example_inputs",
+        "expected_description",
+        "notes"
+      ],
+      "row_count_estimate": 2,
+      "type": "DATA"
+    },
+    {
+      "name": "CHANGELOG",
+      "columns": [
+        "version",
+        "date",
+        "change_summary",
+        "reason",
+        "impact",
+        "owner"
+      ],
+      "row_count_estimate": 43,
+      "type": "DATA"
+    },
+    {
+      "name": "NEW_CHAT_STARTER_PROMPT",
+      "columns": [
+        "Use this Excel workbook as the single source of truth. Follow DECISION_REGISTER and GUARDRAILS_DO_NOT strictly. Work page-by-page; one row per selectable line. For LC1E, use DIRECT pricing only on suffixed SKUs (no base price, no derived pricing). Do not introduce OEM tokens into L0/L1. Log QC per page in QC_LOG and record any changes in CHANGELOG."
+      ],
+      "row_count_estimate": 0,
+      "type": "README/PROCESS"
+    },
+    {
+      "name": "README_FUNDAMENTAL_PROCESS",
+      "columns": [
+        "Unnamed: 0"
+      ],
+      "row_count_estimate": 130,
+      "type": "README"
+    },
+    {
+      "name": "ANCHOR_NEPL_CANONICAL_RULES",
+      "columns": [
+        "anchor_file_path",
+        "docs/NEPL_STANDARDS/00_BASELINE_FREEZE/NEPL_CANONICAL_RULES.md"
+      ],
+      "row_count_estimate": 7,
+      "type": "README/PROCESS"
+    },
+    {
+      "name": "OUT_OF_SCOPE_RUNTIME_ENFORCEMEN",
+      "columns": [
+        "Out-of-scope runtime enforcement (must be honored when integrating this catalog into NEPL/NSW software):"
+      ],
+      "row_count_estimate": 20,
+      "type": "README/PROCESS"
+    },
+    {
+      "name": "INTERP_LC1E_SUMMARY",
+      "columns": [
+        "INTERPRETATION RECORD \u2014 PAGE 8 \u2014 LC1E (3 Pole AC Control)"
+      ],
+      "row_count_estimate": 119,
+      "type": "README/PROCESS"
+    },
+    {
+      "name": "INTERP_LC1D_SUMMARY",
+      "columns": [
+        "INTERPRETATION RECORD \u2014 PAGE 8 \u2014 LC1D (3 Pole AC Control)"
+      ],
+      "row_count_estimate": 148,
+      "type": "README/PROCESS"
+    },
+    {
+      "name": "INTERP_P9_LC1E_DC",
+      "columns": [
+        "INTERPRETATION \u2014 Page 9 Block A (LC1E 3 Pole DC Control)"
+      ],
+      "row_count_estimate": 7,
+      "type": "README/PROCESS"
+    },
+    {
+      "name": "INTERP_P9_LC1E_4P_AC",
+      "columns": [
+        "INTERPRETATION \u2014 Page 9 Block B (LC1E 4 Pole AC Control)"
+      ],
+      "row_count_estimate": 8,
+      "type": "README/PROCESS"
+    },
+    {
+      "name": "ACCESSORIES_MASTER_ARCHIVE_OLD",
+      "columns": [
+        "business_category",
+        "business_segment",
+        "accessory_family",
+        "item_producttype",
+        "l0_code",
+        "l0_name",
+        "l1_code",
+        "l1_name",
+        "generic_item_code",
+        "generic_item_name",
+        "generic_item_description",
+        "capability_codes",
+        "SC_L1",
+        "SC_L2",
+        "SC_L3",
+        "SC_L4",
+        "SC_L5",
+        "SC_L6",
+        "SC_L7",
+        "SC_L8",
+        "FIX_1_CODE",
+        "FIX_1_VALUE",
+        "FIX_1_UNIT",
+        "FIX_2_CODE",
+        "FIX_2_VALUE",
+        "FIX_2_UNIT",
+        "FIX_3_CODE",
+        "FIX_3_VALUE",
+        "FIX_3_UNIT",
+        "FIX_4_CODE",
+        "FIX_4_VALUE",
+        "FIX_4_UNIT",
+        "FIX_5_CODE",
+        "FIX_5_VALUE",
+        "FIX_5_UNIT",
+        "FIX_6_CODE",
+        "FIX_6_VALUE",
+        "FIX_6_UNIT",
+        "FIX_7_CODE",
+        "FIX_7_VALUE",
+        "FIX_7_UNIT",
+        "FIX_8_CODE",
+        "FIX_8_VALUE",
+        "FIX_8_UNIT",
+        "ATTR_1_CODE",
+        "ATTR_1_VALUE",
+        "ATTR_1_UNIT",
+        "ATTR_2_CODE",
+        "ATTR_2_VALUE",
+        "ATTR_2_UNIT",
+        "ATTR_3_CODE",
+        "ATTR_3_VALUE",
+        "ATTR_3_UNIT",
+        "ATTR_4_CODE",
+        "ATTR_4_VALUE",
+        "ATTR_4_UNIT",
+        "ATTR_5_CODE",
+        "ATTR_5_VALUE",
+        "ATTR_5_UNIT",
+        "ATTR_6_CODE",
+        "ATTR_6_VALUE",
+        "ATTR_6_UNIT",
+        "ATTR_7_CODE",
+        "ATTR_7_VALUE",
+        "ATTR_7_UNIT",
+        "ATTR_8_CODE",
+        "ATTR_8_VALUE",
+        "ATTR_8_UNIT",
+        "helper_key_1",
+        "helper_value_1",
+        "helper_unit_1",
+        "helper_key_2",
+        "helper_value_2",
+        "helper_unit_2",
+        "helper_key_3",
+        "helper_value_3",
+        "helper_unit_3",
+        "helper_key_4",
+        "helper_value_4",
+        "helper_unit_4",
+        "make",
+        "oem_series",
+        "series_code",
+        "sku_code",
+        "price_inr",
+        "currency",
+        "wef_date",
+        "price_list_ref",
+        "product_type",
+        "generic_id",
+        "make_id",
+        "series_id",
+        "source_pdf",
+        "source_page",
+        "source_table",
+        "source_row",
+        "source_notes",
+        "status",
+        "qc_flag",
+        "qc_notes"
+      ],
+      "row_count_estimate": 58,
+      "type": "DATA"
+    },
+    {
+      "name": "README_ACCESSORIES",
+      "columns": [
+        "ACCESSORIES_MASTER \u2014 Purpose & Structure"
+      ],
+      "row_count_estimate": 33,
+      "type": "README"
+    },
+    {
+      "name": "ACCESSORY_COMPATIBILITY",
+      "columns": [
+        "parent_make",
+        "parent_series_code",
+        "accessory_sku_code",
+        "applies_to_range",
+        "notes",
+        "source_page"
+      ],
+      "row_count_estimate": 169,
+      "type": "DATA"
+    },
+    {
+      "name": "README_ACCESSORY_MODEL",
+      "columns": [
+        "Accessory modeling rule (LOCKED):"
+      ],
+      "row_count_estimate": 5,
+      "type": "README"
+    },
+    {
+      "name": "ACCESSORIES_MASTER",
+      "columns": [
+        "business_category",
+        "business_segment",
+        "accessory_family",
+        "item_producttype",
+        "l0_code",
+        "l0_name",
+        "l1_code",
+        "l1_name",
+        "generic_item_code",
+        "generic_item_name",
+        "generic_item_description",
+        "SC_L1",
+        "SC_L2",
+        "SC_L3",
+        "SC_L4",
+        "SC_L5",
+        "SC_L6",
+        "SC_L7",
+        "SC_L8",
+        "ATTR_1_CODE",
+        "ATTR_1_VALUE",
+        "ATTR_1_UNIT",
+        "ATTR_2_CODE",
+        "ATTR_2_VALUE",
+        "ATTR_2_UNIT",
+        "ATTR_3_CODE",
+        "ATTR_3_VALUE",
+        "ATTR_3_UNIT",
+        "make",
+        "oem_series",
+        "series_code",
+        "sku_code",
+        "price_inr",
+        "currency",
+        "wef_date",
+        "price_list_ref",
+        "source_pdf",
+        "source_page",
+        "source_table",
+        "source_notes",
+        "status",
+        "qc_flag",
+        "qc_notes"
+      ],
+      "row_count_estimate": 158,
+      "type": "DATA"
+    }
+  ],
+  "conflicts": [],
+  "findings": [
+    {
+      "sheet": "ITEM_TESYS_EOCR_WORK",
+      "issue": "SC_Lx columns found",
+      "columns": [
+        "sc_l1",
+        "sc_l2",
+        "sc_l3",
+        "sc_l4",
+        "sc_l5",
+        "sc_l6",
+        "sc_l7",
+        "sc_l8"
+      ],
+      "severity": "HIGH",
+      "note": "Need to verify if used as SCL or Capability"
+    },
+    {
+      "sheet": "ITEM_TESYS_EOCR_WORK",
+      "issue": "Generic name columns found - need content validation",
+      "columns": [
+        "generic_item_name",
+        "generic_item_description"
+      ],
+      "severity": "MEDIUM",
+      "note": "Check for vendor/series neutrality violations"
+    },
+    {
+      "sheet": "ITEM_TESYS_PROTECT_WORK",
+      "issue": "SC_Lx columns found",
+      "columns": [
+        "sc_l1",
+        "sc_l2",
+        "sc_l3",
+        "sc_l4",
+        "sc_l5",
+        "sc_l6",
+        "sc_l7",
+        "sc_l8"
+      ],
+      "severity": "HIGH",
+      "note": "Need to verify if used as SCL or Capability"
+    },
+    {
+      "sheet": "ITEM_TESYS_PROTECT_WORK",
+      "issue": "Generic name columns found - need content validation",
+      "columns": [
+        "generic_item_name",
+        "generic_item_description"
+      ],
+      "severity": "MEDIUM",
+      "note": "Check for vendor/series neutrality violations"
+    },
+    {
+      "sheet": "ITEM_GIGA_SERIES_WORK",
+      "issue": "SC_Lx columns found",
+      "columns": [
+        "sc_l1",
+        "sc_l2",
+        "sc_l3",
+        "sc_l4",
+        "sc_l5",
+        "sc_l6",
+        "sc_l7",
+        "sc_l8"
+      ],
+      "severity": "HIGH",
+      "note": "Need to verify if used as SCL or Capability"
+    },
+    {
+      "sheet": "ITEM_GIGA_SERIES_WORK",
+      "issue": "Capability columns found",
+      "columns": [
+        "capability_codes"
+      ],
+      "severity": "INFO",
+      "note": "Verify alignment with SC_Lx separation"
+    },
+    {
+      "sheet": "ITEM_GIGA_SERIES_WORK",
+      "issue": "Generic name columns found - need content validation",
+      "columns": [
+        "generic_item_name",
+        "generic_item_description"
+      ],
+      "severity": "MEDIUM",
+      "note": "Check for vendor/series neutrality violations"
+    },
+    {
+      "sheet": "ITEM_K_SERIES_WORK",
+      "issue": "SC_Lx columns found",
+      "columns": [
+        "sc_l1",
+        "sc_l2",
+        "sc_l3",
+        "sc_l4",
+        "sc_l5",
+        "sc_l6",
+        "sc_l7",
+        "sc_l8"
+      ],
+      "severity": "HIGH",
+      "note": "Need to verify if used as SCL or Capability"
+    },
+    {
+      "sheet": "ITEM_K_SERIES_WORK",
+      "issue": "Capability columns found",
+      "columns": [
+        "capability_codes"
+      ],
+      "severity": "INFO",
+      "note": "Verify alignment with SC_Lx separation"
+    },
+    {
+      "sheet": "ITEM_K_SERIES_WORK",
+      "issue": "Generic name columns found - need content validation",
+      "columns": [
+        "generic_item_name",
+        "generic_item_description"
+      ],
+      "severity": "MEDIUM",
+      "note": "Check for vendor/series neutrality violations"
+    },
+    {
+      "sheet": "ITEM_CAPACITOR_DUTY_WORK",
+      "issue": "SC_Lx columns found",
+      "columns": [
+        "sc_l1",
+        "sc_l2",
+        "sc_l3",
+        "sc_l4",
+        "sc_l5",
+        "sc_l6",
+        "sc_l7",
+        "sc_l8"
+      ],
+      "severity": "HIGH",
+      "note": "Need to verify if used as SCL or Capability"
+    },
+    {
+      "sheet": "ITEM_CAPACITOR_DUTY_WORK",
+      "issue": "Capability columns found",
+      "columns": [
+        "capability_codes"
+      ],
+      "severity": "INFO",
+      "note": "Verify alignment with SC_Lx separation"
+    },
+    {
+      "sheet": "ITEM_CAPACITOR_DUTY_WORK",
+      "issue": "Generic name columns found - need content validation",
+      "columns": [
+        "generic_item_name",
+        "generic_item_description"
+      ],
+      "severity": "MEDIUM",
+      "note": "Check for vendor/series neutrality violations"
+    },
+    {
+      "sheet": "NSW_ITEM_MASTER_ENGINEER_VIEW",
+      "issue": "SC_Lx columns found",
+      "columns": [
+        "sc_l1",
+        "sc_l2",
+        "sc_l3",
+        "sc_l4",
+        "sc_l5",
+        "sc_l6",
+        "sc_l7",
+        "sc_l8"
+      ],
+      "severity": "HIGH",
+      "note": "Need to verify if used as SCL or Capability"
+    },
+    {
+      "sheet": "NSW_ITEM_MASTER_ENGINEER_VIEW",
+      "issue": "Capability columns found",
+      "columns": [
+        "capability_codes"
+      ],
+      "severity": "INFO",
+      "note": "Verify alignment with SC_Lx separation"
+    },
+    {
+      "sheet": "NSW_ITEM_MASTER_ENGINEER_VIEW",
+      "issue": "Generic name columns found - need content validation",
+      "columns": [
+        "generic_item_name",
+        "generic_item_description"
+      ],
+      "severity": "MEDIUM",
+      "note": "Check for vendor/series neutrality violations"
+    },
+    {
+      "sheet": "ACCESSORIES_MASTER_ARCHIVE_OLD",
+      "issue": "SC_Lx columns found",
+      "columns": [
+        "sc_l1",
+        "sc_l2",
+        "sc_l3",
+        "sc_l4",
+        "sc_l5",
+        "sc_l6",
+        "sc_l7",
+        "sc_l8"
+      ],
+      "severity": "HIGH",
+      "note": "Need to verify if used as SCL or Capability"
+    },
+    {
+      "sheet": "ACCESSORIES_MASTER_ARCHIVE_OLD",
+      "issue": "Capability columns found",
+      "columns": [
+        "capability_codes"
+      ],
+      "severity": "INFO",
+      "note": "Verify alignment with SC_Lx separation"
+    },
+    {
+      "sheet": "ACCESSORIES_MASTER_ARCHIVE_OLD",
+      "issue": "Generic name columns found - need content validation",
+      "columns": [
+        "generic_item_name",
+        "generic_item_description"
+      ],
+      "severity": "MEDIUM",
+      "note": "Check for vendor/series neutrality violations"
+    },
+    {
+      "sheet": "ACCESSORIES_MASTER",
+      "issue": "SC_Lx columns found",
+      "columns": [
+        "sc_l1",
+        "sc_l2",
+        "sc_l3",
+        "sc_l4",
+        "sc_l5",
+        "sc_l6",
+        "sc_l7",
+        "sc_l8"
+      ],
+      "severity": "HIGH",
+      "note": "Need to verify if used as SCL or Capability"
+    },
+    {
+      "sheet": "ACCESSORIES_MASTER",
+      "issue": "Generic name columns found - need content validation",
+      "columns": [
+        "generic_item_name",
+        "generic_item_description"
+      ],
+      "severity": "MEDIUM",
+      "note": "Check for vendor/series neutrality violations"
+    }
+  ],
+  "readme_analysis": [
+    {
+      "sheet": "README_TESYS_EOCR",
+      "checks": {
+        "SC_Lx mentioned": false,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": false,
+        "SCL mentioned": false
+      },
+      "row_count": 5
+    },
+    {
+      "sheet": "README_TESYS_PROTECT",
+      "checks": {
+        "SC_Lx mentioned": false,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": false,
+        "SCL mentioned": false
+      },
+      "row_count": 2
+    },
+    {
+      "sheet": "README_GIGA_SERIES",
+      "checks": {
+        "SC_Lx mentioned": false,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": false,
+        "SCL mentioned": false
+      },
+      "row_count": 24
+    },
+    {
+      "sheet": "README_ITEM_GOVERNANCE",
+      "checks": {
+        "SC_Lx mentioned": false,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": false,
+        "SCL mentioned": false
+      },
+      "row_count": 90
+    },
+    {
+      "sheet": "README_K_SERIES",
+      "checks": {
+        "SC_Lx mentioned": true,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": true,
+        "SCL mentioned": false
+      },
+      "row_count": 70
+    },
+    {
+      "sheet": "README_PAGE_WORKFLOW",
+      "checks": {
+        "SC_Lx mentioned": true,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": false,
+        "SCL mentioned": false
+      },
+      "row_count": 17
+    },
+    {
+      "sheet": "README_MASTER",
+      "checks": {
+        "SC_Lx mentioned": true,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": true,
+        "SCL mentioned": false
+      },
+      "row_count": 106
+    },
+    {
+      "sheet": "README_FUNDAMENTAL_PROCESS",
+      "checks": {
+        "SC_Lx mentioned": false,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": false,
+        "SCL mentioned": true
+      },
+      "row_count": 130
+    },
+    {
+      "sheet": "README_ACCESSORIES",
+      "checks": {
+        "SC_Lx mentioned": false,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": false,
+        "SCL mentioned": false
+      },
+      "row_count": 33
+    },
+    {
+      "sheet": "README_ACCESSORY_MODEL",
+      "checks": {
+        "SC_Lx mentioned": false,
+        "Capability mentioned": false,
+        "business_subcategory mentioned": false,
+        "business_segment mentioned": false,
+        "SCL mentioned": false
+      },
+      "row_count": 5
+    }
+  ],
+  "recommendations": []
+}
