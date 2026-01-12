@@ -1,0 +1,138 @@
+name: Gates (Full RAG)
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install curl
+        run: sudo apt-get update && sudo apt-get install -y curl
+
+      # Ensure no AppleDouble surprises in CI (should be none on ubuntu, but keep policy aligned)
+      - name: AppleDouble hygiene (CI)
+        run: |
+          if find . -name '._*' -type f | grep -q .; then
+            echo "AppleDouble files found (._*). Failing."
+            find . -name '._*' -type f -print
+            exit 1
+          fi
+
+      # ------------------------------------------------------------
+      # 1) Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
+      # ------------------------------------------------------------
+      - name: Regenerate Decision KB manifest
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("RAG_KB/decisions/phase5_pack")
+          rules_dir = root / "04_RULES_LIBRARY"
+          if not rules_dir.exists():
+              raise SystemExit(f"Decision KB rules directory missing: {rules_dir}")
+
+          files = sorted([p for p in rules_dir.rglob("*.md") if not p.name.startswith("._")])
+          manifest = {
+              "kb_version": "1.0",
+              "index_version": "1.0",
+              "files": [str(p.relative_to(root)).replace("\\","/") for p in files],
+          }
+          (root / "00_INDEX.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+          print(f"Wrote Decision manifest with {len(files)} files -> {root/'00_INDEX.json'}")
+          PY
+
+      # ------------------------------------------------------------
+      # 2) Build + run WORK indexer (batch job)
+      # ------------------------------------------------------------
+      - name: Run Working RAG indexer
+        run: |
+          docker compose -f docker-compose.rag.yml --profile index up --build --abort-on-container-exit
+          docker compose -f docker-compose.rag.yml --profile index down --remove-orphans || true
+
+      # ------------------------------------------------------------
+      # 3) Start WORK query service and wait for health
+      # ------------------------------------------------------------
+      - name: Start Working RAG query
+        run: |
+          docker compose -f docker-compose.rag.yml --profile rag up -d --build
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8011/health >/dev/null; then
+              echo "Working RAG healthy"
+              curl -fsS http://localhost:8011/health
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Working RAG did not become healthy in time."
+          docker compose -f docker-compose.rag.yml ps
+          exit 1
+
+      # ------------------------------------------------------------
+      # 4) Build + run DECISION indexer (batch job)
+      # ------------------------------------------------------------
+      - name: Run Decision RAG indexer
+        run: |
+          docker compose -f docker-compose.rag.decisions.yml --profile decisions_index up --build --abort-on-container-exit
+          docker compose -f docker-compose.rag.decisions.yml --profile decisions_index down --remove-orphans || true
+
+      # ------------------------------------------------------------
+      # 5) Start DECISION query service and wait for health
+      # ------------------------------------------------------------
+      - name: Start Decision RAG query
+        run: |
+          docker compose -f docker-compose.rag.decisions.yml --profile decisions_rag up -d --build
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8021/health >/dev/null; then
+              echo "Decision RAG healthy"
+              curl -fsS http://localhost:8021/health
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Decision RAG did not become healthy in time."
+          docker compose -f docker-compose.rag.decisions.yml ps
+          exit 1
+
+      # ------------------------------------------------------------
+      # 6) Run gate runner (prefer make gates)
+      # ------------------------------------------------------------
+      - name: Run gates
+        run: |
+          chmod +x tools/gates/run_gates.sh
+          if [ -f Makefile ] && grep -qE '^[[:space:]]*gates:' Makefile; then
+            make gates
+          else
+            tools/gates/run_gates.sh
+          fi
+
+      # ------------------------------------------------------------
+      # 7) Upload gate reports
+      # ------------------------------------------------------------
+      - name: Upload gate reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-reports
+          path: governance/decisions/staging/gate_run_*.md
+
+      # ------------------------------------------------------------
+      # 8) Cleanup
+      # ------------------------------------------------------------
+      - name: Cleanup docker
+        if: always()
+        run: |
+          docker compose -f docker-compose.rag.yml down --remove-orphans || true
+          docker compose -f docker-compose.rag.decisions.yml down --remove-orphans || true

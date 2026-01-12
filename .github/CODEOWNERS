@@ -1,0 +1,74 @@
+# CODEOWNERS - Enforces review routing aligned with D-0030 (Access Control & Role-Based Approval)
+#
+# Format: <path> <@username or @team>
+# Order matters: last matching pattern wins
+#
+# Reference: D-0030 (Access Control and Role-Based Approval for Releases)
+# - Low Impact: Reviewer approval
+# - Medium Impact: Reviewer + Release Manager
+# - High Impact: Reviewer + Release Manager + Ops/Admin
+
+# ============================================================================
+# Governance & Decision Changes (High Impact - requires governance owner)
+# ============================================================================
+/governance/decisions/ @governance-owner
+/governance/decisions/** @governance-owner
+
+# Decision memos and registers are binding governance
+/governance/decisions/decisions/*.md @governance-owner
+/governance/decisions/MDR.md @governance-owner
+/governance/decisions/DEL.md @governance-owner
+
+# ============================================================================
+# Schema Changes (High Impact - requires schema owner)
+# ============================================================================
+# Database schema changes affect all modules
+/db/ @schema-owner
+/migrations/ @schema-owner
+**/migrations/** @schema-owner
+
+# Schema governance docs
+/docs/**/schema*.md @schema-owner
+/docs/**/SCHEMA*.md @schema-owner
+
+# ============================================================================
+# Gate Runner & CI Infrastructure (Medium Impact - requires ops owner)
+# ============================================================================
+# Gate runner is release-blocking infrastructure
+/tools/gates/ @ops-owner
+/.github/workflows/gates.yml @ops-owner
+/.github/workflows/*.yml @ops-owner
+
+# Docker compose files affect deployment
+/docker-compose*.yml @ops-owner
+/docker-compose*.yaml @ops-owner
+
+# ============================================================================
+# RAG Infrastructure (Medium Impact - requires ops owner)
+# ============================================================================
+# RAG services are critical infrastructure
+/services/kb_indexer/ @ops-owner
+/services/kb_query/ @ops-owner
+/RAG_KB/ @ops-owner
+/RAG_INDEX/ @ops-owner
+
+# ============================================================================
+# Data & Seed Data (Medium Impact - requires data owner)
+# ============================================================================
+# Seed data affects all environments
+/data/seeds/ @data-owner
+/data/seeds/** @data-owner
+
+# ============================================================================
+# Catalog & Pricing Logic (High Impact - requires business owner)
+# ============================================================================
+# Pricing and catalog changes affect commercial outcomes
+/tools/catalog*/ @business-owner
+/backend/app/services/pricing*.py @business-owner
+/backend/app/services/catalog*.py @business-owner
+
+# ============================================================================
+# Default: All other changes require at least one reviewer
+# ============================================================================
+# This is a catch-all; specific paths above take precedence
+* @reviewer
