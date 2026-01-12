@@ -6,21 +6,6 @@ on:
   # Legacy workflow - disabled in favor of Gates (Full RAG) workflow
   # Kept for manual use only via workflow_dispatch
   workflow_dispatch:
-    inputs:
-      full:
-        description: "Run full (FAISS + sentence-transformers) pipeline"
-        type: choice
-        options: ["false", "true"]
-        required: false
-        default: "false"
-      llm:
-        description: "Run LLM tier (rerank/answer). Default: false"
-        type: choice
-        options: ["false", "true"]
-        required: false
-        default: "false"
-  schedule:
-    - cron: "0 2 * * *"
 
 concurrency:
   group: rag-ci-${{ github.ref }}
