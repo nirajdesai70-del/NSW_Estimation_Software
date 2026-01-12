@@ -24,10 +24,13 @@ jobs:
       # Ensure no AppleDouble surprises in CI (should be none on ubuntu, but keep policy aligned)
       - name: AppleDouble hygiene (CI)
         run: |
-          if find . -name '._*' -type f | grep -q .; then
+          echo "Checking for AppleDouble files (._*) only..."
+          if find . -type f -name '._*' | grep -q .; then
             echo "AppleDouble files found (._*). Failing."
-            find . -name '._*' -type f -print
+            find . -type f -name '._*' -print
             exit 1
+          else
+            echo "No AppleDouble files found."
           fi
 
       # ------------------------------------------------------------
