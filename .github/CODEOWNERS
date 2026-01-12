@@ -1,79 +1,34 @@
-# ============================
-# Global defaults
-# ============================
-# Fallback owner (keeps PRs reviewable even if specific rules miss)
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-* @nirajdesai
+# CODEOWNERS - Role-based approval routing (D-0030 aligned)
+#
+# Minimal setup: All changes require review from @nirajdesai70-del
+# Expand later by uncommenting and customizing role-specific sections below
+#
+# Reference: D-0030 (Access Control and Role-Based Approval for Releases)
 
+# ============================
+# Global default (all changes)
+# ============================
+* @nirajdesai70-del
 
 # ============================
+# Future expansion (uncomment and customize when ready)
+# ============================
+#
 # Governance & Decisions
-# ============================
-# Decision memos, MDR/DEL, governance SOPs
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/governance/decisions/ @nirajdesai
-
-# Gate reports & staging artifacts (read-only review)
-#/governance/decisions/staging/ @governance-owners
-
-
-# ============================
+# /governance/decisions/ @governance-owners
+#
 # RAG & Gate Infrastructure
-# ============================
-# Gate runner script
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/tools/gates/ @nirajdesai
-
-# CI workflows (Gates must not be edited casually)
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/.github/workflows/ @nirajdesai
-
-# Docker & compose files (affect release stability)
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/docker-compose*.yml @nirajdesai
-/services/**/Dockerfile @nirajdesai
-/services/kb_query/ @nirajdesai
-/services/kb_indexer/ @nirajdesai
-
-
-# ============================
+# /tools/gates/ @ops-owners
+# /.github/workflows/ @ops-owners
+# /docker-compose*.yml @ops-owners
+# /services/kb_query/ @ops-owners
+# /services/kb_indexer/ @ops-owners
+#
 # Schema & Data Governance
-# ============================
-# Database schema, migrations, and canon
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/db/ @nirajdesai
-/migrations/ @nirajdesai
-/schema/ @nirajdesai
-
-# Seed / reference data and registry
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/data/seeds/ @nirajdesai
-
-
-# ============================
+# /db/ @schema-owners
+# /migrations/ @schema-owners
+# /data/seeds/ @data-owners
+#
 # Catalog / Estimation Domain
-# ============================
-# Catalog logic, parsers, rules
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/catalog/ @nirajdesai
-
-# Estimation core logic
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/estimation/ @nirajdesai
-
-
-# ============================
-# Security / Access / Release Controls
-# ============================
-# Access control, auth, release scripts
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/auth/ @nirajdesai
-/release/ @nirajdesai
-
-
-# ============================
-# Documentation (non-governance)
-# ============================
-# General docs (can be lighter review)
-# TODO: Replace @nirajdesai with your actual GitHub username or team
-/docs/ @nirajdesai
+# /catalog/ @catalog-owners
+# /estimation/ @catalog-owners
