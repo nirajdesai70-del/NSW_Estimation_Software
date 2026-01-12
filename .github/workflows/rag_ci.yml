@@ -3,9 +3,8 @@
 name: RAG CI (KB Refresh + Index + Tests)
 
 on:
-  pull_request:
-  push:
-    branches: [ "main" ]
+  # Legacy workflow - disabled in favor of Gates (Full RAG) workflow
+  # Kept for manual use only via workflow_dispatch
   workflow_dispatch:
     inputs:
       full:
@@ -14,6 +13,18 @@ on:
         options: ["false", "true"]
         required: false
         default: "false"
+      llm:
+        description: "Run LLM tier (rerank/answer). Default: false"
+        type: choice
+        options: ["false", "true"]
+        required: false
+        default: "false"
+  schedule:
+    - cron: "0 2 * * *"
+
+concurrency:
+  group: rag-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   rag-lite:
@@ -76,19 +87,14 @@ jobs:
             RAG_KB/build_reports/*
           retention-days: 7
 
-  rag-full:
-    name: RAG Full (FAISS + embeddings + rebuild + golden)
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    needs: rag-lite
-    if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.full == 'true')
-
-    env:
-      HF_HOME: ${{ github.workspace }}/.cache/huggingface
-      TRANSFORMERS_CACHE: ${{ github.workspace }}/.cache/huggingface
-      SENTENCE_TRANSFORMERS_HOME: ${{ github.workspace }}/.cache/sentence_transformers
+  rag-lite-matrix:
+    name: RAG Lite Matrix (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - name: Checkout
@@ -100,7 +106,85 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
+      - name: Install deps (lite only)
+        run: |
+          python -m pip install -U pip setuptools wheel
+          pip install -r tests/requirements.txt
+
+      - name: KB refresh (lite)
+        run: |
+          python tools/kb_refresh/run_kb_refresh.py
+
+      - name: H2 Gate A — KB refresh outputs must exist
+        run: |
+          python - << 'PY'
+          from pathlib import Path
+          required = [
+            Path("RAG_KB/phase5_pack/00_INDEX.json"),
+            Path("RAG_KB/build_reports/DELTA_SINCE_LAST.md"),
+            Path("RAG_KB/build_reports/RISKS_AND_GAPS.md"),
+          ]
+          missing = [str(p) for p in required if not p.exists()]
+          assert not missing, f"Missing outputs: {missing}"
+          print("KB refresh outputs present ✅")
+          PY
+
+      - name: H3 Gate — Governance integrity
+        run: |
+          python scripts/ci_h3_governance_gate.py
+
+      - name: Run tests (lite)
+        run: |
+          pytest -q -m "not full"
+
+  rag-full:
+    name: RAG Full (FAISS + embeddings + rebuild + golden)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: rag-lite
+
+    env:
+      HF_HOME: ${{ github.workspace }}/.cache/huggingface
+      TRANSFORMERS_CACHE: ${{ github.workspace }}/.cache/huggingface
+      SENTENCE_TRANSFORMERS_HOME: ${{ github.workspace }}/.cache/sentence_transformers
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Decide whether to run full pipeline
+        id: gate
+        run: |
+          run_full=false
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+            run_full=true
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ github.event.inputs.full }}" == "true" ]]; then
+              run_full=true
+            fi
+          fi
+
+          echo "run_full=$run_full" >> $GITHUB_OUTPUT
+          echo "event=${{ github.event_name }}" >> $GITHUB_OUTPUT
+          echo "ref=${{ github.ref }}" >> $GITHUB_OUTPUT
+          echo "full_input=${{ github.event.inputs.full }}" >> $GITHUB_OUTPUT
+
+      - name: Skip notice (PR / non-full runs)
+        if: ${{ steps.gate.outputs.run_full != 'true' }}
+        run: |
+          echo "Skipping rag-full heavy steps."
+          echo "Reason: event=${{ steps.gate.outputs.event }}, ref=${{ steps.gate.outputs.ref }}, full=${{ steps.gate.outputs.full_input }}"
+          echo "rag-lite provides PR coverage."
+
+      - name: Setup Python
+        if: ${{ steps.gate.outputs.run_full == 'true' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
       - name: Cache HF models
+        if: ${{ steps.gate.outputs.run_full == 'true' }}
         uses: actions/cache@v4
         with:
           path: |
@@ -109,6 +193,7 @@ jobs:
           key: hf-cache-${{ runner.os }}-py311-all-MiniLM-L6-v2-${{ hashFiles('services/kb_indexer/requirements.txt', 'services/kb_query/requirements.txt') }}
 
       - name: Install deps (indexer + query + tests)
+        if: ${{ steps.gate.outputs.run_full == 'true' }}
         run: |
           python -m pip install -U pip setuptools wheel
           pip install -r services/kb_indexer/requirements.txt
@@ -116,18 +201,22 @@ jobs:
           pip install -r tests/requirements.txt
 
       - name: KB refresh
+        if: ${{ steps.gate.outputs.run_full == 'true' }}
         run: |
           python tools/kb_refresh/run_kb_refresh.py
 
       - name: Rebuild indexes (hard rebuild)
+        if: ${{ steps.gate.outputs.run_full == 'true' }}
         run: |
           python services/kb_indexer/indexer.py --rebuild --verbose
 
       - name: H2 Gate — Index metadata must exist
+        if: ${{ steps.gate.outputs.run_full == 'true' }}
         run: |
           test -f RAG_INDEX/index_metadata.json || (echo "ERROR: RAG_INDEX/index_metadata.json not found after rebuild" && exit 1)
 
       - name: H2 Gate — Index counts must match
+        if: ${{ steps.gate.outputs.run_full == 'true' }}
         run: |
           python - << 'PY'
           import json
@@ -141,11 +230,12 @@ jobs:
           PY
 
       - name: Run full tests (includes consistency + golden)
+        if: ${{ steps.gate.outputs.run_full == 'true' }}
         run: |
           pytest -q
 
       - name: Upload build reports (on failure)
-        if: failure()
+        if: ${{ failure() && steps.gate.outputs.run_full == 'true' }}
         uses: actions/upload-artifact@v4.3.1
         with:
           name: rag-full-build-reports
@@ -154,7 +244,7 @@ jobs:
           retention-days: 7
 
       - name: Upload index metadata (on failure)
-        if: failure()
+        if: ${{ failure() && steps.gate.outputs.run_full == 'true' }}
         uses: actions/upload-artifact@v4.3.1
         with:
           name: rag-full-index-metadata
@@ -163,3 +253,57 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+      - name: rag-full summary
+        run: |
+          echo "rag-full completed. run_full=${{ steps.gate.outputs.run_full }}"
+
+  rag-llm:
+    name: RAG LLM Tier (rerank/answer) — gated
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: rag-full
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Decide whether to run LLM tier
+        id: llm_gate
+        run: |
+          run_llm=false
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.llm }}" == "true" ]]; then
+            run_llm=true
+          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
+            run_llm=true
+          fi
+          echo "run_llm=$run_llm" >> $GITHUB_OUTPUT
+          echo "event=${{ github.event_name }}" >> $GITHUB_OUTPUT
+          echo "llm_input=${{ github.event.inputs.llm }}" >> $GITHUB_OUTPUT
+
+      - name: Skip notice (LLM disabled)
+        if: ${{ steps.llm_gate.outputs.run_llm != 'true' }}
+        run: |
+          echo "Skipping rag-llm. Enable via workflow_dispatch input: llm=true or nightly schedule."
+
+      # --- LLM tier steps (placeholder, implement later) ---
+      - name: Setup Python (LLM tier)
+        if: ${{ steps.llm_gate.outputs.run_llm == 'true' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install deps (LLM tier)
+        if: ${{ steps.llm_gate.outputs.run_llm == 'true' }}
+        run: |
+          python -m pip install -U pip setuptools wheel
+          pip install -r tests/requirements.txt
+
+      - name: LLM rerank/answer (future hook)
+        if: ${{ steps.llm_gate.outputs.run_llm == 'true' }}
+        env:
+          LLM_BACKEND: "local"
+          LLM_TEMPERATURE: "0"
+        run: |
+          echo "LLM tier placeholder (disabled by default)."
+          echo "When implemented, run: python scripts/ci_rag_llm_tier.py"
