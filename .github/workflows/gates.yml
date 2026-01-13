@@ -10,96 +10,143 @@ jobs:
     timeout-minutes: 30
 
     steps:
+      # ------------------------------------------------------------
+      # 0) Checkout
+      # ------------------------------------------------------------
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ------------------------------------------------------------
+      # 1) Python
+      # ------------------------------------------------------------
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      # ------------------------------------------------------------
+      # 2) Curl
+      # ------------------------------------------------------------
       - name: Install curl
         run: sudo apt-get update && sudo apt-get install -y curl
 
-      - name: AppleDouble hygiene (CI)
-        shell: bash
+      # ------------------------------------------------------------
+      # 3) AppleDouble hygiene (TRACKED FILES ONLY)
+      # ------------------------------------------------------------
+      - name: AppleDouble hygiene (tracked files only)
         run: |
-          echo "Checking for tracked AppleDouble files (._*) only..."
-          offenders=$(git ls-files | grep '/\._' || true)
+          echo "Checking for tracked AppleDouble files (path segment '/._*')..."
+
+          offenders=$(git ls-files -z | grep -z '/\._' || true)
+
           if [ -n "$offenders" ]; then
-            echo "AppleDouble files found in repo:"
-            echo "$offenders"
+            echo "ERROR: AppleDouble files tracked in git:"
+            printf '%s\n' "$offenders"
             exit 1
-          else
-            echo "No AppleDouble files found."
           fi
 
-      - name: Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
+          echo "OK: No tracked AppleDouble files found."
+
+      # ------------------------------------------------------------
+      # 4) Decision KB manifest (OPTIONAL)
+      # ------------------------------------------------------------
+      - name: Regenerate Decision KB manifest (if present)
         run: |
           python3 - <<'PY'
           import json
           from pathlib import Path
 
           root = Path("RAG_KB/decisions/phase5_pack")
-          rules_dir = root / "04_RULES_LIBRARY"
+          rules = root / "04_RULES_LIBRARY"
 
-          if not rules_dir.exists():
-              print("Decision KB not present — skipping Decision RAG indexing.")
-              (root).mkdir(parents=True, exist_ok=True)
-              (root / "00_INDEX.json").write_text(json.dumps({
-                  "kb_version": "0.0",
-                  "index_version": "0.0",
-                  "files": []
-              }, indent=2))
+          if not rules.exists():
+              print("INFO: Decision KB not present, skipping manifest generation.")
               raise SystemExit(0)
 
-          files = sorted([p for p in rules_dir.rglob("*.md") if not p.name.startswith("._")])
+          files = sorted([p for p in rules.rglob("*.md") if not p.name.startswith("._")])
+
           manifest = {
               "kb_version": "1.0",
               "index_version": "1.0",
-              "files": [str(p.relative_to(root)).replace("\\", "/") for p in files],
+              "files": [str(p.relative_to(root)).replace("\\","/") for p in files],
           }
-          (root / "00_INDEX.json").write_text(json.dumps(manifest, indent=2))
-          print(f"Wrote Decision manifest with {len(files)} files")
+
+          (root / "00_INDEX.json").write_text(
+              json.dumps(manifest, indent=2),
+              encoding="utf-8"
+          )
+
+          print(f"Decision KB manifest written with {len(files)} files.")
           PY
 
+      # ------------------------------------------------------------
+      # 5) Working RAG indexer
+      # ------------------------------------------------------------
       - name: Run Working RAG indexer
         run: |
-          docker compose -f docker-compose.rag.yml --profile index up --build --abort-on-container-exit
-          docker compose -f docker-compose.rag.yml --profile index down --remove-orphans || true
+          docker compose -f docker-compose.rag.yml \
+            --profile index up --build --abort-on-container-exit
+          docker compose -f docker-compose.rag.yml \
+            --profile index down --remove-orphans || true
 
+      # ------------------------------------------------------------
+      # 6) Working RAG query
+      # ------------------------------------------------------------
       - name: Start Working RAG query
         run: |
-          docker compose -f docker-compose.rag.yml --profile rag up -d --build
+          docker compose -f docker-compose.rag.yml \
+            --profile rag up -d --build
+
           for i in {1..30}; do
             if curl -fsS http://localhost:8011/health >/dev/null; then
               echo "Working RAG healthy"
+              curl -fsS http://localhost:8011/health
               exit 0
             fi
             sleep 2
           done
-          echo "Working RAG did not become healthy"
+
+          echo "Working RAG failed health check"
+          docker compose -f docker-compose.rag.yml ps
           exit 1
 
+      # ------------------------------------------------------------
+      # 7) Decision RAG indexer (only if manifest exists)
+      # ------------------------------------------------------------
       - name: Run Decision RAG indexer
+        if: ${{ hashFiles('RAG_KB/decisions/phase5_pack/00_INDEX.json') != '' }}
         run: |
-          docker compose -f docker-compose.rag.decisions.yml --profile decisions_index up --build --abort-on-container-exit
-          docker compose -f docker-compose.rag.decisions.yml --profile decisions_index down --remove-orphans || true
+          docker compose -f docker-compose.rag.decisions.yml \
+            --profile decisions_index up --build --abort-on-container-exit
+          docker compose -f docker-compose.rag.decisions.yml \
+            --profile decisions_index down --remove-orphans || true
 
+      # ------------------------------------------------------------
+      # 8) Decision RAG query
+      # ------------------------------------------------------------
       - name: Start Decision RAG query
+        if: ${{ hashFiles('RAG_KB/decisions/phase5_pack/00_INDEX.json') != '' }}
         run: |
-          docker compose -f docker-compose.rag.decisions.yml --profile decisions_rag up -d --build
+          docker compose -f docker-compose.rag.decisions.yml \
+            --profile decisions_rag up -d --build
+
           for i in {1..30}; do
             if curl -fsS http://localhost:8021/health >/dev/null; then
               echo "Decision RAG healthy"
+              curl -fsS http://localhost:8021/health
               exit 0
             fi
             sleep 2
           done
-          echo "Decision RAG did not become healthy"
+
+          echo "Decision RAG failed health check"
+          docker compose -f docker-compose.rag.decisions.yml ps
           exit 1
 
-      - name: Run gates (make gates)
+      # ------------------------------------------------------------
+      # 9) Run gates
+      # ------------------------------------------------------------
+      - name: Run gates
         run: |
           chmod +x tools/gates/run_gates.sh
           if [ -f Makefile ] && grep -qE '^[[:space:]]*gates:' Makefile; then
@@ -108,6 +155,9 @@ jobs:
             tools/gates/run_gates.sh
           fi
 
+      # ------------------------------------------------------------
+      # 10) Upload reports
+      # ------------------------------------------------------------
       - name: Upload gate reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -115,6 +165,9 @@ jobs:
           name: gate-reports
           path: governance/decisions/staging/gate_run_*.md
 
+      # ------------------------------------------------------------
+      # 11) Cleanup
+      # ------------------------------------------------------------
       - name: Cleanup docker
         if: always()
         run: |
