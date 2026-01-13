@@ -23,22 +23,22 @@ jobs:
 
       # AppleDouble hygiene (CI): fail only on real AppleDouble files (._*)
       # Never fails on __pycache__ / pytest caches.
-      - name: AppleDouble hygiene (CI)
+           - name: AppleDouble hygiene (CI)
+        shell: bash
         run: |
           echo "Checking for AppleDouble files (._*) only..."
 
-          FOUND=$(find . \
-            -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' \) -prune -o \
-            -type f -name '._*' -exec echo {} \;)
+          shopt -s globstar nullglob
 
-          if [ -n "$FOUND" ]; then
+          matches=(**/._*)
+
+          if [ ${#matches[@]} -gt 0 ]; then
             echo "AppleDouble files found:"
-            echo "$FOUND"
+            printf '%s\n' "${matches[@]}"
             exit 1
           else
             echo "No AppleDouble files found."
           fi
-
       # ------------------------------------------------------------
       # 1) Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
       # ------------------------------------------------------------
