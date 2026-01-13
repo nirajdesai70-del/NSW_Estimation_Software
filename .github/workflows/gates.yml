@@ -24,7 +24,7 @@ jobs:
       # ------------------------------------------------------------
       # AppleDouble hygiene (CI) — ONLY real AppleDouble files (._*)
       # ------------------------------------------------------------
-            - name: AppleDouble hygiene (CI)
+               - name: AppleDouble hygiene (CI)
         shell: bash
         run: |
           echo "Checking for AppleDouble files (._*) only..."
@@ -36,8 +36,7 @@ jobs:
             exit 1
           else
             echo "No AppleDouble files found."
-          fi
-      # ------------------------------------------------------------
+          fi      # ------------------------------------------------------------
       # 1) Regenerate Decision KB manifest
       # ------------------------------------------------------------
       - name: Regenerate Decision KB manifest
