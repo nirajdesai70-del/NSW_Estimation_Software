@@ -8,9 +8,19 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# CI-lite mode: skip heavy ML dependencies (indexer not needed for CI health checks)
+# FULL mode: install full ML stack for production indexing
+ARG RAG_MODE=FULL
+
 COPY services/kb_indexer/requirements.txt /app/services/kb_indexer/
-RUN pip install --no-cache-dir -r services/kb_indexer/requirements.txt
+
+RUN if [ "$RAG_MODE" = "CI" ]; then \
+      echo "CI-lite mode: skipping indexer dependencies (not needed for health checks)"; \
+      pip install --no-cache-dir requests; \
+    else \
+      echo "FULL mode: installing complete ML stack"; \
+      pip install --no-cache-dir -r services/kb_indexer/requirements.txt; \
+    fi
 
 # Copy service code
 COPY services/kb_indexer/ /app/services/kb_indexer/

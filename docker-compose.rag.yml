@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: services/kb_indexer/Dockerfile
+      args:
+        RAG_MODE: ${RAG_MODE:-FULL}
     container_name: nsw_kb_indexer
     volumes:
       - ./RAG_KB:/app/RAG_KB:ro
@@ -18,6 +20,8 @@ services:
     build:
       context: .
       dockerfile: services/kb_query/Dockerfile
+      args:
+        RAG_MODE: ${RAG_MODE:-FULL}
     container_name: nsw_kb_query
     ports:
       - "${KB_QUERY_HOST_PORT:-8011}:8099"

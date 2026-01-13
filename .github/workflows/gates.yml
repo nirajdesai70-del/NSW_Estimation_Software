@@ -80,10 +80,12 @@ jobs:
           PY
 
       # ------------------------------------------------------------
-      # 5) Working RAG indexer (non-blocking)
+      # 5) Working RAG indexer (non-blocking, CI-lite mode)
       # ------------------------------------------------------------
       - name: Run Working RAG indexer
         continue-on-error: true
+        env:
+          RAG_MODE: CI
         run: |
           docker compose -f docker-compose.rag.yml \
             --profile index up --build --abort-on-container-exit
@@ -91,10 +93,12 @@ jobs:
             --profile index down --remove-orphans || true
 
       # ------------------------------------------------------------
-      # 6) Working RAG query (non-blocking)
+      # 6) Working RAG query (non-blocking, CI-lite mode)
       # ------------------------------------------------------------
       - name: Start Working RAG query
         continue-on-error: true
+        env:
+          RAG_MODE: CI
         run: |
           docker compose -f docker-compose.rag.yml \
             --profile rag up -d --build
