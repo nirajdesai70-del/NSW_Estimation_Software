@@ -1,0 +1,47 @@
+services:
+  decisions_indexer:
+    build:
+      context: .
+      dockerfile: services/kb_indexer/Dockerfile
+      args:
+        RAG_MODE: ${RAG_MODE:-FULL}
+    container_name: nsw_decisions_indexer
+    volumes:
+      - ./RAG_KB/decisions:/app/RAG_KB/decisions:ro
+      - ./RAG_INDEX/decisions:/app/RAG_INDEX/decisions
+    working_dir: /app
+    command: python3 services/kb_indexer/indexer.py --rebuild --verbose --kb-path RAG_KB/decisions --index-path RAG_INDEX/decisions
+    networks:
+      - nsw_network
+    profiles:
+      - decisions_index
+
+  decisions_query:
+    build:
+      context: .
+      dockerfile: services/kb_query/Dockerfile
+      args:
+        RAG_MODE: ${RAG_MODE:-FULL}
+    container_name: nsw_decisions_query
+    ports:
+      - "${DECISION_RAG_HOST_PORT:-8021}:8099"
+    volumes:
+      - ./RAG_INDEX/decisions:/app/RAG_INDEX/decisions:ro
+    working_dir: /app
+    command: python3 services/kb_query/query_server.py --port 8099 --host 0.0.0.0 --index-path RAG_INDEX/decisions
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8099/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - nsw_network
+    profiles:
+      - decisions_rag
+
+networks:
+  nsw_network:
+    driver: bridge

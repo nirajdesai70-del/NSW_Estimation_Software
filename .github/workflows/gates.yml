@@ -50,7 +50,7 @@ jobs:
       # ------------------------------------------------------------
       # 4) Decision KB manifest (OPTIONAL)
       # ------------------------------------------------------------
-      - name: Regenerate Decision KB manifest (if present)
+      - name: Regenerate Decision KB manifest (always create)
         run: |
           python3 - <<'PY'
           import json
@@ -59,24 +59,29 @@ jobs:
           root = Path("RAG_KB/decisions/phase5_pack")
           rules = root / "04_RULES_LIBRARY"
 
+          # Always create manifest file (even if empty) so Decision RAG steps can run
+          root.mkdir(parents=True, exist_ok=True)
+
           if not rules.exists():
-              print("INFO: Decision KB not present, skipping manifest generation.")
-              raise SystemExit(0)
-
-          files = sorted([p for p in rules.rglob("*.md") if not p.name.startswith("._")])
-
-          manifest = {
-              "kb_version": "1.0",
-              "index_version": "1.0",
-              "files": [str(p.relative_to(root)).replace("\\","/") for p in files],
-          }
+              print("INFO: Decision KB not present, creating empty manifest.")
+              manifest = {
+                  "kb_version": "0.0",
+                  "index_version": "0.0",
+                  "files": []
+              }
+          else:
+              files = sorted([p for p in rules.rglob("*.md") if not p.name.startswith("._")])
+              manifest = {
+                  "kb_version": "1.0",
+                  "index_version": "1.0",
+                  "files": [str(p.relative_to(root)).replace("\\","/") for p in files],
+              }
+              print(f"Decision KB manifest written with {len(files)} files.")
 
           (root / "00_INDEX.json").write_text(
               json.dumps(manifest, indent=2),
               encoding="utf-8"
           )
-
-          print(f"Decision KB manifest written with {len(files)} files.")
           PY
 
       # ------------------------------------------------------------
