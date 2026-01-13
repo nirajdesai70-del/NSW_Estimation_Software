@@ -23,16 +23,23 @@ jobs:
 
       # Ensure no AppleDouble surprises in CI (should be none on ubuntu, but keep policy aligned)
       - name: AppleDouble hygiene (CI)
-        run: |
-          echo "Checking for AppleDouble files (._*) only..."
-          if find . -type f -name '._*' | grep -q .; then
-            echo "AppleDouble files found (._*). Failing."
-            find . -type f -name '._*' -print
-            exit 1
-          else
-            echo "No AppleDouble files found."
-          fi
+  run: |
+    echo "Checking for AppleDouble files (._*) only..."
 
+    if find . \
+      -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' \) -prune -false -o \
+      -type f -name '._*' -print \
+      | grep -q .; then
+
+      echo "AppleDouble files found (._*). Failing."
+      find . \
+        -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' \) -prune -false -o \
+        -type f -name '._*' -print
+
+      exit 1
+    else
+      echo "No AppleDouble files found."
+    fi
       # ------------------------------------------------------------
       # 1) Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
       # ------------------------------------------------------------
