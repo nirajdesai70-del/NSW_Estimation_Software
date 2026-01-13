@@ -1,0 +1,88 @@
+# macOS resource fork files
+._*
+**/._*
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+
+# Git
+.git
+.gitignore
+.githooks
+
+# Environment files
+.env
+.env.*
+*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+.pytest_cache/
+*.egg-info/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Documentation (large, not needed in containers)
+docs/
+*.md
+!services/**/*.md
+!backend/**/*.md
+
+# Test files
+tests/
+*.test.py
+*_test.py
+
+# Archive and evidence
+ARCHIVE/
+evidence/
+ARCH/
+
+# Temporary
+*.tmp
+*.temp
+.cache/
+
+# Database files
+*.db
+*.sqlite
+
+# Large data directories
+tools/
+NSW*/
+PLANNING/
+features/
+changes/
+project/
+SoE/
+SoR/
+SoW/
+trace/
