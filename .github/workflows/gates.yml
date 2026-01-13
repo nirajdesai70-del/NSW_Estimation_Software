@@ -127,6 +127,8 @@ jobs:
       - name: Run Decision RAG indexer
         if: ${{ hashFiles('RAG_KB/decisions/phase5_pack/00_INDEX.json') != '' }}
         continue-on-error: true
+        env:
+          RAG_MODE: CI
         run: |
           docker compose -f docker-compose.rag.decisions.yml \
             --profile decisions_index up --build --abort-on-container-exit
@@ -139,6 +141,8 @@ jobs:
       - name: Start Decision RAG query
         if: ${{ hashFiles('RAG_KB/decisions/phase5_pack/00_INDEX.json') != '' }}
         continue-on-error: true
+        env:
+          RAG_MODE: CI
         run: |
           docker compose -f docker-compose.rag.decisions.yml \
             --profile decisions_rag up -d --build
