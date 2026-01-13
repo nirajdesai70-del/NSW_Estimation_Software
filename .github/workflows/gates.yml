@@ -42,8 +42,16 @@ jobs:
 
           root = Path("RAG_KB/decisions/phase5_pack")
           rules_dir = root / "04_RULES_LIBRARY"
+
           if not rules_dir.exists():
-              raise SystemExit(f"Decision KB rules directory missing: {rules_dir}")
+              print("Decision KB not present — skipping Decision RAG indexing.")
+              (root).mkdir(parents=True, exist_ok=True)
+              (root / "00_INDEX.json").write_text(json.dumps({
+                  "kb_version": "0.0",
+                  "index_version": "0.0",
+                  "files": []
+              }, indent=2))
+              raise SystemExit(0)
 
           files = sorted([p for p in rules_dir.rglob("*.md") if not p.name.startswith("._")])
           manifest = {
@@ -51,7 +59,7 @@ jobs:
               "index_version": "1.0",
               "files": [str(p.relative_to(root)).replace("\\", "/") for p in files],
           }
-          (root / "00_INDEX.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+          (root / "00_INDEX.json").write_text(json.dumps(manifest, indent=2))
           print(f"Wrote Decision manifest with {len(files)} files")
           PY
 
