@@ -24,14 +24,12 @@ jobs:
       # ------------------------------------------------------------
       # AppleDouble hygiene (CI) — ONLY real AppleDouble files (._*)
       # ------------------------------------------------------------
-      - name: AppleDouble hygiene (CI)
+            - name: AppleDouble hygiene (CI)
         shell: bash
         run: |
           echo "Checking for AppleDouble files (._*) only..."
-
           shopt -s globstar nullglob
           matches=(**/._*)
-
           if [ ${#matches[@]} -gt 0 ]; then
             echo "AppleDouble files found:"
             printf '%s\n' "${matches[@]}"
@@ -39,7 +37,6 @@ jobs:
           else
             echo "No AppleDouble files found."
           fi
-
       # ------------------------------------------------------------
       # 1) Regenerate Decision KB manifest
       # ------------------------------------------------------------
