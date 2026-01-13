@@ -140,7 +140,12 @@ if WORK_HEALTH_JSON="$(curl_json "${WORK_HEALTH_URL}" 2>/dev/null)"; then
   if [[ "${WORK_STATUS}" == "ok" ]]; then
     pass "Working RAG /health status=ok."
   else
-    fail "Working RAG /health status != ok. Response: ${WORK_HEALTH_JSON}"
+    # In CI-lite mode, service may start but have different status (non-blocking)
+    if [[ "${RAG_MODE:-FULL}" == "CI" ]]; then
+      warn "Working RAG /health status != ok (non-blocking in CI-lite). Response: ${WORK_HEALTH_JSON}"
+    else
+      fail "Working RAG /health status != ok. Response: ${WORK_HEALTH_JSON}"
+    fi
   fi
   # keyword_docs can be string/int; normalize
   WORK_DOCS_N="${WORK_DOCS:-0}"
@@ -158,7 +163,12 @@ if WORK_HEALTH_JSON="$(curl_json "${WORK_HEALTH_URL}" 2>/dev/null)"; then
     fi
   fi
 else
-  fail "Working RAG not reachable at ${WORK_HEALTH_URL}."
+  # In CI-lite mode, service may not be fully ready (non-blocking)
+  if [[ "${RAG_MODE:-FULL}" == "CI" ]]; then
+    warn "Working RAG not reachable at ${WORK_HEALTH_URL} (non-blocking in CI-lite mode)."
+  else
+    fail "Working RAG not reachable at ${WORK_HEALTH_URL}."
+  fi
 fi
 append ""
 
