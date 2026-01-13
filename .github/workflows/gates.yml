@@ -21,29 +21,28 @@ jobs:
       - name: Install curl
         run: sudo apt-get update && sudo apt-get install -y curl
 
-      # Ensure no AppleDouble surprises in CI (should be none on ubuntu, but keep policy aligned)
+      # AppleDouble hygiene (CI): fail only on real AppleDouble files (._*)
+      # Never fails on __pycache__ / pytest caches.
       - name: AppleDouble hygiene (CI)
-  run: |
-    echo "Checking for AppleDouble files (._*) only..."
+        run: |
+          echo "Checking for AppleDouble files (._*) only..."
 
-    if find . \
-      -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' \) -prune -false -o \
-      -type f -name '._*' -print \
-      | grep -q .; then
+          FOUND=$(find . \
+            -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' \) -prune -o \
+            -type f -name '._*' -exec echo {} \;)
 
-      echo "AppleDouble files found (._*). Failing."
-      find . \
-        -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' \) -prune -false -o \
-        -type f -name '._*' -print
+          if [ -n "$FOUND" ]; then
+            echo "AppleDouble files found:"
+            echo "$FOUND"
+            exit 1
+          else
+            echo "No AppleDouble files found."
+          fi
 
-      exit 1
-    else
-      echo "No AppleDouble files found."
-    fi
       # ------------------------------------------------------------
       # 1) Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
       # ------------------------------------------------------------
-      - name: Regenerate Decision KB manifest
+      - name: Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
         run: |
           python3 - <<'PY'
           import json
@@ -58,7 +57,7 @@ jobs:
           manifest = {
               "kb_version": "1.0",
               "index_version": "1.0",
-              "files": [str(p.relative_to(root)).replace("\\","/") for p in files],
+              "files": [str(p.relative_to(root)).replace("\\", "/") for p in files],
           }
           (root / "00_INDEX.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
           print(f"Wrote Decision manifest with {len(files)} files -> {root/'00_INDEX.json'}")
@@ -119,7 +118,7 @@ jobs:
       # ------------------------------------------------------------
       # 6) Run gate runner (prefer make gates)
       # ------------------------------------------------------------
-      - name: Run gates
+      - name: Run gates (make gates)
         run: |
           chmod +x tools/gates/run_gates.sh
           if [ -f Makefile ] && grep -qE '^[[:space:]]*gates:' Makefile; then
