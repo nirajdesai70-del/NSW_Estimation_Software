@@ -21,12 +21,6 @@ jobs:
       - name: Install curl
         run: sudo apt-get update && sudo apt-get install -y curl
 
-      # ------------------------------------------------------------
-      # AppleDouble hygiene (CI) — ONLY real AppleDouble files (._*)
-      # ------------------------------------------------------------
-               - name: Install curl
-        run: sudo apt-get update && sudo apt-get install -y curl
-
       - name: AppleDouble hygiene (CI)
         shell: bash
         run: |
@@ -38,11 +32,9 @@ jobs:
             exit 1
           else
             echo "No AppleDouble files found."
-          fi     
-# ------------------------------------------------------------
-          # 1) Regenerate Decision KB manifest
-# ------------------------------------------------------------
-      - name: Regenerate Decision KB manifest
+          fi
+
+      - name: Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
         run: |
           python3 - <<'PY'
           import json
@@ -63,17 +55,11 @@ jobs:
           print(f"Wrote Decision manifest with {len(files)} files")
           PY
 
-      # ------------------------------------------------------------
-      # 2) Build + run WORK indexer
-      # ------------------------------------------------------------
       - name: Run Working RAG indexer
         run: |
           docker compose -f docker-compose.rag.yml --profile index up --build --abort-on-container-exit
           docker compose -f docker-compose.rag.yml --profile index down --remove-orphans || true
 
-      # ------------------------------------------------------------
-      # 3) Start WORK query
-      # ------------------------------------------------------------
       - name: Start Working RAG query
         run: |
           docker compose -f docker-compose.rag.yml --profile rag up -d --build
@@ -87,17 +73,11 @@ jobs:
           echo "Working RAG did not become healthy"
           exit 1
 
-      # ------------------------------------------------------------
-      # 4) Build + run DECISION indexer
-      # ------------------------------------------------------------
       - name: Run Decision RAG indexer
         run: |
           docker compose -f docker-compose.rag.decisions.yml --profile decisions_index up --build --abort-on-container-exit
           docker compose -f docker-compose.rag.decisions.yml --profile decisions_index down --remove-orphans || true
 
-      # ------------------------------------------------------------
-      # 5) Start DECISION query
-      # ------------------------------------------------------------
       - name: Start Decision RAG query
         run: |
           docker compose -f docker-compose.rag.decisions.yml --profile decisions_rag up -d --build
@@ -111,10 +91,7 @@ jobs:
           echo "Decision RAG did not become healthy"
           exit 1
 
-      # ------------------------------------------------------------
-      # 6) Run gates
-      # ------------------------------------------------------------
-      - name: Run gates
+      - name: Run gates (make gates)
         run: |
           chmod +x tools/gates/run_gates.sh
           if [ -f Makefile ] && grep -qE '^[[:space:]]*gates:' Makefile; then
@@ -123,9 +100,6 @@ jobs:
             tools/gates/run_gates.sh
           fi
 
-      # ------------------------------------------------------------
-      # 7) Upload reports
-      # ------------------------------------------------------------
       - name: Upload gate reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -133,9 +107,6 @@ jobs:
           name: gate-reports
           path: governance/decisions/staging/gate_run_*.md
 
-      # ------------------------------------------------------------
-      # 8) Cleanup
-      # ------------------------------------------------------------
       - name: Cleanup docker
         if: always()
         run: |
