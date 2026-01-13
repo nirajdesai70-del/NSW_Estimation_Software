@@ -7,10 +7,11 @@ services:
         RAG_MODE: ${RAG_MODE:-FULL}
     container_name: nsw_decisions_indexer
     volumes:
-      - ./RAG_KB/decisions:/app/RAG_KB/decisions:ro
-      - ./RAG_INDEX/decisions:/app/RAG_INDEX/decisions
+      # Mount decisions as phase5_pack so indexer can find it
+      - ./RAG_KB/decisions/phase5_pack:/app/RAG_KB/phase5_pack:ro
+      - ./RAG_INDEX:/app/RAG_INDEX
     working_dir: /app
-    command: python3 services/kb_indexer/indexer.py --rebuild --verbose --kb-path RAG_KB/decisions --index-path RAG_INDEX/decisions
+    command: python3 services/kb_indexer/indexer.py --rebuild --verbose
     networks:
       - nsw_network
     profiles:
@@ -26,9 +27,9 @@ services:
     ports:
       - "${DECISION_RAG_HOST_PORT:-8021}:8099"
     volumes:
-      - ./RAG_INDEX/decisions:/app/RAG_INDEX/decisions:ro
+      - ./RAG_INDEX:/app/RAG_INDEX:ro
     working_dir: /app
-    command: python3 services/kb_query/query_server.py --port 8099 --host 0.0.0.0 --index-path RAG_INDEX/decisions
+    command: python3 services/kb_query/query_server.py --port 8099 --host 0.0.0.0
     environment:
       - PYTHONUNBUFFERED=1
     healthcheck:
