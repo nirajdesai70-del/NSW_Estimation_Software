@@ -61,3 +61,6 @@ RAG_KB/build_reports/
 RAG_KB/phase5_pack/00_INDEX.json
 RAG_KB/phase5_pack/*.json
 RAG_KB/phase5_pack/**/.DS_Store
+RAG_KB/work/
+RAG_INDEX/
+RAG_KB/decisions/
