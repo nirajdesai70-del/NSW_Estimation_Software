@@ -21,15 +21,15 @@ jobs:
       - name: Install curl
         run: sudo apt-get update && sudo apt-get install -y curl
 
-      # AppleDouble hygiene (CI): fail only on real AppleDouble files (._*)
-      # Never fails on __pycache__ / pytest caches.
-           - name: AppleDouble hygiene (CI)
+      # ------------------------------------------------------------
+      # AppleDouble hygiene (CI) — ONLY real AppleDouble files (._*)
+      # ------------------------------------------------------------
+      - name: AppleDouble hygiene (CI)
         shell: bash
         run: |
           echo "Checking for AppleDouble files (._*) only..."
 
           shopt -s globstar nullglob
-
           matches=(**/._*)
 
           if [ ${#matches[@]} -gt 0 ]; then
@@ -39,10 +39,11 @@ jobs:
           else
             echo "No AppleDouble files found."
           fi
+
       # ------------------------------------------------------------
-      # 1) Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
+      # 1) Regenerate Decision KB manifest
       # ------------------------------------------------------------
-      - name: Regenerate Decision KB manifest (phase5_pack/00_INDEX.json)
+      - name: Regenerate Decision KB manifest
         run: |
           python3 - <<'PY'
           import json
@@ -60,11 +61,11 @@ jobs:
               "files": [str(p.relative_to(root)).replace("\\", "/") for p in files],
           }
           (root / "00_INDEX.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-          print(f"Wrote Decision manifest with {len(files)} files -> {root/'00_INDEX.json'}")
+          print(f"Wrote Decision manifest with {len(files)} files")
           PY
 
       # ------------------------------------------------------------
-      # 2) Build + run WORK indexer (batch job)
+      # 2) Build + run WORK indexer
       # ------------------------------------------------------------
       - name: Run Working RAG indexer
         run: |
@@ -72,7 +73,7 @@ jobs:
           docker compose -f docker-compose.rag.yml --profile index down --remove-orphans || true
 
       # ------------------------------------------------------------
-      # 3) Start WORK query service and wait for health
+      # 3) Start WORK query
       # ------------------------------------------------------------
       - name: Start Working RAG query
         run: |
@@ -80,17 +81,15 @@ jobs:
           for i in {1..30}; do
             if curl -fsS http://localhost:8011/health >/dev/null; then
               echo "Working RAG healthy"
-              curl -fsS http://localhost:8011/health
               exit 0
             fi
             sleep 2
           done
-          echo "Working RAG did not become healthy in time."
-          docker compose -f docker-compose.rag.yml ps
+          echo "Working RAG did not become healthy"
           exit 1
 
       # ------------------------------------------------------------
-      # 4) Build + run DECISION indexer (batch job)
+      # 4) Build + run DECISION indexer
       # ------------------------------------------------------------
       - name: Run Decision RAG indexer
         run: |
@@ -98,7 +97,7 @@ jobs:
           docker compose -f docker-compose.rag.decisions.yml --profile decisions_index down --remove-orphans || true
 
       # ------------------------------------------------------------
-      # 5) Start DECISION query service and wait for health
+      # 5) Start DECISION query
       # ------------------------------------------------------------
       - name: Start Decision RAG query
         run: |
@@ -106,19 +105,17 @@ jobs:
           for i in {1..30}; do
             if curl -fsS http://localhost:8021/health >/dev/null; then
               echo "Decision RAG healthy"
-              curl -fsS http://localhost:8021/health
               exit 0
             fi
             sleep 2
           done
-          echo "Decision RAG did not become healthy in time."
-          docker compose -f docker-compose.rag.decisions.yml ps
+          echo "Decision RAG did not become healthy"
           exit 1
 
       # ------------------------------------------------------------
-      # 6) Run gate runner (prefer make gates)
+      # 6) Run gates
       # ------------------------------------------------------------
-      - name: Run gates (make gates)
+      - name: Run gates
         run: |
           chmod +x tools/gates/run_gates.sh
           if [ -f Makefile ] && grep -qE '^[[:space:]]*gates:' Makefile; then
@@ -128,7 +125,7 @@ jobs:
           fi
 
       # ------------------------------------------------------------
-      # 7) Upload gate reports
+      # 7) Upload reports
       # ------------------------------------------------------------
       - name: Upload gate reports
         if: always()
