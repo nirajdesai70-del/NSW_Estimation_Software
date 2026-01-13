@@ -24,21 +24,21 @@ jobs:
       # ------------------------------------------------------------
       # AppleDouble hygiene (CI) — ONLY real AppleDouble files (._*)
       # ------------------------------------------------------------
-           - name: AppleDouble hygiene (CI)
+               - name: Install curl
+        run: sudo apt-get update && sudo apt-get install -y curl
+
+      - name: AppleDouble hygiene (CI)
         shell: bash
         run: |
           echo "Checking for tracked AppleDouble files (._*) only..."
-
           offenders=$(git ls-files | grep '/\._' || true)
-
           if [ -n "$offenders" ]; then
             echo "AppleDouble files found in repo:"
             echo "$offenders"
             exit 1
           else
             echo "No AppleDouble files found."
-          fi   
-      # 1) Regenerate Decision KB manifest
+          fi      # 1) Regenerate Decision KB manifest
       # ------------------------------------------------------------
       - name: Regenerate Decision KB manifest
         run: |
