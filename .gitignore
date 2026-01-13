@@ -67,3 +67,8 @@ RAG_KB/decisions/
 RAG_KB/work/
 RAG_INDEX/
 RAG_KB/decisions/
+
+# Generated RAG artifacts
+RAG_KB/work/
+RAG_KB/decisions/
+RAG_INDEX/
