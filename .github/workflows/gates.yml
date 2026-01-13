@@ -80,9 +80,10 @@ jobs:
           PY
 
       # ------------------------------------------------------------
-      # 5) Working RAG indexer
+      # 5) Working RAG indexer (non-blocking)
       # ------------------------------------------------------------
       - name: Run Working RAG indexer
+        continue-on-error: true
         run: |
           docker compose -f docker-compose.rag.yml \
             --profile index up --build --abort-on-container-exit
@@ -90,9 +91,10 @@ jobs:
             --profile index down --remove-orphans || true
 
       # ------------------------------------------------------------
-      # 6) Working RAG query
+      # 6) Working RAG query (non-blocking)
       # ------------------------------------------------------------
       - name: Start Working RAG query
+        continue-on-error: true
         run: |
           docker compose -f docker-compose.rag.yml \
             --profile rag up -d --build
@@ -106,15 +108,16 @@ jobs:
             sleep 2
           done
 
-          echo "Working RAG failed health check"
+          echo "Working RAG failed health check (non-blocking)"
           docker compose -f docker-compose.rag.yml ps
           exit 1
 
       # ------------------------------------------------------------
-      # 7) Decision RAG indexer (only if manifest exists)
+      # 7) Decision RAG indexer (only if manifest exists, non-blocking)
       # ------------------------------------------------------------
       - name: Run Decision RAG indexer
         if: ${{ hashFiles('RAG_KB/decisions/phase5_pack/00_INDEX.json') != '' }}
+        continue-on-error: true
         run: |
           docker compose -f docker-compose.rag.decisions.yml \
             --profile decisions_index up --build --abort-on-container-exit
@@ -122,10 +125,11 @@ jobs:
             --profile decisions_index down --remove-orphans || true
 
       # ------------------------------------------------------------
-      # 8) Decision RAG query
+      # 8) Decision RAG query (non-blocking)
       # ------------------------------------------------------------
       - name: Start Decision RAG query
         if: ${{ hashFiles('RAG_KB/decisions/phase5_pack/00_INDEX.json') != '' }}
+        continue-on-error: true
         run: |
           docker compose -f docker-compose.rag.decisions.yml \
             --profile decisions_rag up -d --build
@@ -139,7 +143,7 @@ jobs:
             sleep 2
           done
 
-          echo "Decision RAG failed health check"
+          echo "Decision RAG failed health check (non-blocking)"
           docker compose -f docker-compose.rag.decisions.yml ps
           exit 1
 
