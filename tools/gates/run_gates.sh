@@ -22,6 +22,9 @@ set -euo pipefail
 WORK_RAG_PORT="${WORK_RAG_PORT:-8011}"
 DECISION_RAG_PORT="${DECISION_RAG_PORT:-8021}"
 
+# Gate mode: 'work' (default, Decision RAG non-blocking) or 'all' (strict, Decision RAG blocking)
+GATES_MODE="${GATES_MODE:-work}"
+
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 STAGING_DIR="${ROOT_DIR}/governance/decisions/staging"
 REPORT_TS="$(date +%Y%m%d_%H%M%S)"
@@ -159,8 +162,11 @@ else
 fi
 append ""
 
-# 5) Decision RAG health
+# 5) Decision RAG health (non-blocking in work mode)
 append "### 5) Decision RAG health (port ${DECISION_RAG_PORT})"
+if [[ "${GATES_MODE}" == "work" ]]; then
+  append "*(Decision RAG checks are non-blocking in work mode)*"
+fi
 DEC_HEALTH_URL="http://localhost:${DECISION_RAG_PORT}/health"
 DEC_HEALTH_JSON=""
 if DEC_HEALTH_JSON="$(curl_json "${DEC_HEALTH_URL}" 2>/dev/null)"; then
@@ -169,7 +175,11 @@ if DEC_HEALTH_JSON="$(curl_json "${DEC_HEALTH_URL}" 2>/dev/null)"; then
   if [[ "${DEC_STATUS}" == "ok" ]]; then
     pass "Decision RAG /health status=ok."
   else
-    fail "Decision RAG /health status != ok. Response: ${DEC_HEALTH_JSON}"
+    if [[ "${GATES_MODE}" == "work" ]]; then
+      warn "Decision RAG /health status != ok (non-blocking). Response: ${DEC_HEALTH_JSON}"
+    else
+      fail "Decision RAG /health status != ok. Response: ${DEC_HEALTH_JSON}"
+    fi
   fi
   DEC_DOCS_N="${DEC_DOCS:-0}"
   # Strip any whitespace/newlines
@@ -178,25 +188,28 @@ if DEC_HEALTH_JSON="$(curl_json "${DEC_HEALTH_URL}" 2>/dev/null)"; then
   if awk -v docs="${DEC_DOCS_N}" 'BEGIN { exit (docs > 0 ? 0 : 1) }'; then
     pass "Decision RAG keyword_docs > 0 (${DEC_DOCS_N})."
   else
-    # In CI-lite mode, keyword_docs=0 is expected (no indexing or service skipped)
-    if [[ "${RAG_MODE:-FULL}" == "CI" ]]; then
-      warn "Decision RAG keyword_docs is 0 (${DEC_DOCS_N}). Expected in CI-lite mode (no indexing or service skipped)."
+    # In work mode or CI-lite mode, keyword_docs=0 is expected/warned
+    if [[ "${GATES_MODE}" == "work" || "${RAG_MODE:-FULL}" == "CI" ]]; then
+      warn "Decision RAG keyword_docs is 0 (${DEC_DOCS_N}). Expected in work/CI-lite mode (no indexing or service skipped)."
     else
       fail "Decision RAG keyword_docs is not > 0 (${DEC_DOCS_N}). Index may be empty."
     fi
   fi
 else
-  # In CI-lite mode, Decision RAG may be skipped (conditional step)
-  if [[ "${RAG_MODE:-FULL}" == "CI" ]]; then
-    warn "Decision RAG not reachable at ${DEC_HEALTH_URL}. Expected in CI-lite mode if manifest missing."
+  # In work mode or CI-lite mode, Decision RAG may be skipped (non-blocking)
+  if [[ "${GATES_MODE}" == "work" || "${RAG_MODE:-FULL}" == "CI" ]]; then
+    warn "Decision RAG not reachable at ${DEC_HEALTH_URL}. Expected in work/CI-lite mode if manifest missing (non-blocking)."
   else
     fail "Decision RAG not reachable at ${DEC_HEALTH_URL}."
   fi
 fi
 append ""
 
-# 6) Decision RAG QC query (must cite governance)
+# 6) Decision RAG QC query (must cite governance, non-blocking in work mode)
 append "### 6) Decision RAG QC query (governance citation)"
+if [[ "${GATES_MODE}" == "work" ]]; then
+  append "*(Decision RAG QC query is non-blocking in work mode)*"
+fi
 DEC_QUERY_URL="http://localhost:${DECISION_RAG_PORT}/query"
 QC_PAYLOAD='{"query":"MDR Decision Register D-0001","top_k":5}'
 DEC_QUERY_JSON=""

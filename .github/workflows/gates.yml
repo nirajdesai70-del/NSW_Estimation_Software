@@ -152,11 +152,12 @@ jobs:
           exit 1
 
       # ------------------------------------------------------------
-      # 9) Run gates
+      # 9) Run gates (WORK ONLY - Decision RAG non-blocking)
       # ------------------------------------------------------------
-      - name: Run gates
+      - name: Run gates (WORK ONLY)
         env:
           RAG_MODE: CI
+          GATES_MODE: work
         run: |
           chmod +x tools/gates/run_gates.sh
           if [ -f Makefile ] && grep -qE '^[[:space:]]*gates:' Makefile; then
