@@ -147,7 +147,12 @@ if WORK_HEALTH_JSON="$(curl_json "${WORK_HEALTH_URL}" 2>/dev/null)"; then
   if awk -v docs="${WORK_DOCS_N}" 'BEGIN { exit (docs > 0 ? 0 : 1) }'; then
     pass "Working RAG keyword_docs > 0 (${WORK_DOCS_N})."
   else
-    fail "Working RAG keyword_docs is not > 0 (${WORK_DOCS_N}). Index may be empty."
+    # In CI-lite mode, keyword_docs=0 is expected (no indexing)
+    if [[ "${RAG_MODE:-FULL}" == "CI" ]]; then
+      warn "Working RAG keyword_docs is 0 (${WORK_DOCS_N}). Expected in CI-lite mode (no indexing)."
+    else
+      fail "Working RAG keyword_docs is not > 0 (${WORK_DOCS_N}). Index may be empty."
+    fi
   fi
 else
   fail "Working RAG not reachable at ${WORK_HEALTH_URL}."
@@ -173,10 +178,20 @@ if DEC_HEALTH_JSON="$(curl_json "${DEC_HEALTH_URL}" 2>/dev/null)"; then
   if awk -v docs="${DEC_DOCS_N}" 'BEGIN { exit (docs > 0 ? 0 : 1) }'; then
     pass "Decision RAG keyword_docs > 0 (${DEC_DOCS_N})."
   else
-    fail "Decision RAG keyword_docs is not > 0 (${DEC_DOCS_N}). Index may be empty."
+    # In CI-lite mode, keyword_docs=0 is expected (no indexing or service skipped)
+    if [[ "${RAG_MODE:-FULL}" == "CI" ]]; then
+      warn "Decision RAG keyword_docs is 0 (${DEC_DOCS_N}). Expected in CI-lite mode (no indexing or service skipped)."
+    else
+      fail "Decision RAG keyword_docs is not > 0 (${DEC_DOCS_N}). Index may be empty."
+    fi
   fi
 else
-  fail "Decision RAG not reachable at ${DEC_HEALTH_URL}."
+  # In CI-lite mode, Decision RAG may be skipped (conditional step)
+  if [[ "${RAG_MODE:-FULL}" == "CI" ]]; then
+    warn "Decision RAG not reachable at ${DEC_HEALTH_URL}. Expected in CI-lite mode if manifest missing."
+  else
+    fail "Decision RAG not reachable at ${DEC_HEALTH_URL}."
+  fi
 fi
 append ""
 

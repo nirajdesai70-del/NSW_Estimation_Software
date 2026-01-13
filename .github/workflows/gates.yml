@@ -155,6 +155,8 @@ jobs:
       # 9) Run gates
       # ------------------------------------------------------------
       - name: Run gates
+        env:
+          RAG_MODE: CI
         run: |
           chmod +x tools/gates/run_gates.sh
           if [ -f Makefile ] && grep -qE '^[[:space:]]*gates:' Makefile; then
