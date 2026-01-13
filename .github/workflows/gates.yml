@@ -38,8 +38,10 @@ jobs:
             exit 1
           else
             echo "No AppleDouble files found."
-          fi      # 1) Regenerate Decision KB manifest
-      # ------------------------------------------------------------
+          fi     
+# ------------------------------------------------------------
+          # 1) Regenerate Decision KB manifest
+# ------------------------------------------------------------
       - name: Regenerate Decision KB manifest
         run: |
           python3 - <<'PY'
