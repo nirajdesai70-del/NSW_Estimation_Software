@@ -156,6 +156,8 @@ jobs:
         uses: zaproxy/action-baseline@v0.12.0
         with:
           target: ${{ env.ZAP_TARGET_URL }}
+          # Avoid underscore in artifact name (GitHub artifact service rejects some names).
+          artifact_name: zap-scan
           rules_file_name: .zap/rules.tsv
           cmd_options: >
             -a
