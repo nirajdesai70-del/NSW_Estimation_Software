@@ -132,8 +132,10 @@ jobs:
   zap_baseline:
     name: OWASP ZAP Baseline (warn-only)
     runs-on: ubuntu-latest
-    if: ${{ (github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/main')) && secrets.ZAP_TARGET_URL != '' }}
+    if: ${{ github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/main') }}
     continue-on-error: ${{ github.ref != 'refs/heads/main' }}
+    env:
+      ZAP_TARGET_URL: ${{ secrets.ZAP_TARGET_URL }}
     permissions:
       contents: read
       actions: read
@@ -141,10 +143,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Skip if ZAP_TARGET_URL is not set
+        shell: bash
+        run: |
+          if [ -z "${ZAP_TARGET_URL:-}" ]; then
+            echo "ZAP_TARGET_URL not set; skipping ZAP baseline."
+            exit 0
+          fi
+
       - name: ZAP Baseline Scan (10-min max)
         uses: zaproxy/action-baseline@v0.12.0
         with:
-          target: ${{ secrets.ZAP_TARGET_URL }}
+          target: ${{ env.ZAP_TARGET_URL }}
           rules_file_name: .zap/rules.tsv
           cmd_options: >
             -a
