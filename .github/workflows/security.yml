@@ -1,0 +1,165 @@
+name: security-gates
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  secrets_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gitleaks scan
+        uses: zricethezav/gitleaks-action@v2
+        with:
+          args: --no-banner
+
+  sca_pip_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pip-audit
+        run: pip install pip-audit
+      - name: Generate SBOM (CycloneDX JSON) [non-blocking]
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Produce an SBOM per requirements surface where possible.
+          REQS=(
+            "apps/backend/requirements.txt"
+            "WORKING_REVIEWED_SET/backend/requirements.txt"
+            "services/kb_indexer/requirements.txt"
+            "services/kb_query/requirements.txt"
+          )
+
+          for req in "${REQS[@]}"; do
+            if [ -f "$req" ]; then
+              out="sbom-$(echo "$req" | tr '/.' '__').cyclonedx.json"
+              echo "SBOM: $req -> $out"
+              # If pip-audit doesn't support CycloneDX in a given version, this step is non-blocking.
+              pip-audit -r "$req" --format cyclonedx-json --output "$out"
+            else
+              echo "Skipping (missing): $req"
+            fi
+          done
+      - name: Run pip-audit (gate)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Audit the main Python surfaces in this repo.
+          REQS=(
+            "apps/backend/requirements.txt"
+            "WORKING_REVIEWED_SET/backend/requirements.txt"
+            "services/kb_indexer/requirements.txt"
+            "services/kb_query/requirements.txt"
+          )
+
+          for req in "${REQS[@]}"; do
+            if [ -f "$req" ]; then
+              out="pip-audit-$(echo "$req" | tr '/.' '__').sarif"
+              echo "Auditing: $req -> $out"
+              # Always emit SARIF; the gate below decides pass/fail by severity + waivers.
+              pip-audit -r "$req" --format sarif --output "$out" || true
+            else
+              echo "Skipping (missing): $req"
+            fi
+          done
+
+          python tools/security/pip_audit_gate.py \
+            --waivers WORKING_REVIEWED_SET/00_GOVERNANCE/waivers_sca.json \
+            --sarif pip-audit-*.sarif
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-audit-report
+          path: pip-audit-*.sarif
+      - name: Upload SBOM artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom-*.cyclonedx.json
+
+  sast_bandit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install bandit
+        run: pip install bandit
+      - name: Run bandit (gate)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TARGETS=(
+            "apps/backend"
+            "services"
+            "tools"
+            "WORKING_REVIEWED_SET/backend/app"
+          )
+
+          EXISTING=()
+          for t in "${TARGETS[@]}"; do
+            if [ -d "$t" ]; then
+              EXISTING+=("$t")
+            fi
+          done
+
+          if [ "${#EXISTING[@]}" -eq 0 ]; then
+            echo "No python targets found; skipping bandit."
+            exit 0
+          fi
+
+          # Gate on HIGH severity only.
+          bandit -r "${EXISTING[@]}" -f sarif -o bandit.sarif -lll
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-report
+          path: bandit.sarif
+
+  zap_baseline:
+    name: OWASP ZAP Baseline (warn-only)
+    runs-on: ubuntu-latest
+    if: ${{ (github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/main')) && secrets.ZAP_TARGET_URL != '' }}
+    continue-on-error: ${{ github.ref != 'refs/heads/main' }}
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: ZAP Baseline Scan (10-min max)
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: ${{ secrets.ZAP_TARGET_URL }}
+          rules_file_name: .zap/rules.tsv
+          cmd_options: >
+            -a
+            -l HIGH
+            -m 10
+            -I
+            -T 120
+          allow_issue_writing: false
+
+      - name: Upload ZAP Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-baseline-artifacts
+          path: |
+            *.html
+            *.json
+            zap.out
+          if-no-files-found: ignore

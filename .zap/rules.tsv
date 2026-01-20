@@ -1,0 +1,13 @@
+# ZAP baseline rules (TSV)
+# Format examples:
+#   10010	IGNORE	(Reason / link to issue)
+#   10021	WARN	(Reason / link to issue)
+#
+# Keep this file present even if empty; the CI workflow references it.
+
+# ruleId	severity	action	evidence	notes
+# Format: TAB-separated. action = IGNORE | WARN | FAIL
+# Keep entries time-boxed with expiry notes.
+10021	Medium	IGNORE		X-Content-Type-Options planned in Phase-9; expires 2026-03-31
+10010	High	WARN			Pending cookie-hardening backlog
+
