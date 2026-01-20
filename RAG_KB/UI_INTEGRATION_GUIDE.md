@@ -267,7 +267,7 @@ The adapter gracefully degrades if the RAG service is unavailable:
 ```bash
 curl -X POST http://your-app.test/ui/rag/query \
   -H "Content-Type: application/json" \
-  -H "X-CSRF-TOKEN: your-token" \
+  -H "<CSRF_HEADER>: <csrf-token>" \
   -d '{
     "query": "How do I map products to categories?",
     "context": {"screen": "catalog"},

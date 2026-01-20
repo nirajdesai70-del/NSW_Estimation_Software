@@ -89,7 +89,7 @@ php artisan config:clear
 # Make sure you're authenticated first, then:
 curl -X POST http://localhost:8000/ui/rag/query \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "<AUTH_HEADER>: <token>" \
   -d '{
     "query": "What is the catalog structure?",
     "context": {"screen": "catalog"},
