@@ -1,0 +1,11 @@
+[
+  {
+    "rule_id": "PYSEC-YYYY-XXXX",
+    "expires_on": "2026-02-15",
+    "owner": "security@nish.local",
+    "rationale": "Why this MEDIUM finding is acceptable temporarily, plus mitigation plan.",
+    "scope": "WORKING_REVIEWED_SET/backend/requirements.txt",
+    "link": "https://github.com/<org>/<repo>/issues/<id>"
+  }
+]
+
