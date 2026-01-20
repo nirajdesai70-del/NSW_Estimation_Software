@@ -122,12 +122,13 @@ jobs:
           fi
 
           # Gate on HIGH severity only.
-          bandit -r "${EXISTING[@]}" -f sarif -o bandit.sarif -lll
+          # Note: bandit does not support SARIF output; emit JSON instead and keep the HIGH-severity gate.
+          bandit -r "${EXISTING[@]}" -f json -o bandit.json -lll
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: bandit-report
-          path: bandit.sarif
+          path: bandit.json
 
   zap_baseline:
     name: OWASP ZAP Baseline (warn-only)
@@ -158,7 +159,6 @@ jobs:
           rules_file_name: .zap/rules.tsv
           cmd_options: >
             -a
-            -l HIGH
             -m 10
             -I
             -T 120
