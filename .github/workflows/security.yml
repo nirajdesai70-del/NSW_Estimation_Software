@@ -16,7 +16,9 @@ jobs:
           fetch-depth: 0
       - name: Gitleaks scan
         uses: zricethezav/gitleaks-action@v2
-        # Note: this action does not support inputs; keep it default to avoid "Unexpected input(s)" warnings.
+        env:
+          # Required by gitleaks-action on pull_request events (uses GitHub API for PR metadata/ranges).
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   sca_pip_audit:
     runs-on: ubuntu-latest
