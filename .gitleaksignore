@@ -1,0 +1,5 @@
+# Ignore known false-positive "curl-auth-header" findings in historical docs commits.
+# Fingerprints from GitHub Actions secrets_scan logs (gitleaks).
+
+ed73735752688d76930993f5c071be9becb99ca2:RAG_KB/UI_INTEGRATION_GUIDE.md:curl-auth-header:268
+ed73735752688d76930993f5c071be9becb99ca2:RAG_QUICK_REFERENCE.md:curl-auth-header:90
