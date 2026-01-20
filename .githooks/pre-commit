@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Repo-local hooks (core.hooksPath=.githooks).
+#
+# This pre-commit hook:
+# 1) blocks macOS metadata artifacts from being committed
+# 2) runs the pre-commit framework hooks for the pre-commit stage
+
+echo "pre-commit: checking macOS artifacts..."
+
+# List staged files only
+STAGED="$(git diff --cached --name-only || true)"
+
+# Block patterns
+BAD="$(echo "$STAGED" | grep -E '(^|/)\.DS_Store$|(^|/)\._|(^|/)__MACOSX(/|$)' || true)"
+
+if [[ -n "$BAD" ]]; then
+  echo ""
+  echo "Commit blocked: macOS metadata artifacts are staged:"
+  echo "$BAD"
+  echo ""
+  echo "Fix options:"
+  echo "  1) Run cleanup:  ./tools/cleanup_mac_artifacts.sh ."
+  echo "  2) Unstage artifacts: git restore --staged <path>"
+  echo "  3) Ensure .gitignore includes .DS_Store and ._*"
+  echo ""
+  exit 1
+fi
+
+echo "pre-commit: clean."
+
+# Run the pre-commit framework hooks (ruff/black/mypy/gitleaks/etc).
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+if command -v "$PYTHON_BIN" >/dev/null 2>&1; then
+  exec "$PYTHON_BIN" -m pre_commit run --hook-stage pre-commit --show-diff-on-failure
+fi
+
+if command -v python >/dev/null 2>&1; then
+  exec python -m pre_commit run --hook-stage pre-commit --show-diff-on-failure
+fi
+
+echo "pre-commit: python not found; cannot run pre_commit hooks."
+echo "tip: pip install pre-commit && pre-commit --version"
+exit 1
+
