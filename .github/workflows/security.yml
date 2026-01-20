@@ -11,10 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # gitleaks uses git history/ranges; shallow clones can cause "unknown revision" failures on push events.
+          fetch-depth: 0
       - name: Gitleaks scan
         uses: zricethezav/gitleaks-action@v2
-        with:
-          args: --no-banner
+        # Note: this action does not support inputs; keep it default to avoid "Unexpected input(s)" warnings.
 
   sca_pip_audit:
     runs-on: ubuntu-latest
@@ -153,25 +155,34 @@ jobs:
           fi
 
       - name: ZAP Baseline Scan (10-min max)
-        uses: zaproxy/action-baseline@v0.12.0
-        with:
-          target: ${{ env.ZAP_TARGET_URL }}
-          # Avoid underscore in artifact name (GitHub artifact service rejects some names).
-          artifact_name: zap-scan
-          rules_file_name: .zap/rules.tsv
-          cmd_options: >
-            -a
-            -m 10
-            -I
-            -T 120
-          allow_issue_writing: false
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Run ZAP baseline directly (avoid action-internal artifact uploads which can fail with 400s).
+          docker pull ghcr.io/zaproxy/zaproxy:stable -q
+
+          docker run --rm \
+            -v "$PWD:/zap/wrk/:rw" \
+            --network=host \
+            -t ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+              -t "${ZAP_TARGET_URL}" \
+              -J zap-report.json \
+              -w zap-report.md \
+              -r zap-report.html \
+              -a \
+              -m 10 \
+              -I \
+              -T 120
 
       - name: Upload ZAP Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: zap-baseline-artifacts
           path: |
-            *.html
-            *.json
+            zap-report.html
+            zap-report.json
+            zap-report.md
             zap.out
           if-no-files-found: ignore
