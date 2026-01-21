@@ -2,6 +2,7 @@
 Cost adder service
 Phase-5: Minimal upsert service for QCA cost adders
 """
+
 from __future__ import annotations
 
 from sqlalchemy.orm import Session
@@ -32,4 +33,3 @@ class CostAdderService:
             amount=float(amount),
             currency=currency,
         )
-

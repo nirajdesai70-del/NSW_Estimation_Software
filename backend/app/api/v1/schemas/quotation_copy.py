@@ -1,6 +1,7 @@
 """
 Quotation copy API schemas
 """
+
 from __future__ import annotations
 
 from typing import Optional
@@ -16,7 +17,9 @@ class CopyQuotationRequest(BaseModel):
     )
     copy_panels: bool = Field(default=True, description="Copy panels")
     copy_boms: bool = Field(default=True, description="Copy BOMs (requires panels)")
-    copy_bom_items: bool = Field(default=True, description="Copy BOM items (requires BOMs)")
+    copy_bom_items: bool = Field(
+        default=True, description="Copy BOM items (requires BOMs)"
+    )
 
 
 class CopyQuotationResponse(BaseModel):
@@ -35,4 +38,3 @@ class CopyBOMResponse(BaseModel):
     """Response schema for copying a BOM tree."""
 
     new_bom_id: int
-

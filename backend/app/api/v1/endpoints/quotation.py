@@ -1,6 +1,7 @@
 """
 Quotation endpoints
 """
+
 from typing import List, Dict, Any
 from decimal import Decimal
 from fastapi import APIRouter, Depends, Path, Request
@@ -16,7 +17,10 @@ from app.estimation.discount_rule_lookup import DiscountRuleLookup
 from app.estimation.discount_engine import DiscountEngine
 from app.estimation.discount_rule_types import DiscountScope
 from app.api.v1.schemas.pricing import ApplyRecalcRequest, ApplyRecalcResponse
-from app.api.v1.schemas.quotation_discount import QuotationDiscountSetRequest, QuotationDiscountSetResponse
+from app.api.v1.schemas.quotation_discount import (
+    QuotationDiscountSetRequest,
+    QuotationDiscountSetResponse,
+)
 from app.api.v1.schemas.quotation_copy import (
     CopyQuotationRequest,
     CopyQuotationResponse,
@@ -26,11 +30,17 @@ from app.api.v1.schemas.quotation_copy import (
 from app.api.v1.schemas.quotation_read import QuotationListItem, QuotationDetail
 from app.api.v1.schemas.quotation_structure_read import PanelListItem, FeederListItem
 from app.api.v1.schemas.bom_items_read import BOMItemListItem
-from app.api.v1.schemas.cost_adders import CostAdderUpsertRequest, CostAdderUpsertResponse
+from app.api.v1.schemas.cost_adders import (
+    CostAdderUpsertRequest,
+    CostAdderUpsertResponse,
+)
 from app.api.v1.schemas.cost_summary import QuotationCostSummaryResponse
 from app.services.cost_adder_service import CostAdderService
 from app.services.cost_summary_service import CostSummaryService
-from app.validators.pricing_apply import assert_apply_recalc_allowed, ApplyRecalcPermissionError
+from app.validators.pricing_apply import (
+    assert_apply_recalc_allowed,
+    ApplyRecalcPermissionError,
+)
 from app.validators.discount_rules import assert_bulk_allowed, DiscountPermissionError
 from app.audit.logger import AuditLogger
 from app.estimation.tax_profile_lookup import TaxProfileLookup
@@ -44,13 +54,13 @@ router = APIRouter()
 def get_user_id_from_request(request: Request) -> int:
     """
     Extract user_id from request context.
-    
+
     Phase-5: Stub implementation using header (similar to tenant_id).
     TODO: Replace with proper JWT/auth middleware.
-    
+
     Args:
         request: FastAPI request object
-        
+
     Returns:
         User ID (defaults to 1 for development)
     """
@@ -60,7 +70,7 @@ def get_user_id_from_request(request: Request) -> int:
             return int(user_id_header)
         except ValueError:
             pass
-    
+
     # Default for development
     return 1
 
@@ -81,27 +91,31 @@ def _compute_quote_pricing(
 ) -> Dict[str, Any]:
     """
     Internal helper: Compute pricing for a quotation (shared by preview and apply-recalc).
-    
+
     Returns deterministic pricing calculation with totals, GST, and flags.
     This is the single source of truth for pricing computation.
-    
+
     Args:
         db: Database session
         tenant_id: Tenant ID
         quotation_id: Quotation ID
-        
+
     Returns:
         Dict with keys: subtotal, quotation_discount_pct, discounted_subtotal, gst, grand_total, flags
     """
     # 1) Load quotation (tenant-safe)
-    quote = db.execute(
-        text("""
+    quote = (
+        db.execute(
+            text("""
             SELECT id, tenant_id, discount_pct, tax_profile_id, tax_mode
             FROM quotations
             WHERE id = :qid AND tenant_id = :tenant_id
         """),
-        {"qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().first()
+            {"qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
 
     if not quote:
         raise_api_error(
@@ -115,8 +129,9 @@ def _compute_quote_pricing(
     tax_mode_str = quote.get("tax_mode")
 
     # 2) Load quote lines (tenant-safe)
-    lines = db.execute(
-        text("""
+    lines = (
+        db.execute(
+            text("""
             SELECT
                 id,
                 product_id,
@@ -134,14 +149,16 @@ def _compute_quote_pricing(
                 AND tenant_id = :tenant_id
             ORDER BY id ASC
         """),
-        {"qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().all()
+            {"qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .all()
+    )
 
     # 3) Load discount rules (quote-scoped)
     rule_lookup = DiscountRuleLookup(db)
     rules = rule_lookup.list_active_rules_for_quote(
-        tenant_id=tenant_id,
-        quotation_id=quotation_id
+        tenant_id=tenant_id, quotation_id=quotation_id
     )
 
     # Build fast lookup maps for rules (quote-scoped)
@@ -203,7 +220,11 @@ def _compute_quote_pricing(
 
         # Normal discount resolution for PRICELIST, MANUAL_WITH_DISCOUNT
         line_discount_source = row.get("discount_source")
-        line_discount_pct = Decimal(str(row["discount_pct"])) if row.get("discount_pct") is not None else None
+        line_discount_pct = (
+            Decimal(str(row["discount_pct"]))
+            if row.get("discount_pct") is not None
+            else None
+        )
 
         effective_discount_pct = Decimal("0")
         applied_scope = "NONE"
@@ -227,7 +248,7 @@ def _compute_quote_pricing(
                     if r:
                         effective_discount_pct = r.discount_pct
                         applied_scope = "MAKE_SERIES"
-                        
+
                 else:
                     # rules exist but this line can't be matched because identifiers missing
                     local_flags.append("MAKE_SERIES_MAPPING_NOT_AVAILABLE")
@@ -240,13 +261,11 @@ def _compute_quote_pricing(
                     if r:
                         effective_discount_pct = r.discount_pct
                         applied_scope = "CATEGORY"
-                        
 
             # 4) SITE rule (quote-level fallback)
             if applied_scope == "NONE" and site_rule is not None:
                 effective_discount_pct = site_rule.discount_pct
                 applied_scope = "SITE"
-                
 
         # Use engine to validate/quantize via existing logic
         # (engine.validate_pct will be called inside apply_item_discount)
@@ -331,18 +350,22 @@ async def list_quotations(
 ):
     """
     List quotations (Week-1 Day-1).
-    
+
     Returns tenant-scoped list of quotations with basic fields.
     """
-    rows = db.execute(
-        text("""
+    rows = (
+        db.execute(
+            text("""
             SELECT id, quote_no, customer_name, status, created_at
             FROM quotations
             WHERE tenant_id = :tenant_id
             ORDER BY id ASC
         """),
-        {"tenant_id": tenant_id},
-    ).mappings().all()
+            {"tenant_id": tenant_id},
+        )
+        .mappings()
+        .all()
+    )
 
     # Convert to list of dicts, handling datetime conversion
     result = []
@@ -352,7 +375,7 @@ async def list_quotations(
         if row_dict.get("created_at") and hasattr(row_dict["created_at"], "isoformat"):
             row_dict["created_at"] = row_dict["created_at"].isoformat()
         result.append(row_dict)
-    
+
     return result
 
 
@@ -364,7 +387,7 @@ async def list_panels(
 ):
     """
     List panels for a quotation (Week-1 Day-2).
-    
+
     Returns tenant-safe list of panels for the quotation or 404 if quotation not found.
     """
     # Ensure quotation exists tenant-safe (prevents leaking panel ids across tenants)
@@ -379,20 +402,26 @@ async def list_panels(
             detail="Quotation not found for tenant",
         )
 
-    rows = db.execute(
-        text("""
+    rows = (
+        db.execute(
+            text("""
             SELECT id, quotation_id, name, quantity, rate, amount
             FROM quote_panels
             WHERE tenant_id = :tenant_id AND quotation_id = :qid
             ORDER BY id ASC
         """),
-        {"tenant_id": tenant_id, "qid": quotation_id},
-    ).mappings().all()
+            {"tenant_id": tenant_id, "qid": quotation_id},
+        )
+        .mappings()
+        .all()
+    )
 
     return [dict(r) for r in rows]
 
 
-@router.get("/{quotation_id}/panels/{panel_id}/feeders", response_model=List[FeederListItem])
+@router.get(
+    "/{quotation_id}/panels/{panel_id}/feeders", response_model=List[FeederListItem]
+)
 async def list_panel_feeders(
     quotation_id: int = Path(..., description="Quotation ID"),
     panel_id: int = Path(..., description="Panel ID"),
@@ -401,7 +430,7 @@ async def list_panel_feeders(
 ):
     """
     List feeders (level 0 BOMs) for a panel (Week-1 Day-2).
-    
+
     Returns tenant-safe list of feeders (level 0 BOMs) for the panel.
     Feeder = quote_boms.level = 0
     """
@@ -434,8 +463,9 @@ async def list_panel_feeders(
         )
 
     # Feeder = level 0 BOMs
-    rows = db.execute(
-        text("""
+    rows = (
+        db.execute(
+            text("""
             SELECT
                 id,
                 quotation_id,
@@ -454,8 +484,11 @@ async def list_panel_feeders(
               AND level = 0
             ORDER BY id ASC
         """),
-        {"tenant_id": tenant_id, "qid": quotation_id, "pid": panel_id},
-    ).mappings().all()
+            {"tenant_id": tenant_id, "qid": quotation_id, "pid": panel_id},
+        )
+        .mappings()
+        .all()
+    )
 
     return [dict(r) for r in rows]
 
@@ -469,7 +502,7 @@ async def list_bom_items(
 ):
     """
     List BOM items for a given BOM under a quotation (Week-1 Day-3).
-    
+
     Read-only, tenant-safe, cost-neutral:
     - No pricing recompute
     - No QCA joins
@@ -488,14 +521,18 @@ async def list_bom_items(
         )
 
     # 2) Validate BOM belongs to quotation + tenant
-    b = db.execute(
-        text("""
+    b = (
+        db.execute(
+            text("""
             SELECT id, panel_id, level
             FROM quote_boms
             WHERE id=:bid AND quotation_id=:qid AND tenant_id=:tenant_id
         """),
-        {"bid": bom_id, "qid": quotation_id, "tenant_id": tenant_id},
-    ).mappings().first()
+            {"bid": bom_id, "qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
     if not b:
         raise_api_error(
             status_code=404,
@@ -504,8 +541,9 @@ async def list_bom_items(
         )
 
     # 3) Fetch items for this BOM
-    rows = db.execute(
-        text("""
+    rows = (
+        db.execute(
+            text("""
             SELECT
                 id,
                 quotation_id,
@@ -523,8 +561,11 @@ async def list_bom_items(
               AND bom_id = :bid
             ORDER BY sequence_order ASC, id ASC
         """),
-        {"tenant_id": tenant_id, "qid": quotation_id, "bid": bom_id},
-    ).mappings().all()
+            {"tenant_id": tenant_id, "qid": quotation_id, "bid": bom_id},
+        )
+        .mappings()
+        .all()
+    )
 
     return [dict(r) for r in rows]
 
@@ -535,7 +576,10 @@ async def create_quotation():
     return {"message": "Create quotation endpoint - to be implemented"}
 
 
-@router.post("/{quotation_id}/panels/{panel_id}/cost-adders", response_model=CostAdderUpsertResponse)
+@router.post(
+    "/{quotation_id}/panels/{panel_id}/cost-adders",
+    response_model=CostAdderUpsertResponse,
+)
 async def upsert_panel_cost_adder(
     request: Request,
     quotation_id: int = Path(..., description="Quotation ID"),
@@ -546,7 +590,7 @@ async def upsert_panel_cost_adder(
 ):
     """
     Upsert (insert or update) a cost adder for a panel.
-    
+
     Week-3 Day-1: Cost Adders write API (QCA only).
     Enforces uniqueness: one row per (tenant_id, quotation_id, panel_id, cost_head_code).
     """
@@ -561,7 +605,7 @@ async def upsert_panel_cost_adder(
             error_code=ErrorCodes.NOT_FOUND_QUOTATION,
             detail="Quotation not found for tenant",
         )
-    
+
     # 2) Validate panel belongs to quotation + tenant
     p = db.execute(
         text("""
@@ -576,7 +620,7 @@ async def upsert_panel_cost_adder(
             error_code=ErrorCodes.NOT_FOUND_RESOURCE,
             detail="Panel not found for quotation/tenant",
         )
-    
+
     # 3) Upsert into QCA only
     svc = CostAdderService(db, tenant_id=tenant_id)
     row = svc.upsert_cost_adder(
@@ -587,7 +631,7 @@ async def upsert_panel_cost_adder(
         currency=body.currency,
         notes=body.notes,
     )
-    
+
     db.commit()
     return row
 
@@ -629,11 +673,12 @@ async def get_quotation(
 ):
     """
     Get quotation by ID (Week-1 Day-1).
-    
+
     Returns tenant-safe quotation detail or 404 if not found.
     """
-    row = db.execute(
-        text("""
+    row = (
+        db.execute(
+            text("""
             SELECT
                 id,
                 quote_no,
@@ -649,8 +694,11 @@ async def get_quotation(
             FROM quotations
             WHERE id = :qid AND tenant_id = :tenant_id
         """),
-        {"qid": quotation_id, "tenant_id": tenant_id},
-    ).mappings().first()
+            {"qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
 
     if not row:
         raise_api_error(
@@ -665,17 +713,21 @@ async def get_quotation(
         result["created_at"] = result["created_at"].isoformat()
     if result.get("updated_at") and hasattr(result["updated_at"], "isoformat"):
         result["updated_at"] = result["updated_at"].isoformat()
-    
+
     return result
 
 
 @router.post("/{quotation_id}/revisions")
 async def create_revision(quotation_id: int):
     """Create quotation revision (to be implemented)"""
-    return {"message": f"Create revision for quotation {quotation_id} endpoint - to be implemented"}
+    return {
+        "message": f"Create revision for quotation {quotation_id} endpoint - to be implemented"
+    }
 
 
-@router.put("/{quotation_id}/discount/quotation", response_model=QuotationDiscountSetResponse)
+@router.put(
+    "/{quotation_id}/discount/quotation", response_model=QuotationDiscountSetResponse
+)
 async def set_quotation_discount(
     request: Request,
     quotation_id: int = Path(..., description="Quotation ID"),
@@ -700,10 +752,16 @@ async def set_quotation_discount(
         )
 
     # verify quotation exists + tenant-safe
-    q = db.execute(
-        text("SELECT id, discount_pct FROM quotations WHERE id=:qid AND tenant_id=:tenant_id"),
-        {"qid": quotation_id, "tenant_id": tenant_id},
-    ).mappings().first()
+    q = (
+        db.execute(
+            text(
+                "SELECT id, discount_pct FROM quotations WHERE id=:qid AND tenant_id=:tenant_id"
+            ),
+            {"qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
     if not q:
         raise_api_error(
             status_code=404,
@@ -765,14 +823,14 @@ async def pricing_preview(
 ):
     """
     Preview pricing calculation for a quotation (Policy-1: preview only, no DB overwrite).
-    
+
     Computes:
     - Line-level discounts (rule-based precedence)
     - Subtotal
     - Quotation-level discount
     - GST split (CGST/SGST/IGST)
     - Grand total
-    
+
     Returns preview response with totals, GST breakdown, and flags.
     """
     # Use shared computation helper (single source of truth)
@@ -781,7 +839,7 @@ async def pricing_preview(
         tenant_id=tenant_id,
         quotation_id=quotation_id,
     )
-    
+
     return {
         "quotation_id": quotation_id,
         **result,
@@ -798,10 +856,10 @@ async def apply_recalc(
 ):
     """
     Apply pricing recalculation to a quotation (Policy-1: explicit action, Reviewer/Approver only).
-    
+
     Computes pricing using the same logic as preview, then persists snapshots to quotations table.
     Requires decision_id and reason for audit trail.
-    
+
     Only Reviewer and Approver roles are allowed.
     """
     user_id = get_user_id_from_request(request)
@@ -818,15 +876,19 @@ async def apply_recalc(
         )
 
     # Ensure quotation exists + belongs to tenant (also get tax profile info for audit)
-    qrow = db.execute(
-        text("""
+    qrow = (
+        db.execute(
+            text("""
             SELECT id, tax_profile_id, tax_mode
             FROM quotations
             WHERE id = :qid AND tenant_id = :tenant_id
         """),
-        {"qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().first()
-    
+            {"qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
+
     if not qrow:
         raise_api_error(
             status_code=404,
@@ -839,8 +901,9 @@ async def apply_recalc(
     tax_mode_at_compute = qrow.get("tax_mode")
 
     # Read old stored totals (for audit)
-    old = db.execute(
-        text("""
+    old = (
+        db.execute(
+            text("""
             SELECT
                 taxable_base,
                 cgst_pct_snapshot,
@@ -854,8 +917,11 @@ async def apply_recalc(
             FROM quotations
             WHERE id = :qid AND tenant_id = :tenant_id
         """),
-        {"qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().first()
+            {"qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
 
     old_values = dict(old) if old else None
 
@@ -919,7 +985,7 @@ async def apply_recalc(
             "grand_total": grand_total,
             "qid": quotation_id,
             "tenant_id": tenant_id,
-        }
+        },
     )
 
     # Verify UPDATE actually affected 1 row (prevents silent no-op)
@@ -978,7 +1044,7 @@ async def copy_quotation(
 ):
     """
     Copy a quotation (deep copy - copy-never-link).
-    
+
     Creates a new quotation with new IDs for all panels, BOMs, and BOM items.
     Tracking fields in quote_boms are set:
     - origin_master_bom_id: preserved if source had it, otherwise NULL
@@ -986,25 +1052,29 @@ async def copy_quotation(
     - is_modified: set to false for new copies
     """
     user_id = get_user_id_from_request(request)
-    
+
     # Verify source quotation exists and belongs to tenant
-    source_quote = db.execute(
-        text("""
+    source_quote = (
+        db.execute(
+            text("""
             SELECT id, quote_no, customer_name, customer_id, project_id, status, 
                    discount_pct, tax_profile_id, tax_mode
             FROM quotations
             WHERE id = :qid AND tenant_id = :tenant_id
         """),
-        {"qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().first()
-    
+            {"qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
+
     if not source_quote:
         raise_api_error(
             status_code=404,
             error_code=ErrorCodes.NOT_FOUND_QUOTATION,
             detail="Source quotation not found for tenant",
         )
-    
+
     # Generate new quote number
     if body.new_quote_no == "AUTO" or not body.new_quote_no:
         new_quote_no = f"{source_quote['quote_no']}-COPY"
@@ -1012,8 +1082,10 @@ async def copy_quotation(
         counter = 1
         while True:
             check = db.execute(
-                text("SELECT id FROM quotations WHERE tenant_id=:tid AND quote_no=:qno"),
-                {"tid": tenant_id, "qno": new_quote_no}
+                text(
+                    "SELECT id FROM quotations WHERE tenant_id=:tid AND quote_no=:qno"
+                ),
+                {"tid": tenant_id, "qno": new_quote_no},
             ).first()
             if not check:
                 break
@@ -1021,7 +1093,7 @@ async def copy_quotation(
             counter += 1
     else:
         new_quote_no = body.new_quote_no
-    
+
     # Create new quotation (copy-never-link: new ID)
     new_quote_result = db.execute(
         text("""
@@ -1045,23 +1117,27 @@ async def copy_quotation(
             "tax_profile_id": source_quote.get("tax_profile_id"),
             "tax_mode": source_quote.get("tax_mode"),
             "created_by": user_id,
-        }
+        },
     )
     new_quotation_id = new_quote_result.scalar_one()
-    
+
     # Copy panels if requested
     panel_id_map = {}  # old_panel_id -> new_panel_id
     if body.copy_panels:
-        source_panels = db.execute(
-            text("""
+        source_panels = (
+            db.execute(
+                text("""
                 SELECT id, name, quantity, rate, amount
                 FROM quote_panels
                 WHERE quotation_id = :qid AND tenant_id = :tenant_id
                 ORDER BY id
             """),
-            {"qid": quotation_id, "tenant_id": tenant_id}
-        ).mappings().all()
-        
+                {"qid": quotation_id, "tenant_id": tenant_id},
+            )
+            .mappings()
+            .all()
+        )
+
         for panel in source_panels:
             new_panel_result = db.execute(
                 text("""
@@ -1076,35 +1152,41 @@ async def copy_quotation(
                     "quantity": panel["quantity"],
                     "rate": panel.get("rate"),
                     "amount": panel.get("amount"),
-                }
+                },
             )
             new_panel_id = new_panel_result.scalar_one()
             panel_id_map[panel["id"]] = new_panel_id
-    
+
     # Copy BOMs if requested (preserve hierarchy)
     bom_id_map = {}  # old_bom_id -> new_bom_id
     if body.copy_boms and body.copy_panels:
         # First pass: copy all BOMs (level 0 first, then children)
-        source_boms = db.execute(
-            text("""
+        source_boms = (
+            db.execute(
+                text("""
                 SELECT id, panel_id, parent_bom_id, level, name, quantity, rate, amount,
                        origin_master_bom_id, instance_sequence_no, is_modified
                 FROM quote_boms
                 WHERE quotation_id = :qid AND tenant_id = :tenant_id
                 ORDER BY level, id
             """),
-            {"qid": quotation_id, "tenant_id": tenant_id}
-        ).mappings().all()
-        
+                {"qid": quotation_id, "tenant_id": tenant_id},
+            )
+            .mappings()
+            .all()
+        )
+
         for bom in source_boms:
             old_panel_id = bom["panel_id"]
             new_panel_id = panel_id_map.get(old_panel_id)
             if not new_panel_id:
                 continue  # Skip if panel wasn't copied
-            
+
             old_parent_bom_id = bom.get("parent_bom_id")
-            new_parent_bom_id = bom_id_map.get(old_parent_bom_id) if old_parent_bom_id else None
-            
+            new_parent_bom_id = (
+                bom_id_map.get(old_parent_bom_id) if old_parent_bom_id else None
+            )
+
             # Tracking fields: preserve origin_master_bom_id, set instance_sequence_no=1, is_modified=false
             new_bom_result = db.execute(
                 text("""
@@ -1128,16 +1210,19 @@ async def copy_quotation(
                     "quantity": bom["quantity"],
                     "rate": bom.get("rate"),
                     "amount": bom.get("amount"),
-                    "origin_master_bom_id": bom.get("origin_master_bom_id"),  # Preserve if exists
-                }
+                    "origin_master_bom_id": bom.get(
+                        "origin_master_bom_id"
+                    ),  # Preserve if exists
+                },
             )
             new_bom_id = new_bom_result.scalar_one()
             bom_id_map[bom["id"]] = new_bom_id
-    
+
     # Copy BOM items if requested
     if body.copy_bom_items and body.copy_boms:
-        source_items = db.execute(
-            text("""
+        source_items = (
+            db.execute(
+                text("""
                 SELECT id, panel_id, bom_id, parent_line_id, product_id, make_id, series_id, category_id,
                        quantity, rate, discount_pct, discount_source, net_rate, amount, rate_source,
                        is_price_missing, is_client_supplied, is_locked, cost_head_id, resolution_status,
@@ -1146,23 +1231,28 @@ async def copy_quotation(
                 WHERE quotation_id = :qid AND tenant_id = :tenant_id
                 ORDER BY id
             """),
-            {"qid": quotation_id, "tenant_id": tenant_id}
-        ).mappings().all()
-        
+                {"qid": quotation_id, "tenant_id": tenant_id},
+            )
+            .mappings()
+            .all()
+        )
+
         item_id_map = {}  # old_item_id -> new_item_id
-        
+
         for item in source_items:
             old_panel_id = item["panel_id"]
             new_panel_id = panel_id_map.get(old_panel_id)
             if not new_panel_id:
                 continue
-            
+
             old_bom_id = item.get("bom_id")
             new_bom_id = bom_id_map.get(old_bom_id) if old_bom_id else None
-            
+
             old_parent_line_id = item.get("parent_line_id")
-            new_parent_line_id = item_id_map.get(old_parent_line_id) if old_parent_line_id else None
-            
+            new_parent_line_id = (
+                item_id_map.get(old_parent_line_id) if old_parent_line_id else None
+            )
+
             item_result = db.execute(
                 text("""
                     INSERT INTO quote_bom_items (
@@ -1206,13 +1296,13 @@ async def copy_quotation(
                     "sequence_order": item.get("sequence_order") or 0,
                     "override_rate": item.get("override_rate"),
                     "override_reason": item.get("override_reason"),
-                }
+                },
             )
             new_item_id = item_result.scalar_one()
             item_id_map[item["id"]] = new_item_id
-    
+
     db.commit()
-    
+
     return CopyQuotationResponse(new_quotation_id=new_quotation_id)
 
 
@@ -1226,26 +1316,30 @@ async def copy_panel(
 ):
     """
     Copy a panel within the same quotation (deep copy).
-    
+
     Creates a new panel with new ID, and copies all associated BOMs and BOM items.
     """
     # Verify source panel exists
-    source_panel = db.execute(
-        text("""
+    source_panel = (
+        db.execute(
+            text("""
             SELECT id, name, quantity, rate, amount
             FROM quote_panels
             WHERE id = :panel_id AND quotation_id = :qid AND tenant_id = :tenant_id
         """),
-        {"panel_id": panel_id, "qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().first()
-    
+            {"panel_id": panel_id, "qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
+
     if not source_panel:
         raise_api_error(
             status_code=404,
             error_code=ErrorCodes.NOT_FOUND_QUOTATION,
             detail="Source panel not found",
         )
-    
+
     # Create new panel
     new_panel_result = db.execute(
         text("""
@@ -1260,27 +1354,33 @@ async def copy_panel(
             "quantity": source_panel["quantity"],
             "rate": source_panel.get("rate"),
             "amount": source_panel.get("amount"),
-        }
+        },
     )
     new_panel_id = new_panel_result.scalar_one()
-    
+
     # Copy BOMs (preserve hierarchy)
     bom_id_map = {}
-    source_boms = db.execute(
-        text("""
+    source_boms = (
+        db.execute(
+            text("""
             SELECT id, parent_bom_id, level, name, quantity, rate, amount,
                    origin_master_bom_id, instance_sequence_no, is_modified
             FROM quote_boms
             WHERE panel_id = :panel_id AND quotation_id = :qid AND tenant_id = :tenant_id
             ORDER BY level, id
         """),
-        {"panel_id": panel_id, "qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().all()
-    
+            {"panel_id": panel_id, "qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .all()
+    )
+
     for bom in source_boms:
         old_parent_bom_id = bom.get("parent_bom_id")
-        new_parent_bom_id = bom_id_map.get(old_parent_bom_id) if old_parent_bom_id else None
-        
+        new_parent_bom_id = (
+            bom_id_map.get(old_parent_bom_id) if old_parent_bom_id else None
+        )
+
         new_bom_result = db.execute(
             text("""
                 INSERT INTO quote_boms (
@@ -1304,14 +1404,15 @@ async def copy_panel(
                 "rate": bom.get("rate"),
                 "amount": bom.get("amount"),
                 "origin_master_bom_id": bom.get("origin_master_bom_id"),
-            }
+            },
         )
         new_bom_id = new_bom_result.scalar_one()
         bom_id_map[bom["id"]] = new_bom_id
-    
+
     # Copy BOM items
-    source_items = db.execute(
-        text("""
+    source_items = (
+        db.execute(
+            text("""
             SELECT id, bom_id, parent_line_id, product_id, make_id, series_id, category_id,
                    quantity, rate, discount_pct, discount_source, net_rate, amount, rate_source,
                    is_price_missing, is_client_supplied, is_locked, cost_head_id, resolution_status,
@@ -1320,17 +1421,22 @@ async def copy_panel(
             WHERE panel_id = :panel_id AND quotation_id = :qid AND tenant_id = :tenant_id
             ORDER BY id
         """),
-        {"panel_id": panel_id, "qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().all()
-    
+            {"panel_id": panel_id, "qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .all()
+    )
+
     item_id_map = {}
     for item in source_items:
         old_bom_id = item.get("bom_id")
         new_bom_id = bom_id_map.get(old_bom_id) if old_bom_id else None
-        
+
         old_parent_line_id = item.get("parent_line_id")
-        new_parent_line_id = item_id_map.get(old_parent_line_id) if old_parent_line_id else None
-        
+        new_parent_line_id = (
+            item_id_map.get(old_parent_line_id) if old_parent_line_id else None
+        )
+
         item_result = db.execute(
             text("""
                 INSERT INTO quote_bom_items (
@@ -1374,13 +1480,13 @@ async def copy_panel(
                 "sequence_order": item.get("sequence_order") or 0,
                 "override_rate": item.get("override_rate"),
                 "override_reason": item.get("override_reason"),
-            }
+            },
         )
         new_item_id = item_result.scalar_one()
         item_id_map[item["id"]] = new_item_id
-    
+
     db.commit()
-    
+
     return CopyPanelResponse(new_panel_id=new_panel_id)
 
 
@@ -1394,31 +1500,35 @@ async def copy_bom(
 ):
     """
     Copy a BOM subtree (deep copy).
-    
+
     Copies the BOM and all its children (recursive), plus all BOM items.
     Tracking fields are set: instance_sequence_no=1, is_modified=false.
     """
     # Verify source BOM exists
-    source_bom = db.execute(
-        text("""
+    source_bom = (
+        db.execute(
+            text("""
             SELECT id, panel_id, parent_bom_id, level, name, quantity, rate, amount,
                    origin_master_bom_id, instance_sequence_no, is_modified
             FROM quote_boms
             WHERE id = :bom_id AND quotation_id = :qid AND tenant_id = :tenant_id
         """),
-        {"bom_id": bom_id, "qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().first()
-    
+            {"bom_id": bom_id, "qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
+
     if not source_bom:
         raise_api_error(
             status_code=404,
             error_code=ErrorCodes.NOT_FOUND_QUOTATION,
             detail="Source BOM not found",
         )
-    
+
     panel_id = source_bom["panel_id"]
     old_parent_bom_id = source_bom.get("parent_bom_id")
-    
+
     # Copy the BOM itself
     new_bom_result = db.execute(
         text("""
@@ -1443,24 +1553,32 @@ async def copy_bom(
             "rate": source_bom.get("rate"),
             "amount": source_bom.get("amount"),
             "origin_master_bom_id": source_bom.get("origin_master_bom_id"),
-        }
+        },
     )
     new_bom_id = new_bom_result.scalar_one()
-    
+
     # Recursively copy child BOMs
     bom_id_map = {bom_id: new_bom_id}
-    
+
     def copy_bom_tree(old_parent_id: int, new_parent_id: int):
         """Recursively copy BOM subtree"""
-        children = db.execute(
-            text("""
+        children = (
+            db.execute(
+                text("""
                 SELECT id, level, name, quantity, rate, amount, origin_master_bom_id
                 FROM quote_boms
                 WHERE parent_bom_id = :parent_id AND quotation_id = :qid AND tenant_id = :tenant_id
             """),
-            {"parent_id": old_parent_id, "qid": quotation_id, "tenant_id": tenant_id}
-        ).mappings().all()
-        
+                {
+                    "parent_id": old_parent_id,
+                    "qid": quotation_id,
+                    "tenant_id": tenant_id,
+                },
+            )
+            .mappings()
+            .all()
+        )
+
         for child in children:
             new_child_result = db.execute(
                 text("""
@@ -1485,18 +1603,19 @@ async def copy_bom(
                     "rate": child.get("rate"),
                     "amount": child.get("amount"),
                     "origin_master_bom_id": child.get("origin_master_bom_id"),
-                }
+                },
             )
             new_child_id = new_child_result.scalar_one()
             bom_id_map[child["id"]] = new_child_id
             copy_bom_tree(child["id"], new_child_id)  # Recursive
-    
+
     copy_bom_tree(bom_id, new_bom_id)
-    
+
     # Copy BOM items for all copied BOMs
     for old_bom_id, new_bom_id_mapped in bom_id_map.items():
-        source_items = db.execute(
-            text("""
+        source_items = (
+            db.execute(
+                text("""
                 SELECT id, parent_line_id, product_id, make_id, series_id, category_id,
                        quantity, rate, discount_pct, discount_source, net_rate, amount, rate_source,
                        is_price_missing, is_client_supplied, is_locked, cost_head_id, resolution_status,
@@ -1505,14 +1624,19 @@ async def copy_bom(
                 WHERE bom_id = :bom_id AND quotation_id = :qid AND tenant_id = :tenant_id
                 ORDER BY id
             """),
-            {"bom_id": old_bom_id, "qid": quotation_id, "tenant_id": tenant_id}
-        ).mappings().all()
-        
+                {"bom_id": old_bom_id, "qid": quotation_id, "tenant_id": tenant_id},
+            )
+            .mappings()
+            .all()
+        )
+
         item_id_map = {}
         for item in source_items:
             old_parent_line_id = item.get("parent_line_id")
-            new_parent_line_id = item_id_map.get(old_parent_line_id) if old_parent_line_id else None
-            
+            new_parent_line_id = (
+                item_id_map.get(old_parent_line_id) if old_parent_line_id else None
+            )
+
             db.execute(
                 text("""
                     INSERT INTO quote_bom_items (
@@ -1555,11 +1679,11 @@ async def copy_bom(
                     "sequence_order": item.get("sequence_order") or 0,
                     "override_rate": item.get("override_rate"),
                     "override_reason": item.get("override_reason"),
-                }
+                },
             )
-    
+
     db.commit()
-    
+
     return CopyBOMResponse(new_bom_id=new_bom_id)
 
 
@@ -1573,33 +1697,37 @@ async def copy_feeder(
 ):
     """
     Copy a feeder (level 0 BOM) - alias for copy_bom with level validation.
-    
+
     A feeder is a BOM with level=0. This endpoint validates the level and then calls copy_bom logic.
     """
     # Verify it's a level 0 BOM
-    source_bom = db.execute(
-        text("""
+    source_bom = (
+        db.execute(
+            text("""
             SELECT id, level
             FROM quote_boms
             WHERE id = :bom_id AND quotation_id = :qid AND tenant_id = :tenant_id
         """),
-        {"bom_id": bom_id, "qid": quotation_id, "tenant_id": tenant_id}
-    ).mappings().first()
-    
+            {"bom_id": bom_id, "qid": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
+
     if not source_bom:
         raise_api_error(
             status_code=404,
             error_code=ErrorCodes.NOT_FOUND_QUOTATION,
             detail="Source feeder not found",
         )
-    
+
     if source_bom["level"] != 0:
         raise_api_error(
             status_code=400,
             error_code=ErrorCodes.VALIDATION_ERROR,
             detail="BOM is not a feeder (level must be 0)",
         )
-    
+
     # Delegate to copy_bom
     return await copy_bom(request, quotation_id, bom_id, db, tenant_id)
 
@@ -1614,15 +1742,15 @@ async def delete_quote_bom_item(
 ):
     """
     Delete a quote BOM line item.
-    
+
     A5.2 IsLocked enforcement: Deletion is blocked if is_locked = true.
     Returns 409 LINE_ITEM_LOCKED if item is locked.
-    
+
     Allowed roles: Operator, Reviewer, Approver
     """
     user_id = get_user_id_from_request(request)
     user_roles = get_user_roles_from_request(request)
-    
+
     # Role enforcement: Operator, Reviewer, Approver allowed
     try:
         assert_bulk_allowed(user_roles)
@@ -1632,10 +1760,11 @@ async def delete_quote_bom_item(
             error_code=ErrorCodes.PERMISSION_INSUFFICIENT_ROLE,
             detail=str(e),
         )
-    
+
     # Verify line item exists and belongs to quotation + tenant (tenant-filtered SELECT)
-    line = db.execute(
-        text("""
+    line = (
+        db.execute(
+            text("""
             SELECT 
                 id, 
                 quotation_id, 
@@ -1645,16 +1774,19 @@ async def delete_quote_bom_item(
                 AND quotation_id = :quotation_id 
                 AND tenant_id = :tenant_id
         """),
-        {"line_id": line_id, "quotation_id": quotation_id, "tenant_id": tenant_id}
-    ).mappings().first()
-    
+            {"line_id": line_id, "quotation_id": quotation_id, "tenant_id": tenant_id},
+        )
+        .mappings()
+        .first()
+    )
+
     if not line:
         raise_api_error(
             status_code=404,
             error_code=ErrorCodes.NOT_FOUND_LINE_ITEM,
             detail="Line item not found",
         )
-    
+
     # A5.2: IsLocked enforcement - block deletion if locked
     if line.get("is_locked"):
         raise_api_error(
@@ -1662,10 +1794,10 @@ async def delete_quote_bom_item(
             error_code=ErrorCodes.CONFLICT_LINE_ITEM_LOCKED,
             detail="LINE_ITEM_LOCKED",
         )
-    
+
     # Read old values for audit
     old_values = dict(line)
-    
+
     # Delete the line item
     delete_result = db.execute(
         text("""
@@ -1675,24 +1807,32 @@ async def delete_quote_bom_item(
                 AND tenant_id = :tenant_id
                 AND is_locked = false
         """),
-        {"line_id": line_id, "quotation_id": quotation_id, "tenant_id": tenant_id}
+        {"line_id": line_id, "quotation_id": quotation_id, "tenant_id": tenant_id},
     )
-    
+
     # Verify deletion succeeded (race condition protection)
     if delete_result.rowcount != 1:
         # Could be locked between check and delete, or already deleted
         # Re-check is_locked with tenant-safe query to give more specific error
-        recheck = db.execute(
-            text("""
+        recheck = (
+            db.execute(
+                text("""
                 SELECT is_locked
                 FROM quote_bom_items
                 WHERE id = :line_id
                   AND quotation_id = :quotation_id
                   AND tenant_id = :tenant_id
             """),
-            {"line_id": line_id, "quotation_id": quotation_id, "tenant_id": tenant_id}
-        ).mappings().first()
-        
+                {
+                    "line_id": line_id,
+                    "quotation_id": quotation_id,
+                    "tenant_id": tenant_id,
+                },
+            )
+            .mappings()
+            .first()
+        )
+
         if recheck and recheck.get("is_locked"):
             raise_api_error(
                 status_code=409,
@@ -1704,7 +1844,7 @@ async def delete_quote_bom_item(
             error_code=ErrorCodes.NOT_FOUND_LINE_ITEM,
             detail="Line item not found or already deleted",
         )
-    
+
     # Audit
     AuditLogger.log_event(
         db=db,
@@ -1717,12 +1857,11 @@ async def delete_quote_bom_item(
         new_values=None,
         metadata={"quotation_id": quotation_id, "actor_roles": user_roles},
     )
-    
+
     db.commit()
-    
+
     return {
         "message": "Line item deleted successfully",
         "line_id": line_id,
         "quotation_id": quotation_id,
     }
-

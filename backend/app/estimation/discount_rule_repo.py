@@ -2,6 +2,7 @@
 Discount Rule Repository
 Phase-5: DB operations for discount rules (quotation-scoped)
 """
+
 from __future__ import annotations
 from typing import Optional, Tuple
 from decimal import Decimal
@@ -9,20 +10,18 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 
 
-
-
 class DiscountRuleRepo:
     """Repository for discount rule CRUD operations"""
-    
+
     def __init__(self, db: Session):
         """
         Initialize repository.
-        
+
         Args:
             db: Database session
         """
         self.db = db
-    
+
     def upsert_rule(
         self,
         *,
@@ -36,9 +35,9 @@ class DiscountRuleRepo:
     ) -> Tuple[str, int, Optional[Decimal]]:
         """
         Create or update a discount rule.
-        
+
         Handles inactive rules by reactivating them (prevents unique constraint violation).
-        
+
         Args:
             tenant_id: Tenant ID
             quotation_id: Quotation ID
@@ -47,15 +46,16 @@ class DiscountRuleRepo:
             discount_pct: Discount percentage (0..100)
             reason: Optional reason
             actor_id: User ID performing the action
-            
+
         Returns:
             Tuple of (action, rule_id, old_discount_pct) where:
             - action is 'SET' or 'UPDATE'
             - old_discount_pct is None for SET, previous value for UPDATE
         """
         # Find existing rule regardless of is_active (to handle reactivation)
-        existing = self.db.execute(
-            text("""
+        existing = (
+            self.db.execute(
+                text("""
                 SELECT id, discount_pct, is_active
                 FROM discount_rules
                 WHERE tenant_id = :tenant_id
@@ -63,14 +63,17 @@ class DiscountRuleRepo:
                   AND scope_type = :scope_type
                   AND scope_key = :scope_key
             """),
-            {
-                "tenant_id": tenant_id,
-                "quotation_id": quotation_id,
-                "scope_type": scope_type,
-                "scope_key": scope_key,
-            }
-        ).mappings().first()
-        
+                {
+                    "tenant_id": tenant_id,
+                    "quotation_id": quotation_id,
+                    "scope_type": scope_type,
+                    "scope_key": scope_key,
+                },
+            )
+            .mappings()
+            .first()
+        )
+
         if existing:
             old_pct = Decimal(str(existing["discount_pct"]))
             # Update existing rule (reactivate if inactive)
@@ -90,10 +93,10 @@ class DiscountRuleRepo:
                     "reason": reason,
                     "actor_id": actor_id,
                     "id": existing["id"],
-                }
+                },
             )
             return ("UPDATE", int(existing["id"]), old_pct)
-        
+
         # Create new rule
         rule_id = self.db.execute(
             text("""
@@ -131,11 +134,11 @@ class DiscountRuleRepo:
                 "pct": discount_pct,
                 "reason": reason,
                 "actor_id": actor_id,
-            }
+            },
         ).scalar_one()
-        
+
         return ("SET", int(rule_id), None)
-    
+
     def deactivate_rule(
         self,
         *,
@@ -146,7 +149,7 @@ class DiscountRuleRepo:
     ) -> None:
         """
         Deactivate a discount rule (soft delete).
-        
+
         Args:
             tenant_id: Tenant ID
             quotation_id: Quotation ID
@@ -169,9 +172,9 @@ class DiscountRuleRepo:
                 "rule_id": rule_id,
                 "tenant_id": tenant_id,
                 "quotation_id": quotation_id,
-            }
+            },
         )
-    
+
     def set_line_override(
         self,
         *,
@@ -184,9 +187,9 @@ class DiscountRuleRepo:
     ) -> None:
         """
         Set line-level discount override.
-        
+
         Uses tenant-safe join through quotations table.
-        
+
         Args:
             tenant_id: Tenant ID
             quotation_id: Quotation ID
@@ -194,7 +197,7 @@ class DiscountRuleRepo:
             discount_pct: Discount percentage (0..100)
             reason: Optional reason (stored in audit metadata only)
             actor_id: User ID performing the action
-            
+
         Raises:
             ValueError: If line not found for quote/tenant (rowcount == 0)
         """
@@ -216,11 +219,10 @@ class DiscountRuleRepo:
                 "line_id": line_id,
                 "quotation_id": quotation_id,
                 "tenant_id": tenant_id,
-            }
+            },
         )
-        
+
         if result.rowcount == 0:
             raise ValueError(
                 f"Line override failed: line {line_id} not found for quotation {quotation_id}/tenant {tenant_id}"
             )
-

@@ -2,6 +2,7 @@
 Database Configuration
 SQLAlchemy 2.0 style
 """
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
@@ -22,10 +23,12 @@ engine_kwargs: dict[str, object] = {
 
 # Only add pool settings for PostgreSQL
 if database_url.startswith("postgresql"):
-    engine_kwargs.update({
-        "pool_size": 10,
-        "max_overflow": 20,
-    })
+    engine_kwargs.update(
+        {
+            "pool_size": 10,
+            "max_overflow": 20,
+        }
+    )
 
 engine = create_engine(database_url, **engine_kwargs)
 
@@ -34,6 +37,7 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 class Base(DeclarativeBase):
     """SQLAlchemy 2.0 style declarative base for all models"""
+
     pass
 
 
@@ -44,5 +48,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-

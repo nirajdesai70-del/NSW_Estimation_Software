@@ -1,6 +1,7 @@
 """
 Cost adders API schemas
 """
+
 from __future__ import annotations
 
 from typing import Optional
@@ -20,4 +21,3 @@ class CostAdderUpsertResponse(BaseModel):
     cost_head_code: str
     amount: float
     currency: str
-

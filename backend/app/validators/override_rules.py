@@ -2,6 +2,7 @@
 Override rules validator
 Phase-5: Manual override governance checks
 """
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -30,11 +31,16 @@ class OverrideRulesValidator:
 
         allowed_roles = {"Reviewer", "Approver"}
         if not any(role in allowed_roles for role in user_roles):
-            raise OverrideValidationError("MANUAL override requires one of roles: Reviewer, Approver")
+            raise OverrideValidationError(
+                "MANUAL override requires one of roles: Reviewer, Approver"
+            )
 
         if not override_reason:
-            raise OverrideValidationError("override_reason is mandatory for MANUAL override")
+            raise OverrideValidationError(
+                "override_reason is mandatory for MANUAL override"
+            )
 
         if override_rate is None or Decimal(str(override_rate)) <= 0:
-            raise OverrideValidationError("override_rate must be > 0 for MANUAL override")
-
+            raise OverrideValidationError(
+                "override_rate must be > 0 for MANUAL override"
+            )

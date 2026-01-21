@@ -1,6 +1,7 @@
 """
 Pricing helper functions for endpoints
 """
+
 from typing import Optional
 from fastapi import Header
 
@@ -13,16 +14,16 @@ def get_tenant_id_from_request(
 ) -> int:
     """
     Extract and validate X-Tenant-ID header.
-    
+
     Phase-5: Stub implementation using header.
     TODO: Replace with proper JWT/auth middleware.
-    
+
     Args:
         x_tenant_id: X-Tenant-ID header value
-        
+
     Returns:
         Tenant ID (integer)
-        
+
     Raises:
         HTTPException: If header is missing or invalid
     """
@@ -42,4 +43,3 @@ def get_tenant_id_from_request(
             detail="X-Tenant-ID must be an integer",
         )
         raise RuntimeError("unreachable")
-

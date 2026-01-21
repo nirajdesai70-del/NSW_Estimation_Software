@@ -1,6 +1,7 @@
 """
 Quotation read API schemas
 """
+
 from __future__ import annotations
 
 from typing import Optional, List
@@ -23,4 +24,3 @@ class QuotationDetail(BaseModel):
     quote_no: Optional[str] = None
     status: Optional[str] = None
     panels: List[dict] = []
-

@@ -2,6 +2,7 @@
 Tests for Quotation-Level Discount Computation
 Phase-5 P0-N1: Verify quotation discount_pct affects pricing totals
 """
+
 from unittest.mock import MagicMock
 from decimal import Decimal
 
@@ -11,7 +12,7 @@ from app.api.v1.endpoints import quotation as quotation_ep
 def test_compute_quote_pricing_applies_quotation_discount(monkeypatch):
     """
     Verify that quotation-level discount_pct from DB is applied correctly.
-    
+
     Scenario:
     - Quotation has discount_pct=5.00
     - One line: qty=2, rate=1000, no line discount
@@ -33,17 +34,19 @@ def test_compute_quote_pricing_applies_quotation_discount(monkeypatch):
 
     # one line: qty=2, rate=1000, no line discount
     lrow = MagicMock()
-    lrow.mappings.return_value.all.return_value = [{
-        "id": 10,
-        "sku_id": 101,
-        "quantity": Decimal("2"),
-        "rate": Decimal("1000"),
-        "rate_source": "PRICELIST",
-        "discount_pct": None,
-        "discount_source": None,
-        "make_id": None,
-        "series_id": None,
-    }]
+    lrow.mappings.return_value.all.return_value = [
+        {
+            "id": 10,
+            "sku_id": 101,
+            "quantity": Decimal("2"),
+            "rate": Decimal("1000"),
+            "rate_source": "PRICELIST",
+            "discount_pct": None,
+            "discount_source": None,
+            "make_id": None,
+            "series_id": None,
+        }
+    ]
 
     # discount rules empty
     rrow = MagicMock()
@@ -54,9 +57,7 @@ def test_compute_quote_pricing_applies_quotation_discount(monkeypatch):
 
     # Call compute helper
     out = quotation_ep._compute_quote_pricing(
-        db=db,
-        tenant_id=tenant_id,
-        quotation_id=quotation_id
+        db=db, tenant_id=tenant_id, quotation_id=quotation_id
     )
 
     # subtotal = 2*1000 = 2000
@@ -70,7 +71,7 @@ def test_compute_quote_pricing_applies_quotation_discount(monkeypatch):
 def test_compute_quote_pricing_with_zero_discount(monkeypatch):
     """
     Verify that discount_pct=0 (default) works correctly.
-    
+
     Scenario:
     - Quotation has discount_pct=0
     - One line: qty=1, rate=500
@@ -90,17 +91,19 @@ def test_compute_quote_pricing_with_zero_discount(monkeypatch):
     }
 
     lrow = MagicMock()
-    lrow.mappings.return_value.all.return_value = [{
-        "id": 20,
-        "sku_id": 102,
-        "quantity": Decimal("1"),
-        "rate": Decimal("500"),
-        "rate_source": "PRICELIST",
-        "discount_pct": None,
-        "discount_source": None,
-        "make_id": None,
-        "series_id": None,
-    }]
+    lrow.mappings.return_value.all.return_value = [
+        {
+            "id": 20,
+            "sku_id": 102,
+            "quantity": Decimal("1"),
+            "rate": Decimal("500"),
+            "rate_source": "PRICELIST",
+            "discount_pct": None,
+            "discount_source": None,
+            "make_id": None,
+            "series_id": None,
+        }
+    ]
 
     rrow = MagicMock()
     rrow.mappings.return_value.all.return_value = []
@@ -108,9 +111,7 @@ def test_compute_quote_pricing_with_zero_discount(monkeypatch):
     db.execute.side_effect = [qrow, lrow, rrow]
 
     out = quotation_ep._compute_quote_pricing(
-        db=db,
-        tenant_id=tenant_id,
-        quotation_id=quotation_id
+        db=db, tenant_id=tenant_id, quotation_id=quotation_id
     )
 
     assert out["subtotal"] == "500.0000"
@@ -121,7 +122,7 @@ def test_compute_quote_pricing_with_zero_discount(monkeypatch):
 def test_compute_quote_pricing_with_null_discount_defaults_to_zero(monkeypatch):
     """
     Verify that NULL discount_pct defaults to 0.
-    
+
     Scenario:
     - Quotation has discount_pct=None (should default to 0)
     - One line: qty=1, rate=1000
@@ -141,17 +142,19 @@ def test_compute_quote_pricing_with_null_discount_defaults_to_zero(monkeypatch):
     }
 
     lrow = MagicMock()
-    lrow.mappings.return_value.all.return_value = [{
-        "id": 30,
-        "sku_id": 103,
-        "quantity": Decimal("1"),
-        "rate": Decimal("1000"),
-        "rate_source": "PRICELIST",
-        "discount_pct": None,
-        "discount_source": None,
-        "make_id": None,
-        "series_id": None,
-    }]
+    lrow.mappings.return_value.all.return_value = [
+        {
+            "id": 30,
+            "sku_id": 103,
+            "quantity": Decimal("1"),
+            "rate": Decimal("1000"),
+            "rate_source": "PRICELIST",
+            "discount_pct": None,
+            "discount_source": None,
+            "make_id": None,
+            "series_id": None,
+        }
+    ]
 
     rrow = MagicMock()
     rrow.mappings.return_value.all.return_value = []
@@ -159,12 +162,9 @@ def test_compute_quote_pricing_with_null_discount_defaults_to_zero(monkeypatch):
     db.execute.side_effect = [qrow, lrow, rrow]
 
     out = quotation_ep._compute_quote_pricing(
-        db=db,
-        tenant_id=tenant_id,
-        quotation_id=quotation_id
+        db=db, tenant_id=tenant_id, quotation_id=quotation_id
     )
 
     assert out["subtotal"] == "1000.0000"
     assert out["discounted_subtotal"] == "1000.0000"
     assert Decimal(out["quotation_discount_pct"]) == Decimal("0")
-

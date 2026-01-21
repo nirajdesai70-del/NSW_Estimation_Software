@@ -2,6 +2,7 @@
 Audit Logger
 Phase-5: Logs audit events to audit_logs table
 """
+
 from typing import Optional, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import text
@@ -9,7 +10,7 @@ from sqlalchemy import text
 
 class AuditLogger:
     """Static class for logging audit events"""
-    
+
     @staticmethod
     def log_event(
         *,
@@ -27,7 +28,7 @@ class AuditLogger:
     ) -> None:
         """
         Log an audit event to the audit_logs table.
-        
+
         Args:
             db: Database session
             tenant_id: Tenant ID
@@ -43,11 +44,11 @@ class AuditLogger:
         """
         # Import json for JSONB serialization
         import json
-        
+
         # Convert dicts to JSON strings for JSONB columns
         old_values_json = json.dumps(old_values, default=str) if old_values else None
         new_values_json = json.dumps(new_values, default=str) if new_values else None
-        
+
         # Insert audit log entry
         db.execute(
             text("""
@@ -83,7 +84,6 @@ class AuditLogger:
                 "new_values": new_values_json,
                 "ip_address": ip_address,
                 "user_agent": user_agent,
-            }
+            },
         )
         # Note: No commit here - caller controls transaction atomicity
-

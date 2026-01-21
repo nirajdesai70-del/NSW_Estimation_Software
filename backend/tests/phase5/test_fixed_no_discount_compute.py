@@ -1,6 +1,7 @@
 """
 Test for FIXED_NO_DISCOUNT excluded from quotation-level discount (G-06)
 """
+
 from decimal import Decimal
 
 from app.api.v1.endpoints import quotation as quotation_ep
@@ -29,6 +30,7 @@ class FakeDB:
       2) quote_bom_items SELECT
       3) discount_rules listing (via DiscountRuleLookup -> db)
     """
+
     def __init__(self, quote_row, line_rows, rules_rows=None):
         self.quote_row = quote_row
         self.line_rows = line_rows
@@ -62,6 +64,7 @@ def test_fixed_no_discount_excluded_from_quotation_discount(monkeypatch):
       normal line: 100 × 1 (quotation discount 10%)
     Expected discounted_subtotal = 100 + 90 = 190
     """
+
     # Patch DiscountRuleLookup to return no rules (keep test focused)
     class _NoRulesLookup:
         def __init__(self, db): ...
@@ -114,4 +117,3 @@ def test_fixed_no_discount_excluded_from_quotation_discount(monkeypatch):
     assert Decimal(out["discounted_subtotal"]) == Decimal("190.0000")
     assert Decimal(out["grand_total"]) == Decimal("190.0000")
     assert "HAS_FIXED_NO_DISCOUNT_LINES" in out["flags"]
-
