@@ -12,9 +12,7 @@ from app.estimation.discount_rule_types import (
     DiscountScope,
     SCOPE_KEY_SITE,
     SCOPE_KEY_CATEGORY_PREFIX,
-    SCOPE_KEY_MAKE_SERIES_PREFIX,
 )
-from app.estimation.decimal_norm import qrate
 
 # Percentage quantization: 2 decimal places
 PCT_Q = Decimal("0.01")

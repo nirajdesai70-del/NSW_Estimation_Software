@@ -3,7 +3,7 @@ Quotation endpoints
 """
 from typing import List, Dict, Any
 from decimal import Decimal
-from fastapi import APIRouter, Depends, HTTPException, Path, Request
+from fastapi import APIRouter, Depends, Path, Request
 
 from app.core.raise_api_error import raise_api_error
 from app.core.error_codes import ErrorCodes
@@ -228,7 +228,7 @@ def _compute_quote_pricing(
                     if r:
                         effective_discount_pct = r.discount_pct
                         applied_scope = "MAKE_SERIES"
-                        applied_rule_id = r.id
+                        
                 else:
                     # rules exist but this line can't be matched because identifiers missing
                     local_flags.append("MAKE_SERIES_MAPPING_NOT_AVAILABLE")
@@ -241,13 +241,13 @@ def _compute_quote_pricing(
                     if r:
                         effective_discount_pct = r.discount_pct
                         applied_scope = "CATEGORY"
-                        applied_rule_id = r.id
+                        
 
             # 4) SITE rule (quote-level fallback)
             if applied_scope == "NONE" and site_rule is not None:
                 effective_discount_pct = site_rule.discount_pct
                 applied_scope = "SITE"
-                applied_rule_id = site_rule.id
+                
 
         # Use engine to validate/quantize via existing logic
         # (engine.validate_pct will be called inside apply_item_discount)
@@ -1230,8 +1230,6 @@ async def copy_panel(
     
     Creates a new panel with new ID, and copies all associated BOMs and BOM items.
     """
-    user_id = get_user_id_from_request(request)
-    
     # Verify source panel exists
     source_panel = db.execute(
         text("""
@@ -1401,8 +1399,6 @@ async def copy_bom(
     Copies the BOM and all its children (recursive), plus all BOM items.
     Tracking fields are set: instance_sequence_no=1, is_modified=false.
     """
-    user_id = get_user_id_from_request(request)
-    
     # Verify source BOM exists
     source_bom = db.execute(
         text("""
