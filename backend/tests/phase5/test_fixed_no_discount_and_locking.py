@@ -135,8 +135,11 @@ class TestFixedNoDiscountRatePreservation:
         assert mock_db.execute.called
         
         # Extract UPDATE statement to verify discount_pct=0 is set
-        update_calls = [call for call in mock_db.execute.call_args_list 
-                       if "UPDATE quote_bom_items" in str(call)]
+        update_calls = [
+            call
+            for call in mock_db.execute.call_args_list
+            if call.args and "UPDATE quote_bom_items" in str(call.args[0])
+        ]
         assert len(update_calls) > 0
 
 
