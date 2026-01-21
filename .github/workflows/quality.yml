@@ -1,0 +1,91 @@
+name: quality-gates
+
+on:
+  pull_request:
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  python-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install lint tools
+        run: python -m pip install --upgrade pip ruff black
+      - name: Ruff + Black (backend)
+        run: |
+          if [ -d backend/app ]; then
+            ruff check backend/app backend/tests/phase5 || ruff check backend/app
+            black --check backend/app backend/tests/phase5 || black --check backend/app
+          else
+            echo "backend/app not found; skipping lint."
+          fi
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps + mypy
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then
+            pip install -r backend/requirements.txt
+          fi
+          pip install mypy
+      - name: Mypy (backend)
+        run: |
+          if [ -d backend/app ]; then
+            mypy backend/app --ignore-missing-imports --follow-imports=skip
+          else
+            echo "backend/app not found; skipping mypy."
+          fi
+
+  backend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps + pytest
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then
+            pip install -r backend/requirements.txt
+          fi
+          pip install pytest
+      - name: Pytest (phase5)
+        run: |
+          if [ -d backend/tests/phase5 ]; then
+            PYTHONPATH=backend pytest -q backend/tests/phase5
+          else
+            echo "backend/tests/phase5 not found; skipping pytest."
+          fi
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install + build (frontend)
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+            npm run build
+          else
+            echo "frontend/package.json not found; skipping build."
+          fi
+
