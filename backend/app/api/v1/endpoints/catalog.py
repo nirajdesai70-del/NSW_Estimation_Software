@@ -10,7 +10,7 @@ from decimal import Decimal, InvalidOperation
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, UploadFile, File, HTTPException
+from fastapi import APIRouter, Depends, Query, UploadFile, File
 
 from app.core.raise_api_error import raise_api_error
 from app.core.error_codes import ErrorCodes

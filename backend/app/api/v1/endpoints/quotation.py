@@ -207,7 +207,6 @@ def _compute_quote_pricing(
 
         effective_discount_pct = Decimal("0")
         applied_scope = "NONE"
-        applied_rule_id = None
         local_flags: List[str] = []
 
         # 1) LINE override (highest precedence)

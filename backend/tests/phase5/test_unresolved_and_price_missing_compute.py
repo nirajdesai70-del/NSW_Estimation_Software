@@ -2,7 +2,6 @@
 Test for UNRESOLVED and is_price_missing contributing zero (G-03, G-05)
 """
 from decimal import Decimal
-import pytest
 
 from app.api.v1.endpoints import quotation as quotation_ep
 

@@ -2,7 +2,7 @@
 Pricing helper functions for endpoints
 """
 from typing import Optional
-from fastapi import Header, Request
+from fastapi import Header
 
 from app.core.raise_api_error import raise_api_error
 from app.core.error_codes import ErrorCodes
