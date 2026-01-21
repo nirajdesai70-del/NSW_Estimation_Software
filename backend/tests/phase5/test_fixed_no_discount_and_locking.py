@@ -4,7 +4,7 @@ Phase-5: Governance-grade fixes per audit corrections
 """
 import pytest
 from decimal import Decimal
-from unittest.mock import MagicMock, Mock
+from unittest.mock import MagicMock
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
@@ -314,7 +314,8 @@ class TestIsLockedEnforcement:
             )
         
         assert e.value.status_code == 409
-        assert e.value.detail == "LINE_ITEM_LOCKED"
+        assert e.value.detail["detail"] == "LINE_ITEM_LOCKED"
+        assert e.value.detail["error_code"] == "CONFLICT_LINE_ITEM_LOCKED"
         db.commit.assert_not_called()
     
     @pytest.mark.asyncio

@@ -45,8 +45,8 @@ class AuditLogger:
         import json
         
         # Convert dicts to JSON strings for JSONB columns
-        old_values_json = json.dumps(old_values) if old_values else None
-        new_values_json = json.dumps(new_values) if new_values else None
+        old_values_json = json.dumps(old_values, default=str) if old_values else None
+        new_values_json = json.dumps(new_values, default=str) if new_values else None
         
         # Insert audit log entry
         db.execute(

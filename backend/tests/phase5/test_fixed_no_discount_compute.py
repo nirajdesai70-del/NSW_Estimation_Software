@@ -2,7 +2,6 @@
 Test for FIXED_NO_DISCOUNT excluded from quotation-level discount (G-06)
 """
 from decimal import Decimal
-import pytest
 
 from app.api.v1.endpoints import quotation as quotation_ep
 

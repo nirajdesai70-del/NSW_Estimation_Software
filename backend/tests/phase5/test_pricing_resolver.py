@@ -4,7 +4,7 @@ Phase-5 Commit 1: Rate resolution with override governance
 """
 import pytest
 from decimal import Decimal
-from unittest.mock import Mock, MagicMock
+from unittest.mock import MagicMock
 from sqlalchemy.orm import Session
 
 from app.estimation.types import RateSource, LineInput, PriceSnapshot

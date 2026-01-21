@@ -4,8 +4,6 @@ Phase-5: Minimal upsert service for QCA cost adders
 """
 from __future__ import annotations
 
-from typing import Any
-
 from sqlalchemy.orm import Session
 
 from app.api.v1.schemas.cost_adders import CostAdderUpsertResponse
