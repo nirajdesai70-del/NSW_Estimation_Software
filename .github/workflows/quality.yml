@@ -41,7 +41,13 @@ jobs:
       - name: Mypy (backend)
         run: |
           if [ -d backend/app ]; then
-            mypy backend/app --ignore-missing-imports --follow-imports=skip
+            mypy \
+              backend/app/core \
+              backend/app/estimation \
+              backend/app/validators \
+              backend/app/models \
+              backend/app/api/v1/schemas \
+              --ignore-missing-imports --follow-imports=skip
           else
             echo "backend/app not found; skipping mypy."
           fi

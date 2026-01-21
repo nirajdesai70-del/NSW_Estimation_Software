@@ -32,6 +32,7 @@ def get_tenant_id_from_request(
             error_code=ErrorCodes.VALIDATION_MISSING_TENANT,
             detail="X-Tenant-ID header required",
         )
+        raise RuntimeError("unreachable")
     try:
         return int(x_tenant_id)
     except ValueError:
@@ -40,4 +41,5 @@ def get_tenant_id_from_request(
             error_code=ErrorCodes.VALIDATION_ERROR,
             detail="X-Tenant-ID must be an integer",
         )
+        raise RuntimeError("unreachable")
 

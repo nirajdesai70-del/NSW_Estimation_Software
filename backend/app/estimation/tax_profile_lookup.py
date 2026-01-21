@@ -3,12 +3,10 @@ Tax Profile Lookup
 Phase-5: Fetch tax profiles from database (tenant-scoped)
 """
 from __future__ import annotations
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 from decimal import Decimal
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-
-from app.estimation.decimal_norm import qrate
 
 
 class TaxProfileLookup:

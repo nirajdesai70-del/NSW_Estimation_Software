@@ -15,7 +15,7 @@ if database_url.startswith("postgresql://") and "+psycopg" not in database_url:
     database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
 
 # Pool settings only for PostgreSQL (SQLite doesn't support them)
-engine_kwargs = {
+engine_kwargs: dict[str, object] = {
     "echo": settings.DATABASE_ECHO,
     "pool_pre_ping": True,
 }

@@ -22,6 +22,7 @@ def _require_tenant_id(x_tenant_id: Optional[str]) -> int:
             error_code=ErrorCodes.VALIDATION_MISSING_TENANT,
             detail="X-Tenant-ID header required",
         )
+        raise RuntimeError("unreachable")
     try:
         return int(x_tenant_id)
     except ValueError:
@@ -30,6 +31,7 @@ def _require_tenant_id(x_tenant_id: Optional[str]) -> int:
             error_code=ErrorCodes.VALIDATION_ERROR,
             detail="X-Tenant-ID must be an integer",
         )
+        raise RuntimeError("unreachable")
 
 
 @router.post("/explode", response_model=BomExplodeResponse)

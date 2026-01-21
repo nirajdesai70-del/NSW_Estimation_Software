@@ -8,7 +8,7 @@ from decimal import Decimal
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
-from app.estimation.discount_rule_types import DiscountScope, SCOPE_KEY_SITE
+
 
 
 class DiscountRuleRepo:
