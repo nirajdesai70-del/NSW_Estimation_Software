@@ -33,6 +33,7 @@ Path alignment update: reflects root bifurcation to `workspaces/current_dev/`; n
 | GOV-E22-20260119-001 | Governance | CODEOWNERS + branch protection required checks | DONE | CP1-A2-20260119-001 | Required checks enforced on `main` + code-owner reviews enabled (2026-01-20) | `.github/CODEOWNERS`, `.github/workflows/{security.yml,quality.yml}` | Required checks: security-gates / (ZAP warn-only, sca_pip_audit, secrets_scan, sast_bandit) + quality-gates / (backend-tests, python-lint, type-check, frontend-build). strict=true (branch up to date). |
 | GOV-E25A-20260119-001 | Governance | Coverage floor (backend) | **DONE — 2026-01-20** | `--cov-fail-under=70` enforced in CI | `.github/workflows/quality.yml` | Scope: `workspaces/current_dev/backend/app`; uploads `coverage.xml`. |
 | GOV-EXC-20260124-001 | Governance | Revert direct main commit (`docs/badges/.keep`) | **DONE — 2026-01-24** | PR **#28** merged; reverted **5d420d0** | `docs/badges/.keep` | Policy reaffirmed: **PR-only** on `main`; badge updates via **CI-opened PR**. |
+| OPS-CI-20260124-001 | Ops | CI maintenance cadence checklist | **PENDING** | Checklist published | `docs/OPS/CI_MAINTENANCE_CHECKLIST.md` | Weekly/monthly/quarterly checks to prevent regressions. |
 
 ---
 
