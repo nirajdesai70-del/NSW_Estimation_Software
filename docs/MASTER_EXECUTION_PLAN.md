@@ -1,8 +1,8 @@
 # Master Execution Plan - Full Correction Plan Overview
 
-**Version:** 1.0  
-**Date:** 2025-12-18  
-**Status:** ACTIVE - Comprehensive Plan  
+**Version:** 2.0
+**Date:** 2025-12-24
+**Status:** 🔒 CLOSED - Planning & Implementation Complete
 **Purpose:** Show complete picture of all phases and remaining work
 
 ---
@@ -14,14 +14,14 @@
 | **Phase 1** | Baseline Documentation | ✅ COMPLETE | 100% | None |
 | **Phase 2** | Traceability Maps | ✅ COMPLETE | ~80% | ~20% routes deferred (non-blocking) |
 | **Phase 3** | Execution Planning | ✅ CLOSED | 100% | None (planning frozen) |
-| **Phase 4** | Controlled Execution | 🔄 IN PROGRESS | ~36% (14/39 tasks) | S2-S5 tasks remaining |
-| **Phase 5** | Data Dictionary & Schema | ⏳ PENDING | 0% | Starts after Phase 4 |
+| **Phase 4** | Controlled Execution | 🔒 CLOSED | Planning & Implementation complete | Execution deferred for S5 + gap closures (live DB) |
+| **Phase 5** | Data Dictionary & Schema | ⏳ PENDING | 0% | May start (analysis-only) after Phase 4 closure |
 
 ---
 
 ## ✅ Phase 1: Baseline Documentation (COMPLETE)
 
-**Status:** ✅ Complete  
+**Status:** ✅ Complete
 **Completion Date:** 2025-12-17
 
 ### What Was Done
@@ -37,7 +37,7 @@
 
 ## ✅ Phase 2: Traceability Maps (COMPLETE)
 
-**Status:** ✅ Complete (First Pass)  
+**Status:** ✅ Complete (First Pass)
 **Completion Date:** 2025-12-17
 
 ### What Was Done
@@ -59,7 +59,7 @@
 
 ## ✅ Phase 3: Execution Planning (CLOSED)
 
-**Status:** ✅ Closed (Frozen)  
+**Status:** ✅ Closed (Frozen)
 **Closure Date:** 2025-12-18
 
 ### What Was Done
@@ -79,42 +79,35 @@
 
 ---
 
-## 🔄 Phase 4: Controlled Execution (IN PROGRESS)
+## 🔒 Phase 4: Controlled Execution (CLOSED)
 
-**Status:** 🔄 In Progress  
-**Current Stage:** S2 - Isolation
+**Status:** 🔒 CLOSED — Planning & Implementation Complete
+**Closure Note:** `docs/PHASE_4/PHASE_4_FINAL_CLOSURE_NOTE.md`
 
-### What's Complete (S0-S1)
+### What's Complete (S0-S4)
 - ✅ S0: Verification (11/11 tasks)
 - ✅ S1: Ownership Lock (3/3 tasks)
+- ✅ S2: Isolation (15/15 tasks)
+- ✅ S3: Alignment (10/10 tasks) — contracts frozen
+- ✅ S4: Propagation (12/12 tasks) — batches closed/planned
 
-### What's In Progress (S2)
-- 🔄 S2: Isolation (3/11 tasks complete)
-  - ✅ GOV-001: Exception mapping
-  - ✅ GOV-002: Boundary blocks
-  - ✅ SHARED-001: Shared contracts
-  - ⏳ Remaining: 8 S2 tasks
+### What's Deferred (S5 + Gap Execution)
+- 🟨 S5: Regression Gate (10/10 tasks) — planned & frozen
+- 🟨 Gap closure execution (BOM/PB gaps) — planned & frozen
+- **Reason:** Requires live DB for execution validation
 
-### What's Pending (S3-S5)
-- ⏳ S3: Alignment (0/8 tasks)
-- ⏳ S4: Propagation (0/9 tasks)
-- ⏳ S5: Regression Gate (0/6 tasks)
+### Phase 4 Scope (Completed)
+- Structural refactoring (isolation, alignment, propagation)
+- Contract freezes and evidence packs
+- Execution planning preserved for deferred tasks
 
-### Phase 4 Scope
-**Phase 4 includes:**
-- All refactoring work (S0-S5)
-- Module isolation and alignment
-- Contract propagation
-- Regression testing
-- System stabilization
-
-**This IS the full correction plan execution.**
+**Phase 4 remains the full correction plan execution, with live-DB-dependent validation deferred.**
 
 ---
 
 ## ⏳ Phase 5: Data Dictionary & Schema (PENDING)
 
-**Status:** ⏳ Pending (starts after Phase 4)
+**Status:** ⏳ Pending (analysis-only; may start after Phase 4 closure)
 
 ### Scope
 - Step 1: Freeze NSW Canonical Data Dictionary (analysis only)
@@ -131,22 +124,15 @@
 
 ### NEPL Rectification Plan (`docs/PHASE_4/NEPL_RECTIFICATION_PLAN.md`)
 
-**Status:** Planning template (not yet executed)  
-**Relationship to Phase 4:** This appears to be a **separate plan template** that hasn't been populated with actual gaps yet.
-
-**Question:** Are there specific gaps/fixes identified that need to be incorporated into Phase 4 tasks?
-
-**Action Required:**
-- [ ] Review if NEPL_RECTIFICATION_PLAN has specific fixes that need Phase 4 tasks
-- [ ] If yes, create Phase 4 tasks for these fixes
-- [ ] If no, clarify this is a template/future work
+**Status:** Planning template only (no gap IDs populated)
+**Relationship to Phase 4:** Separate template; no Phase 4 tasks sourced from it.
 
 ---
 
 ### Module-Specific Work Items
 
 Some modules have pending work documented in their change/fix folders:
-- Security Hardening Phase 1 (pending)
+- Security Hardening Phase 1 (pending) — `changes/security/phase_1/*`
 - Component Catalog work (pending)
 - Various enhancement plans (pending)
 
@@ -156,8 +142,8 @@ Some modules have pending work documented in their change/fix folders:
 - Enhancements can come after Phase 4 completion
 
 **Decision Needed:**
-- Are any of these **critical fixes** that must be in Phase 4?
-- Or are they **enhancements** that come after Phase 4?
+- Are any of these **critical fixes** that must run with deferred Phase 4 execution?
+- Or are they **enhancements** that come after Phase 4 completion?
 
 ---
 
@@ -167,7 +153,7 @@ Some modules have pending work documented in their change/fix folders:
 
 **Covers:**
 - ✅ All Phase 4 execution tasks (S0-S5)
-- ✅ 39 tasks total (14 complete, 25 remaining)
+- ✅ 51 tasks total (41 complete, 10 planned & frozen)
 
 **Does NOT Cover:**
 - Phase 1/2/3 tasks (already complete)
@@ -204,66 +190,53 @@ Some modules have pending work documented in their change/fix folders:
 
 ---
 
-## ⚠️ GAP CLOSURE ANALYSIS NEEDED
+## ⚠️ GAP CLOSURE STATUS
 
 ### Identified Gaps (BOM-GAP-*, PB-GAP-*, MB-GAP-*)
 
-**Status:** Found 10+ open gaps that need analysis:
-- BOM-GAP-001, 002, 004, 005, 006, 007, 013 (OPEN/PARTIAL)
-- PB-GAP-003, 004 (OPEN)
-- MB-GAP-001 (OPEN)
+**Status:** Gap coverage decisions captured; execution deferred (live DB required).
 
-**Question:** Are these gaps:
-1. **Covered by Phase 4 refactoring** (isolation/alignment addresses them)?
-2. **Need separate Phase 4 fix tasks** (must be fixed in Phase 4)?
-3. **Post-Phase 4 work** (can wait until after refactoring)?
+**Planned & frozen gap tasks in Phase 4:**
+- BOM-GAP-001, BOM-GAP-002 (Feeder apply behavior)
+- BOM-GAP-004, BOM-GAP-007 (copy history + wiring)
+- BOM-GAP-013 (template data readiness gate)
+- PB-GAP-003, PB-GAP-004 (PBOM edge cases)
+- BOM-GAP-006 (lookup preservation; alignment evidence)
 
-**See:** `docs/PHASE_4/GAP_CLOSURE_MAPPING.md` for detailed analysis.
+**See:** `docs/PHASE_4/GAP_GATEBOARD.md` and `docs/PHASE_4/GAP_CLOSURE_MAPPING.md`.
 
 ---
 
 ## ✅ Recommended Action
 
-### 1. Gap Closure Analysis (URGENT)
-- [ ] Review `docs/PHASE_4/GAP_CLOSURE_MAPPING.md`
-- [ ] Determine which gaps are critical for Phase 4
-- [ ] Decide: Include in Phase 4 tasks OR defer to post-Phase 4
-- [ ] If included, add gap fix tasks to `MASTER_TASK_LIST.md`
+### 1. Execute Deferred Phase 4 Tasks (When Live DB Is Available)
+- [ ] Run S5 regression gate tasks
+- [ ] Execute planned gap-closure tasks
+- [ ] Update `GAP_GATEBOARD.md` with CLOSED/DEFERRED statuses
 
-### 2. Verify Rectification Plan Status
-- [ ] Review `NEPL_RECTIFICATION_PLAN.md` for specific gap IDs/fixes
-- [ ] Cross-reference with gap register
-- [ ] If gaps identified, create corresponding Phase 4 tasks (if critical)
+### 2. Track Rectification Plan Separately
+- [ ] Populate `NEPL_RECTIFICATION_PLAN.md` only when specific fixes are defined
+- [ ] Create a separate task register if rectifications are approved
 
 ### 3. Clarify Module-Specific Work
-- [ ] List all pending module work items
-- [ ] Categorize: Critical fixes (→ Phase 4) vs Enhancements (→ post-Phase 4)
-- [ ] Create Phase 4 tasks for critical fixes only
-
-### 4. Update Master Task List (if needed)
-- [ ] Add gap fix tasks (if critical and included in Phase 4)
-- [ ] Add any critical fixes from rectification plan
-- [ ] Add any critical fixes from module-specific work
-- [ ] Keep enhancements separate (not in Phase 4)
+- [ ] Confirm which items are critical and need to join deferred Phase 4 execution
+- [ ] Keep enhancements outside Phase 4
 
 ---
 
 ## 📊 Current Execution Status
 
-**What We're Working On Now:**
-- **Phase 4, S2 Isolation**
-- Following `MASTER_TASK_LIST.md`
-- 14 tasks complete, 25 remaining
-
-**What's Next:**
-- Continue S2 tasks (CIM, BOM modules, QUO)
-- Then S3 (Alignment)
-- Then S4 (Propagation)
-- Then S5 (Regression Gate)
-- Then Phase 5 (Data Dictionary)
+**Phase 4:** 🔒 CLOSED (planning + implementation complete)
+**Deferred:** S5 regression execution + gap closure execution
+**Phase 5:** May start (analysis-only), while waiting for live DB
 
 ---
 
-**Last Updated:** 2025-12-18  
-**Status:** Active - Need clarification on rectification plan and module-specific work
+## 🧾 Governance Note
 
+- 2026-01-24 — Reverted one-off direct commit to `main` (`docs/badges/.keep`) via PR **#28** (revert **5d420d0**). Guardrail reaffirmed: PR-only on `main`; coverage badge updates via CI-opened PR.
+
+---
+
+**Last Updated:** 2026-01-24
+**Status:** 🔒 FROZEN (Final Closure)
