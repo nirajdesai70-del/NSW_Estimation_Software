@@ -98,7 +98,7 @@ jobs:
             -i backend/coverage.xml \
             -o docs/badges/coverage.svg
       - name: Create coverage badge PR (main only)
-        if: github.ref == 'refs/heads/main' && secrets.CI_BOT_TOKEN != ''
+        if: github.ref == 'refs/heads/main'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.CI_BOT_TOKEN }}
