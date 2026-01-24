@@ -100,7 +100,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CI_BOT_TOKEN }}
           commit-message: "chore(badge): update coverage.svg [skip ci]"
           title: "chore(badge): update coverage.svg"
           body: "Automated coverage badge update."
