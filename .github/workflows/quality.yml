@@ -97,10 +97,10 @@ jobs:
             -i backend/coverage.xml \
             -o docs/badges/coverage.svg
       - name: Create coverage badge PR (main only)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && secrets.CI_BOT_TOKEN != ''
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CI_BOT_TOKEN }}
           commit-message: "chore(badge): update coverage.svg [skip ci]"
           title: "chore(badge): update coverage.svg"
           body: "Automated coverage badge update."
