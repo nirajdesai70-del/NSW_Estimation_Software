@@ -1,0 +1,419 @@
+name: quality-gates
+
+on:
+  pull_request:
+  push:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  pr-title-lint:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            chore
+            docs
+            ci
+            refactor
+            test
+            perf
+            build
+          scopes: |
+            backend
+            frontend
+            ci
+            docs
+            gov
+          requireScope: false
+
+  branch-name-lint:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce branch naming (type/topic)
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if echo "$BRANCH" | grep -Eq '^(feat|fix|chore|docs|ci|refactor|test|perf|build)/[a-z0-9._-]+$'; then
+            echo "Branch name ok: $BRANCH"
+          else
+            echo "Branch '$BRANCH' must match: type/topic (e.g., feat/add-pr-title-lint)"
+            exit 1
+          fi
+
+  python-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install lint tools
+        run: python -m pip install --upgrade pip ruff black
+      - name: Ruff + Black (changed files)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_REF="${{ github.base_ref }}"
+            git fetch origin "${BASE_REF}" --depth=1
+            CHANGED=$(git diff --name-only "origin/${BASE_REF}"...HEAD | grep -E '\.py$' || true)
+          else
+            CHANGED=$(git diff --name-only HEAD~1..HEAD | grep -E '\.py$' || true)
+          fi
+          if [ -z "$CHANGED" ]; then
+            echo "No Python changes to lint."
+            exit 0
+          fi
+          echo "Linting: $CHANGED"
+          ruff check $CHANGED
+          black --check $CHANGED
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps + mypy
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then
+            pip install -r backend/requirements.txt
+          fi
+          pip install mypy
+      - name: Mypy (backend)
+        run: |
+          if [ -d backend/app ]; then
+            mypy \
+              backend/app/core \
+              backend/app/estimation \
+              backend/app/validators \
+              backend/app/models \
+              backend/app/api/v1/schemas \
+              --ignore-missing-imports --follow-imports=skip
+          else
+            echo "backend/app not found; skipping mypy."
+          fi
+
+  backend-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      PYTHONPATH: ${{ github.workspace }}/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps + pytest
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then
+            pip install -r backend/requirements.txt
+          fi
+          pip install pytest pytest-cov
+      - name: Pytest (coverage floor: 70%)
+        run: |
+          if [ -d backend/tests/phase5 ]; then
+            pytest -q backend/tests/phase5 \
+              --cov=backend/app \
+              --cov-report=xml:backend/coverage.xml \
+              --cov-fail-under=70 \
+              --cov-omit="*/alembic/*,*/tests/*"
+          else
+            echo "backend/tests/phase5 not found; skipping pytest."
+          fi
+      - name: Generate coverage badge (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python -m pip install 'genbadge[coverage]'
+          mkdir -p docs/badges
+          genbadge coverage \
+            -i backend/coverage.xml \
+            -o docs/badges/coverage.svg
+      - name: Prepare coverage history (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python - << 'PY'
+          import json
+          import pathlib
+          import re
+
+          xml_path = pathlib.Path("backend/coverage.xml")
+          if not xml_path.exists():
+              raise SystemExit("coverage.xml not found")
+
+          content = xml_path.read_text()
+          match = re.search(r'line-rate="([0-9.]+)"', content)
+          pct = round(float(match.group(1)) * 100, 2) if match else 0.0
+
+          history_path = pathlib.Path("docs/badges/coverage-history.json")
+          history = []
+          if history_path.exists():
+              try:
+                  history = json.loads(history_path.read_text())
+              except Exception:
+                  history = []
+
+          history.append(
+              {
+                  "run": "${{ github.run_id }}",
+                  "ref": "${{ github.ref }}",
+                  "pct": pct,
+              }
+          )
+          history_path.write_text(json.dumps(history[-50:], indent=2) + "\n")
+          PY
+      - name: Create coverage badge PR (main only)
+        if: github.ref == 'refs/heads/main'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.CI_BOT_TOKEN }}
+          commit-message: "chore(badge): update coverage artifacts"
+          title: "chore(badge): update coverage artifacts"
+          body: "Automated coverage badge + history update."
+          branch: "bot/coverage-badge-${{ github.run_id }}"
+          base: "main"
+          add-paths: |
+            docs/badges/coverage.svg
+            docs/badges/coverage-history.json
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install + build (frontend)
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+            npm run build
+          else
+            echo "frontend/package.json not found; skipping build."
+          fi
+name: quality-gates
+
+on:
+  pull_request:
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  pr-title-lint:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            chore
+            docs
+            ci
+            refactor
+            test
+            perf
+            build
+          scopes: |
+            backend
+            frontend
+            ci
+            docs
+            gov
+          requireScope: false
+
+  branch-name-lint:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce branch naming (type/topic)
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if echo "$BRANCH" | grep -Eq '^(feat|fix|chore|docs|ci|refactor|test|perf|build)/[a-z0-9._-]+$'; then
+            echo "Branch name ok: $BRANCH"
+          else
+            echo "Branch '$BRANCH' must match: type/topic (e.g., feat/add-pr-title-lint)"
+            exit 1
+          fi
+
+  python-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install lint tools
+        run: python -m pip install --upgrade pip ruff black
+      - name: Ruff + Black (changed files)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_REF="${{ github.base_ref }}"
+            git fetch origin "${BASE_REF}" --depth=1
+            CHANGED=$(git diff --name-only "origin/${BASE_REF}"...HEAD | grep -E '\.py$' || true)
+          else
+            CHANGED=$(git diff --name-only HEAD~1..HEAD | grep -E '\.py$' || true)
+          fi
+          if [ -z "$CHANGED" ]; then
+            echo "No Python changes to lint."
+            exit 0
+          fi
+          echo "Linting: $CHANGED"
+          ruff check $CHANGED
+          black --check $CHANGED
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps + mypy
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then
+            pip install -r backend/requirements.txt
+          fi
+          pip install mypy
+      - name: Mypy (backend)
+        run: |
+          if [ -d backend/app ]; then
+            mypy \
+              backend/app/core \
+              backend/app/estimation \
+              backend/app/validators \
+              backend/app/models \
+              backend/app/api/v1/schemas \
+              --ignore-missing-imports --follow-imports=skip
+          else
+            echo "backend/app not found; skipping mypy."
+          fi
+
+  backend-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      PYTHONPATH: ${{ github.workspace }}/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps + pytest
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then
+            pip install -r backend/requirements.txt
+          fi
+          pip install pytest pytest-cov
+      - name: Pytest (coverage floor: 70%)
+        run: |
+          if [ -d backend/tests/phase5 ]; then
+            pytest -q backend/tests/phase5 \
+              --cov=backend/app \
+              --cov-report=xml:backend/coverage.xml \
+              --cov-fail-under=70 \
+              --cov-omit="*/alembic/*,*/tests/*"
+          else
+            echo "backend/tests/phase5 not found; skipping pytest."
+          fi
+      - name: Generate coverage badge (main only)
+        if: github.ref == 'refs/heads/main'
+        uses: tj-actions/coverage-badge-py@v2
+        with:
+          python-location: 'python'
+          output: 'docs/badges/coverage.svg'
+          filepath: 'backend/coverage.xml'
+      - name: Prepare coverage history (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python - << 'PY'
+          import json
+          import pathlib
+          import re
+
+          xml_path = pathlib.Path("backend/coverage.xml")
+          if not xml_path.exists():
+              raise SystemExit("coverage.xml not found")
+
+          content = xml_path.read_text()
+          match = re.search(r'line-rate="([0-9.]+)"', content)
+          pct = round(float(match.group(1)) * 100, 2) if match else 0.0
+
+          history_path = pathlib.Path("docs/badges/coverage-history.json")
+          history = []
+          if history_path.exists():
+              try:
+                  history = json.loads(history_path.read_text())
+              except Exception:
+                  history = []
+
+          history.append(
+              {
+                  "run": "${{ github.run_id }}",
+                  "ref": "${{ github.ref }}",
+                  "pct": pct,
+              }
+          )
+          history_path.write_text(json.dumps(history[-50:], indent=2) + "\n")
+          PY
+      - name: Create coverage badge PR (main only)
+        if: github.ref == 'refs/heads/main'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.CI_BOT_TOKEN }}
+          commit-message: "chore(badge): update coverage artifacts"
+          title: "chore(badge): update coverage artifacts"
+          body: "Automated coverage badge + history update."
+          branch: "bot/coverage-badge-${{ github.run_id }}"
+          base: "main"
+          add-paths: |
+            docs/badges/coverage.svg
+            docs/badges/coverage-history.json
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install + build (frontend)
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+            npm run build
+          else
+            echo "frontend/package.json not found; skipping build."
+          fi
+

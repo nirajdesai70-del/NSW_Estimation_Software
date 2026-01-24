@@ -8,27 +8,12 @@
 # ============================
 # Global default (all changes)
 # ============================
-* @nirajdesai70-del
+* @nirajdesai70-del @zk7m4x5kzv-maker
 
 # ============================
-# Future expansion (uncomment and customize when ready)
+# Scoped ownership
 # ============================
-#
-# Governance & Decisions
-# /governance/decisions/ @governance-owners
-#
-# RAG & Gate Infrastructure
-# /tools/gates/ @ops-owners
-# /.github/workflows/ @ops-owners
-# /docker-compose*.yml @ops-owners
-# /services/kb_query/ @ops-owners
-# /services/kb_indexer/ @ops-owners
-#
-# Schema & Data Governance
-# /db/ @schema-owners
-# /migrations/ @schema-owners
-# /data/seeds/ @data-owners
-#
-# Catalog / Estimation Domain
-# /catalog/ @catalog-owners
-# /estimation/ @catalog-owners
+backend/** @nirajdesai70-del @zk7m4x5kzv-maker
+frontend/** @nirajdesai70-del @zk7m4x5kzv-maker
+.github/workflows/** @nirajdesai70-del @zk7m4x5kzv-maker
+docs/** @nirajdesai70-del @zk7m4x5kzv-maker

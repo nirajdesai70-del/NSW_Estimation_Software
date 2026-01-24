@@ -1,5 +1,9 @@
 # NSW Estimation Software
 
+![Security Gates](https://github.com/nirajdesai70-del/NSW_Estimation_Software/actions/workflows/security.yml/badge.svg)
+![Quality Gates](https://github.com/nirajdesai70-del/NSW_Estimation_Software/actions/workflows/quality.yml/badge.svg)
+![Coverage](docs/badges/coverage.svg)
+
 **New Generation Software** - Evolved from NEPL Estimation Software V2
 
 ## Overview
