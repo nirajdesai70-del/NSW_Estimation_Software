@@ -7,7 +7,10 @@ for fast retrieval by the query service. Uses BM25 keyword search (SQLite FTS5)
 and semantic search (FAISS + sentence-transformers).
 
 Usage:
-    python3 indexer.py [--rebuild] [--update] [--verbose]
+    python3 indexer.py [--rebuild] [--update] [--verbose] [--full]
+    
+    --full: Full indexing mode - scans all markdown files in RAG_KB directory
+            instead of using the curated manifest (00_INDEX.json)
 """
 
 import json
@@ -53,9 +56,10 @@ def wipe_index_artifacts(index_root: Path):
 class KBIndexer:
     """Main indexer orchestrator"""
 
-    def __init__(self, rebuild: bool = False, verbose: bool = False):
+    def __init__(self, rebuild: bool = False, verbose: bool = False, full: bool = False):
         self.rebuild = rebuild
         self.verbose = verbose
+        self.full = full
         self.index_root = INDEX_ROOT
         self.index_root.mkdir(parents=True, exist_ok=True)
         
@@ -79,6 +83,75 @@ class KBIndexer:
 
         with open(manifest_path, "r") as f:
             return json.load(f)
+    
+    def scan_all_files(self) -> Dict:
+        """Scan all markdown files in RAG_KB directory for full indexing"""
+        print("Scanning all markdown files in RAG_KB...")
+        
+        files = []
+        ignore_patterns = [
+            r"_old", r"_copy", r"_backup", r"\.bak$", r"^\.git",
+            r"^__pycache__", r"^\.venv", r"^venv", r"^node_modules",
+            r"\.pyc$", r"\.pyo$", r"\.git", r"build_reports"
+        ]
+        
+        # Recursively find all .md files
+        for md_file in RAG_KB_ROOT.rglob("*.md"):
+            # Skip ignored paths
+            relative_path = md_file.relative_to(RAG_KB_ROOT)
+            path_str = str(relative_path)
+            
+            should_skip = False
+            for pattern in ignore_patterns:
+                if re.search(pattern, path_str, re.IGNORECASE):
+                    should_skip = True
+                    break
+            
+            if should_skip:
+                continue
+            
+            # Get file metadata
+            try:
+                stat = md_file.stat()
+                last_modified = datetime.fromtimestamp(stat.st_mtime).isoformat()
+            except:
+                last_modified = datetime.now().isoformat()
+            
+            # Determine namespace from path
+            namespace = "rag_kb"
+            if "phase5_pack" in path_str:
+                namespace = "phase5_pack"
+            elif "chat_mirror" in path_str:
+                namespace = "chat_mirror"
+            
+            # Create file entry similar to manifest format
+            files.append({
+                "namespace": namespace,
+                "folder": str(relative_path.parent),
+                "filename": md_file.name,
+                "status": "WORKING",
+                "last_modified": last_modified,
+                "authority": "WORKING",
+                "kb_path": path_str,
+                "source_path": f"RAG_KB/{path_str}",
+                "selected_by": "FULL_SCAN",
+                "header_status": None,
+                "header_version": None,
+            })
+        
+        print(f"Found {len(files)} markdown files to index")
+        
+        return {
+            "version": "1.0-full",
+            "last_refresh": datetime.now().isoformat(),
+            "files": files,
+            "statistics": {
+                "total_files": len(files),
+                "canonical_count": 0,
+                "working_count": len(files),
+                "draft_count": 0,
+            }
+        }
 
     def extract_metadata_header(self, content: str) -> Dict:
         """Extract metadata from YAML front matter"""
@@ -213,13 +286,22 @@ class KBIndexer:
         print("KB Indexer")
         print("=" * 60)
 
-        manifest = self.load_kb_manifest()
-        if not manifest:
-            print("Cannot proceed without KB manifest")
-            return
+        # Use full scan if --full flag is set, otherwise use manifest
+        if self.full:
+            manifest = self.scan_all_files()
+            if not manifest:
+                print("Cannot proceed with full scan")
+                return
+        else:
+            manifest = self.load_kb_manifest()
+            if not manifest:
+                print("Cannot proceed without KB manifest")
+                return
 
         print(f"KB Version: {manifest.get('version')}")
         print(f"KB Last Refresh: {manifest.get('last_refresh')}")
+        if self.full:
+            print("Mode: FULL INDEXING (all markdown files)")
         print()
 
         if self.rebuild:
@@ -256,9 +338,10 @@ def main():
     parser.add_argument("--rebuild", action="store_true", help="Rebuild all indexes")
     parser.add_argument("--update", action="store_true", help="Incremental update (not yet implemented)")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+    parser.add_argument("--full", action="store_true", help="Full indexing: scan all markdown files in RAG_KB (bypasses manifest)")
     args = parser.parse_args()
 
-    indexer = KBIndexer(rebuild=args.rebuild, verbose=args.verbose)
+    indexer = KBIndexer(rebuild=args.rebuild, verbose=args.verbose, full=args.full)
     indexer.run()
 
 

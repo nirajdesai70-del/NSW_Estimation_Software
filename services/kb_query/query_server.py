@@ -14,6 +14,8 @@ import argparse
 import uvicorn
 
 from query_service import QueryService
+from pathlib import Path
+import os
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -22,8 +24,17 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Get index root from environment variable (for decisions RAG support)
+REPO_ROOT = Path(__file__).parent.parent.parent
+DEFAULT_INDEX_ROOT = REPO_ROOT / "RAG_INDEX"
+INDEX_SUBDIR = os.getenv("RAG_INDEX_SUBDIR", "")  # e.g., "decisions" or "work"
+if INDEX_SUBDIR:
+    index_root = DEFAULT_INDEX_ROOT / INDEX_SUBDIR
+else:
+    index_root = DEFAULT_INDEX_ROOT
+
 # Initialize query service (global instance)
-query_service = QueryService()
+query_service = QueryService(index_root=index_root)
 
 
 # Request/Response models

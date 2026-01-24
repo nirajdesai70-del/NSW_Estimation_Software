@@ -5,6 +5,8 @@
 **Status:** COMPLETE  
 **Owner:** Phase 5 Senate  
 
+_Link audit fix: 2026-01-21 (Phase E) — updated traceability link to canonical location; no content meaning changed._
+
 ## 🎉 Setup Complete!
 
 The Phase 5 Senate structure has been created and all alignment documents are in place. You now have:
@@ -57,7 +59,7 @@ Read: [`PHASE_5_COMPLETE_ALIGNMENT_SUMMARY.md`](PHASE_5_COMPLETE_ALIGNMENT_SUMMA
 - How everything connects
 
 ### 2. Track Requirements
-Use: [`05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md`](05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md)
+Use: [`PHASE_5_REQUIREMENT_TRACE.md`](../05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md)
 - 20 requirements mapped (R-001 to R-020)
 - Update status as work progresses
 - Ensures nothing is missed

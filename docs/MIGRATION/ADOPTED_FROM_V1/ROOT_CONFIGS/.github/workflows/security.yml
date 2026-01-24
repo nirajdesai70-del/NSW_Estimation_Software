@@ -1,0 +1,199 @@
+# adoption:
+#   status: ADOPTED_FROM_V1
+#   adopted_on: 2026-01-21
+#   origin_root: "NSW Estimation Software V1.0"
+#   origin_path: ".github/workflows/security.yml"
+#   owner: "TBD"
+#   reason: "Phase C intake (governance-controlled adoption)."
+
+name: security-gates
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  secrets_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # gitleaks uses git history/ranges; shallow clones can cause "unknown revision" failures on push events.
+          fetch-depth: 0
+      - name: Gitleaks scan
+        uses: zricethezav/gitleaks-action@v2
+        env:
+          # Required by gitleaks-action on pull_request events (uses GitHub API for PR metadata/ranges).
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sca_pip_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pip-audit
+        run: pip install pip-audit
+      - name: Generate SBOM (CycloneDX JSON) [non-blocking]
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Produce an SBOM per requirements surface where possible.
+          REQS=(
+            "apps/backend/requirements.txt"
+            "WORKING_REVIEWED_SET/backend/requirements.txt"
+            "services/kb_indexer/requirements.txt"
+            "services/kb_query/requirements.txt"
+          )
+
+          for req in "${REQS[@]}"; do
+            if [ -f "$req" ]; then
+              out="sbom-$(echo "$req" | tr '/.' '__').cyclonedx.json"
+              echo "SBOM: $req -> $out"
+              # If pip-audit doesn't support CycloneDX in a given version, this step is non-blocking.
+              pip-audit -r "$req" --format cyclonedx-json --output "$out"
+            else
+              echo "Skipping (missing): $req"
+            fi
+          done
+      - name: Run pip-audit (gate)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Audit the main Python surfaces in this repo.
+          REQS=(
+            "apps/backend/requirements.txt"
+            "WORKING_REVIEWED_SET/backend/requirements.txt"
+            "services/kb_indexer/requirements.txt"
+            "services/kb_query/requirements.txt"
+          )
+
+          for req in "${REQS[@]}"; do
+            if [ -f "$req" ]; then
+              out="pip-audit-$(echo "$req" | tr '/.' '__').sarif"
+              echo "Auditing: $req -> $out"
+              # Always emit SARIF; the gate below decides pass/fail by severity + waivers.
+              pip-audit -r "$req" --format sarif --output "$out" || true
+            else
+              echo "Skipping (missing): $req"
+            fi
+          done
+
+          python tools/security/pip_audit_gate.py \
+            --waivers WORKING_REVIEWED_SET/00_GOVERNANCE/waivers_sca.json \
+            --sarif pip-audit-*.sarif
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-audit-report
+          path: pip-audit-*.sarif
+      - name: Upload SBOM artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom-*.cyclonedx.json
+
+  sast_bandit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install bandit
+        run: pip install bandit
+      - name: Run bandit (gate)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TARGETS=(
+            "apps/backend"
+            "services"
+            "tools"
+            "WORKING_REVIEWED_SET/backend/app"
+          )
+
+          EXISTING=()
+          for t in "${TARGETS[@]}"; do
+            if [ -d "$t" ]; then
+              EXISTING+=("$t")
+            fi
+          done
+
+          if [ "${#EXISTING[@]}" -eq 0 ]; then
+            echo "No python targets found; skipping bandit."
+            exit 0
+          fi
+
+          # Gate on HIGH severity only.
+          # Note: bandit does not support SARIF output; emit JSON instead and keep the HIGH-severity gate.
+          bandit -r "${EXISTING[@]}" -f json -o bandit.json -lll
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-report
+          path: bandit.json
+
+  zap_baseline:
+    name: OWASP ZAP Baseline (warn-only)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/main') }}
+    continue-on-error: ${{ github.ref != 'refs/heads/main' }}
+    env:
+      ZAP_TARGET_URL: ${{ secrets.ZAP_TARGET_URL }}
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Skip if ZAP_TARGET_URL is not set
+        shell: bash
+        run: |
+          if [ -z "${ZAP_TARGET_URL:-}" ]; then
+            echo "ZAP_TARGET_URL not set; skipping ZAP baseline."
+            exit 0
+          fi
+
+      - name: ZAP Baseline Scan (10-min max)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Run ZAP baseline directly (avoid action-internal artifact uploads which can fail with 400s).
+          docker pull ghcr.io/zaproxy/zaproxy:stable -q
+
+          docker run --rm \
+            -v "$PWD:/zap/wrk/:rw" \
+            --network=host \
+            -t ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+              -t "${ZAP_TARGET_URL}" \
+              -J zap-report.json \
+              -w zap-report.md \
+              -r zap-report.html \
+              -a \
+              -m 10 \
+              -I \
+              -T 120
+
+      - name: Upload ZAP Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-baseline-artifacts
+          path: |
+            zap-report.html
+            zap-report.json
+            zap-report.md
+            zap.out
+          if-no-files-found: ignore
+

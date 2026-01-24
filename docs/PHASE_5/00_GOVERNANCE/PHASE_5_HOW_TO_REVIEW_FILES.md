@@ -5,6 +5,8 @@
 **Status:** CANONICAL  
 **Owner:** Phase 5 Senate  
 
+_Link audit fix: 2026-01-21 (Phase E) — escaped placeholder link syntax and corrected example references; no content meaning changed._
+
 ## Purpose
 Practical step-by-step guide on how to review each file to ensure content is mapped and nothing is lost.
 
@@ -68,7 +70,7 @@ Section: [SECTION_NAME]
 
 ### Step 4: Track References
 ```
-1. Find all markdown links: [text](path)
+1. Find all markdown links: [text] (path)
 2. Find all file references: mentions of other files
 3. Find all section references: #section-name
 4. Note which references will break
@@ -78,7 +80,7 @@ Section: [SECTION_NAME]
 **Template:**
 ```
 References Found:
-- Link: [text](path) → Will break? [YES/NO] → Update to: [NEW_PATH]
+- Link: [text] (path) → Will break? [YES/NO] → Update to: [NEW_PATH]
 - File reference: [FILENAME] → Will break? [YES/NO] → Update to: [NEW_PATH]
 - Section reference: #section → Will break? [YES/NO] → Update to: [NEW_SECTION]
 ```
@@ -133,13 +135,13 @@ Section: Explicit Exclusions
 **Step 4: Track References**
 ```
 References Found:
-- Link: [PHASE_5_PENDING_UPGRADES_INTEGRATION.md](PHASE_5_PENDING_UPGRADES_INTEGRATION.md)
+\- Link: [PHASE_5_PENDING_UPGRADES_INTEGRATION.md] (PHASE_5_PENDING_UPGRADES_INTEGRATION.md)
   → Will break? YES (file moving to 02_FREEZE_GATE/)
-  → Update to: [PHASE_5_PENDING_UPGRADES_INTEGRATION.md](../02_FREEZE_GATE/PHASE_5_PENDING_UPGRADES_INTEGRATION.md)
+  → Update to: [PHASE_5_PENDING_UPGRADES_INTEGRATION.md] (../02_FREEZE_GATE/PHASE_5_PENDING_UPGRADES_INTEGRATION.md)
 
-- Link: [SCOPE_SEPARATION.md](SCOPE_SEPARATION.md)
+\- Link: [SCOPE_SEPARATION.md] (SCOPE_SEPARATION.md)
   → Will break? YES (file moving to 00_GOVERNANCE/)
-  → Update to: [SCOPE_SEPARATION.md](SCOPE_SEPARATION.md) (same folder, no change)
+  → Update to: [SCOPE_SEPARATION.md] (SCOPE_SEPARATION.md) (same folder, no change)
 ```
 
 **Step 5: Verify**

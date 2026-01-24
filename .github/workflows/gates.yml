@@ -48,6 +48,22 @@ jobs:
           echo "OK: No tracked AppleDouble files found."
 
       # ------------------------------------------------------------
+      # 3.1) Guard: prevent WORKING_REVIEWED_SET drift into workflows
+      # ------------------------------------------------------------
+      - name: "Guard: workflows must not reference WORKING_REVIEWED_SET"
+        run: |
+          set -euo pipefail
+          hits=$(grep -RIn "WORKING_REVIEWED_SET" .github/workflows --exclude "gates.yml" || true)
+          if [ -n "${hits:-}" ]; then
+            echo "ERROR: WORKING_REVIEWED_SET referenced under .github/workflows/"
+            echo "This is a governance violation (reference-pack must not be treated as an operational CI surface)."
+            echo ""
+            echo "$hits"
+            exit 1
+          fi
+          echo "OK: No WORKING_REVIEWED_SET references in workflows."
+
+      # ------------------------------------------------------------
       # 4) Decision KB manifest (OPTIONAL)
       # ------------------------------------------------------------
       - name: Regenerate Decision KB manifest (always create)

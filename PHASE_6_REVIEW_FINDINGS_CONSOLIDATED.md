@@ -24,6 +24,21 @@
 12. ✅ `PHASE_6_DETAILED_MATRIX_PLAN.md`
 13. ✅ `PHASE_6_WEEK4_FINDINGS.md`
 14. ✅ `project/nish/README.md`
+15. ✅ `docs/PHASE_5/00_GOVERNANCE/PHASE_6_COST_ADDERS_FINAL_SPEC.md` - **NEW**
+16. ✅ `docs/PHASE_5/00_GOVERNANCE/PHASE_6_EXECUTION_PLAN.md` - **NEW**
+17. ✅ `docs/PHASE_5/00_GOVERNANCE/PHASE_6_COST_ADDERS_INTEGRATION_ANALYSIS.md` - **NEW**
+18. ✅ `docs/PHASE_5/00_GOVERNANCE/PHASE_6_COST_ADDERS_TASK_INSERTS.md` - **NEW**
+19. ✅ `docs/PHASE_5/00_GOVERNANCE/PHASE_6_INFRASTRUCTURE_AND_TOOLS.md` - **NEW**
+20. ✅ `docs/PHASE_5/00_GOVERNANCE/PHASE_6_TIMEFRAME_AND_COST_ESTIMATION.md` - **NEW**
+21. ✅ `project/nish/PHASE_6_NISH_REVIEW_REPORT.md` - **NEW**
+
+### Files Found Empty (Need Investigation)
+- ⚠️ `PHASE6_COMPREHENSIVE_VERIFICATION_REPORT.md` - Empty (may need to restore from different commit)
+- ⚠️ `PHASE_6_DECISION_REGISTER.md` - Empty
+- ⚠️ `PHASE_6_GOVERNANCE_RULES.md` - Empty
+- ⚠️ `PHASE6_WEEK0_DETAILED_PLAN.md` - Empty
+- ⚠️ `PHASE6_WEEK1_DETAILED_PLAN.md` - Empty
+- ⚠️ `PHASE_6_NEW_SYSTEM_SCOPE.md` - Empty
 
 ### Files Not Found (Listed in Master Plan)
 - Many files from Category 1 (Core Planning Documents) do not exist in git or filesystem

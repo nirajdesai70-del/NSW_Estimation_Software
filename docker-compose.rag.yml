@@ -10,7 +10,9 @@ services:
       - ./RAG_KB:/app/RAG_KB:ro
       - ./RAG_INDEX:/app/RAG_INDEX
     working_dir: /app
-    command: python3 services/kb_indexer/indexer.py --rebuild --verbose
+    command: python3 services/kb_indexer/indexer.py --rebuild --verbose ${KB_INDEXER_FULL:+--full}
+    environment:
+      - KB_INDEXER_FULL=${KB_INDEXER_FULL:-}
     networks:
       - nsw_network
     profiles:

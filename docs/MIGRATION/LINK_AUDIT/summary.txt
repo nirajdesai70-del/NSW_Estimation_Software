@@ -1,0 +1,11 @@
+Repo: /Volumes/T9/Projects/NSW_Estimation_Software
+Scanned files: 11681
+
+Counts by kind:
+- abs_path: 7446
+- md_link: 11338
+- port_hint: 1289
+- url: 34048
+- v1_reference: 1719
+
+Broken internal markdown links: 500

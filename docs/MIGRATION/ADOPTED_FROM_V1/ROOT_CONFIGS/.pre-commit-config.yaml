@@ -1,0 +1,23 @@
+# adoption:
+#   status: ADOPTED_FROM_V1
+#   adopted_on: 2026-01-21
+#   origin_root: "NSW Estimation Software V1.0"
+#   origin_path: ".pre-commit-config.yaml"
+#   owner: "TBD"
+#   reason: "Phase C intake (governance-controlled adoption)."
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: detect-private-key
+
+  # Secret scanning (local mirror of CI gitleaks)
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.3
+    hooks:
+      - id: gitleaks
+

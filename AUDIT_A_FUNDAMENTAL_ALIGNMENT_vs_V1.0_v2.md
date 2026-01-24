@@ -1,0 +1,494 @@
+# AUDIT A — NSW Fundamental Alignment Plan vs V1.0 Coverage (v2)
+
+**Audit Mode:** READ-ONLY (No Insertions, No Modifications)  
+**Prompt Version:** v2.0 (Governed Audit Mode)  
+**Source Folder:** `/Volumes/T9/Projects/NSW_Estimation_Software/NSW Fundamental Alignment Plan`  
+**Target Workspace:** `/Volumes/T9/Projects/NSW Estimation Software V1.0`  
+**Audit Date:** 2026-01-14 13:18:04
+
+---
+
+## 1. Audit Metadata
+
+- **Source Folder:** `/Volumes/T9/Projects/NSW_Estimation_Software/NSW Fundamental Alignment Plan`
+- **Audit Date:** 2026-01-14T13:18:04.878836
+- **Audit Mode:** READ-ONLY
+- **Prompt Version:** v2.0 (Governed Audit & Coverage Verification Mode)
+- **Total Files Audited:** 203
+
+---
+
+## 2. Coverage Summary
+
+| Classification | Count | Percentage |
+|----------------|-------|------------|
+| **FULLY_COVERED** | 11 | 5.4% |
+| **PARTIALLY_COVERED** | 19 | 9.4% |
+| **MISSING** | 173 | 85.2% |
+| **DUPLICATE / SUPERSEDED** | 0 | 0.0% |
+
+**Total Files:** 203
+
+---
+
+## 3. File-by-File Coverage Table
+
+| Source File | Coverage | Closest V1.0 Match | Notes |
+|-------------|----------|-------------------|-------|
+| `00_INDEX.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/ADOPTION_QUICK_ANSWERS.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/ADOPTION_STRATEGIC_ANALYSIS.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/CANONICAL_BOM_HIERARCHY_v1.0.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/EXECUTION_WINDOW_SOP.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FEEDER_MASTER_BACKEND_DESIGN_v1.0.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FILE_LINK_GRAPH.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FUNDAMENTALS_BASELINE_BUNDLE_v1.0.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FUNDAMENTALS_INDEX.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FUNDAMENTALS_SERIAL_TRACKER_v1.0.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FUNDAMENTALS_VERIFICATION_CHECKLIST.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FUNDAMENTALS_VERIFICATION_QUERIES.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FUNDAMENTALS_v2.0_CORRECTIONS_APPLIED.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/FUNDAMENTALS_v2.0_PHASE_5_GAP_ANALYSIS.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/GAP_CORRECTION_STATUS_SUMMARY.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/GAP_REGISTERS_GUIDE.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/IMPLEMENTATION_MAPPING.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/MASTER_FUNDAMENTALS_v2.0.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/MASTER_FUNDAMENTALS_v2.0_SUMMARY.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/MASTER_INSTANCE_MAPPING_v1.0.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/MASTER_REFERENCE.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/PATCH_APPENDIX_v1.1.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/PROPOSAL_BOM_MASTER_BACKEND_DESIGN_v1.0.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `01_FUNDAMENTALS/v1.1_UPDATE_SUMMARY.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/v1.3_PHASE_5_PLACEMENT.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/v1.3_TABLE_STRUCTURE_REVIEW.md` | MISSING | `—` |  |
+| `01_FUNDAMENTALS/v1.3_WORKBOOK_README.md` | PARTIALLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `02_GOVERNANCE/BOM_GAP_REGISTER.md` | MISSING | `—` |  |
+| `02_GOVERNANCE/DASHBOARD_REVIEW_STATUS.md` | MISSING | `—` |  |
+| `02_GOVERNANCE/GOVERNANCE_BADGES.md` | MISSING | `—` |  |
+| `02_GOVERNANCE/GOVERNANCE_FINAL_FREEZE_TRACKER.md` | MISSING | `—` |  |
+| `02_GOVERNANCE/NEPL_CANONICAL_RULES.md` | MISSING | `—` |  |
+| `02_GOVERNANCE/NEPL_CUMULATIVE_VERIFICATION_STANDARD.md` | MISSING | `—` |  |
+| `02_GOVERNANCE/NEPL_PRODUCT_ARCHIVAL_STANDARD.md` | MISSING | `—` |  |
+| `02_GOVERNANCE/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `03_GAP_REGISTERS/BOM_GAP_REGISTER.md` | MISSING | `—` |  |
+| `03_GAP_REGISTERS/MASTER_BOM_GAP_REGISTER_R1.md` | MISSING | `—` |  |
+| `03_GAP_REGISTERS/PROPOSAL_BOM_GAP_REGISTER_R1.md` | MISSING | `—` |  |
+| `03_GAP_REGISTERS/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `04_PHASES/FEEDER_BOM_DOCUMENTATION_INDEX.md` | MISSING | `—` |  |
+| `04_PHASES/FUNDAMENTALS_WINDOW_EXECUTION_SUMMARY.md` | MISSING | `—` |  |
+| `04_PHASES/MASTER_PLANNING_INDEX.md` | MISSING | `—` |  |
+| `04_PHASES/NEXT_STEPS_SUMMARY.md` | MISSING | `—` |  |
+| `04_PHASES/PHASE1_IMPLEMENTATION_SUMMARY.md` | MISSING | `—` |  |
+| `04_PHASES/PHASE2_WINDOWA_EXECUTION_SUMMARY.md` | MISSING | `—` |  |
+| `04_PHASES/PHASE3_EXECUTION_SUMMARY.md` | MISSING | `—` |  |
+| `04_PHASES/PHASE4_IMPLEMENTATION_SUMMARY.md` | MISSING | `—` |  |
+| `04_PHASES/PHASES_1_5_COMPLETE_REVIEW.md` | PARTIALLY_COVERED | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | Also matches: RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md, 08_EXECUTION/PHASE6_EXECUTION_ORDER_REVIEW_AND_RECOMMENDATIONS.md |
+| `04_PHASES/PHASES_3_4_5_MASTER_PLAN.md` | MISSING | `—` |  |
+| `04_PHASES/PHASES_3_4_5_TODO_TRACKER.md` | MISSING | `—` |  |
+| `04_PHASES/PHASE_NAVIGATION_MAP.md` | MISSING | `—` |  |
+| `04_PHASES/PHASE_WISE_CHECKLIST.md` | MISSING | `—` |  |
+| `04_PHASES/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_CANONICAL_FLOW.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_EXECUTION_READINESS_SUMMARY.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_MASTER_STATUS.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_ROUND0_COMPLETE_METHOD.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_ROUND0_IMPLEMENTATION_GUIDE.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_ROUND0_SUMMARY.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/PHASE2_2_VERIFICATION_SQL.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/PHASE2_EXECUTION_SUMMARY.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/GENERIC_ITEM_MASTER/GENERIC_ITEM_MASTER_CUMULATIVE_REVIEW_R1.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/GENERIC_ITEM_MASTER/GENERIC_ITEM_MASTER_CUMULATIVE_REVIEW_R2_FINAL.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/GENERIC_ITEM_MASTER/GENERIC_ITEM_MASTER_FREEZE_v1.0.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/GENERIC_ITEM_MASTER/GENERIC_R2_COMPLETE_SUMMARY.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_BACKEND_DESIGN_INDEX.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_BACKEND_DESIGN_PART1_FOUNDATION.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_BACKEND_DESIGN_PART2_DATA_MODELS.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_BACKEND_DESIGN_PLAN.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_CORRECTION_PLAN.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_CUMULATIVE_REVIEW_R1.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_GAP_REGISTER_R1.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_ROUND0_READINESS.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/CANONICAL_FLOW.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/COPY_RULES.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/GATES_TRACKER.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/MASTER_INDEX.md` | PARTIALLY_COVERED | `01_MASTER_DOCUMENTS/PHASE_6_MASTER_CONSOLIDATED.md` | Also matches: RAG_KB/phase5_pack/01_MASTER_DOCUMENTS/PHASE_6_MASTER_CONSOLIDATED.md |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/PANEL_BOM_DOCUMENT_REGISTER.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/PANEL_BOM_PLANNING_TRACK.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/PANEL_BOM_REVIEW_SUMMARY.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/PANEL_BOM_TODO_TRACKER.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/QUANTITY_CONTRACT.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_CODE_EVIDENCE_PACK_R1.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_CORRECTION_PLAN.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_CUMULATIVE_REVIEW_R1.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_GAP_REGISTER_R1.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_HIERARCHY_CLARIFICATION.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_MASTER_BACKEND_DESIGN_v1.0.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_ILLEGAL_DEFAULTS.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_RULES.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_SUMMARY.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_WRITE_GATEWAY_DESIGN.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_WRITE_PATHS.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/SPECIFIC_ITEM_MASTER/SPECIFIC_ITEM_MASTER_DETAILED_DESIGN.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/SPECIFIC_ITEM_MASTER/SPECIFIC_ITEM_MASTER_ROUND0_READINESS.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/SPECIFIC_ITEM_MASTER/SPECIFIC_ITEM_MASTER_ROUND1_CHECKLIST.md` | MISSING | `—` |  |
+| `05_DESIGN_DOCUMENTS/SPECIFIC_ITEM_MASTER/SPECIFIC_ITEM_MASTER_ROUND1_KICKOFF_TEMPLATE.md` | MISSING | `—` |  |
+| `06_PATCHES/PATCH_DOCUMENT_MAPPING.md` | MISSING | `—` |  |
+| `06_PATCHES/PATCH_INTEGRATION_PLAN.md` | MISSING | `—` |  |
+| `06_PATCHES/PATCH_PLAN.md` | MISSING | `—` |  |
+| `06_PATCHES/PATCH_REGISTER.md` | MISSING | `—` |  |
+| `06_PATCHES/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `07_VERIFICATION/FUNDAMENTALS_VERIFICATION_CHECKLIST.md` | MISSING | `—` |  |
+| `07_VERIFICATION/FUNDAMENTALS_VERIFICATION_QUERIES.md` | MISSING | `—` |  |
+| `07_VERIFICATION/PHASE2_2_VERIFICATION_SQL.md` | MISSING | `—` |  |
+| `07_VERIFICATION/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `08_REVIEWS_AND_ANALYSIS/COMPLETE_PROJECT_VERIFICATION_REPORT.md` | PARTIALLY_COVERED | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | Also matches: RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md |
+| `08_REVIEWS_AND_ANALYSIS/COMPLETE_PROJECT_VERIFICATION_SUMMARY.md` | PARTIALLY_COVERED | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | Also matches: RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md, 00_GOVERNANCE/01_SCOPE/PHASE_6_FINAL_SCOPE_CONFIRMATION.md |
+| `08_REVIEWS_AND_ANALYSIS/COMPLETE_REVIEW_SUMMARY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/DOCUMENT_VERIFICATION_REPORT.md` | PARTIALLY_COVERED | `08_EXECUTION/PHASE7_EXECUTION_DOCS_TRANSFER_VERIFICATION.md` | Also matches: 09_SPECIFICATIONS/PHASE8_SPECIFICATIONS_TRANSFER_VERIFICATION.md, RAG_KB/phase5_pack/09_SPECIFICATIONS/PHASE8_SPECIFICATIONS_TRANSFER_VERIFICATION.md |
+| `08_REVIEWS_AND_ANALYSIS/FILES_FOR_DETAILED_STUDY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/FINAL_VERIFICATION_REPORT.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/FINAL_VERIFICATION_SUMMARY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/FINAL_WORKING_PLAN.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/FUNDAMENTALS_REVIEW_REPORT.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/GAP_REFERENCES_ANALYSIS_AND_INTEGRATION_PLAN.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/GAP_REFERENCES_ANALYSIS_SUMMARY.md` | PARTIALLY_COVERED | `00_GOVERNANCE/01_SCOPE/PHASE_6_SCOPE_GAP_ANALYSIS.md` |  |
+| `08_REVIEWS_AND_ANALYSIS/INDIVIDUAL_FILE_REVIEW_AND_INTEGRATION_PLAN.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_ENHANCED_VERSION.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_FINAL_ANALYSIS.md` | PARTIALLY_COVERED | `01_MASTER_DOCUMENTS/PHASE_6_FINAL_MASTER_CONSOLIDATED_PLAN.md` | Also matches: RAG_KB/phase5_pack/01_MASTER_DOCUMENTS/PHASE_6_FINAL_MASTER_CONSOLIDATED_PLAN.md |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/BOM_GAP_REGISTER.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/CURSOR_EXEC_MASTER_BOM_REVIEW_PLAYBOOK_v1.0_20251218.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/CURSOR_ONLY_EXEC_NEPL_GOVERNANCE_CHECKLIST_v1.0_20251218.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/FEEDER_BOM_EXECUTION_READINESS_SUMMARY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/FEEDER_MASTER_BACKEND_DESIGN_v1.0.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/FUNDAMENTALS_VERIFICATION_CHECKLIST.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/FUNDAMENTALS_VERIFICATION_QUERIES.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_INDEX.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART1_FOUNDATION.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART2_DATA_MODELS.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART3_STRUCTURE.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART4_COPY_PROCESS.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART5_RULES.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PLAN.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_GAP_REGISTER_R1.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_DOCUMENT_COVERAGE_GAP_REPORT.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_PLANNING_INDEX.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_REFERENCE.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PANEL_BOM_DOCUMENT_REGISTER.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PATCH_PLAN.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PATCH_REGISTER.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE1_IMPLEMENTATION_SUMMARY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE2_2_VERIFICATION_SQL.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE4_IMPLEMENTATION_SUMMARY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASES_1_5_COMPLETE_REVIEW.md` | PARTIALLY_COVERED | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | Also matches: RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md, 08_EXECUTION/PHASE6_EXECUTION_ORDER_REVIEW_AND_RECOMMENDATIONS.md |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASES_3_4_5_MASTER_PLAN.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE_NAVIGATION_MAP.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE_WISE_CHECKLIST.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PROPOSAL_BOM_GAP_REGISTER_R1.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PROPOSAL_BOM_MASTER_BACKEND_DESIGN_v1.0.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/RESOLUTION_B_SUMMARY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_REVISION_PLAN.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_REVISION_SUMMARY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/MISSING_DOCUMENTS_SUMMARY.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `08_REVIEWS_AND_ANALYSIS/REVIEW_SUMMARY.md` | PARTIALLY_COVERED | `00_GOVERNANCE/01_SCOPE/PHASE_6_SCOPE_REVIEW_SUMMARY.md` |  |
+| `08_REVIEWS_AND_ANALYSIS/UPDATED_INTEGRATION_PLAN.md` | MISSING | `—` |  |
+| `08_REVIEWS_AND_ANALYSIS/VERIFICATION_COMPLETE_SUMMARY.md` | PARTIALLY_COVERED | `02_WEEK_PLANS/WEEK_0/PHASE6_WEEK0_DETAILED_PLAN.md` |  |
+| `09_CODE_AND_SCRIPTS/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `10_STANDARDS_AND_TEMPLATES/CURSOR_PLAYBOOKS/CURSOR_EXEC_MASTER_BOM_REVIEW_PLAYBOOK_v1.0_20251218.md` | MISSING | `—` |  |
+| `10_STANDARDS_AND_TEMPLATES/GOVERNANCE_CHECKLISTS/CURSOR_ONLY_EXEC_NEPL_GOVERNANCE_CHECKLIST_v1.0_20251218.md` | MISSING | `—` |  |
+| `10_STANDARDS_AND_TEMPLATES/GOVERNANCE_CHECKLISTS/CURSOR_PROMPT_PRODUCT_ARCHIVE_COMPLIANCE_v1.0_20251218.md` | MISSING | `—` |  |
+| `10_STANDARDS_AND_TEMPLATES/ONBOARDING/NEPL_GOVERNANCE_ONBOARDING_POSTER_v1.0_20251218.md` | MISSING | `—` |  |
+| `10_STANDARDS_AND_TEMPLATES/README.md` | FULLY_COVERED | `README.md` | Also matches: scripts/README.md, 04_TASKS_AND_TRACKS/README.md |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/FREEZE_DECLARATION_TEMPLATE.md` | MISSING | `—` |  |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/GAP_CLOSURE_TEMPLATE.md` | MISSING | `—` |  |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/WINDOW_A_EVIDENCE_HEADER_TEMPLATE.md` | MISSING | `—` |  |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/WINDOW_B_EVIDENCE_HEADER_TEMPLATE.md` | MISSING | `—` |  |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/WINDOW_PB_EVIDENCE_HEADER_TEMPLATE.md` | MISSING | `—` |  |
+| `ARCHIVE/ADOPTION_QUICK_ANSWERS.md` | MISSING | `—` |  |
+| `ARCHIVE/ADOPTION_STRATEGIC_ANALYSIS.md` | MISSING | `—` |  |
+| `ARCHIVE/FILE_LINK_GRAPH.md` | MISSING | `—` |  |
+| `ARCHIVE/GAP_REGISTERS_GUIDE.md` | MISSING | `—` |  |
+| `ARCHIVE/IMPLEMENTATION_MAPPING.md` | MISSING | `—` |  |
+| `ARCHIVE/INDEX.md` | PARTIALLY_COVERED | `README_INDEX.md` | Also matches: 03_MATRICES/MATRIX_INDEX.md, RAG_KB/phase5_pack/03_MATRICES/MATRIX_INDEX.md |
+| `ARCHIVE/MASTER_REFERENCE.md` | MISSING | `—` |  |
+| `ARCHIVE/PATCH_APPENDIX_v1.1.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/COMPLETE_PROJECT_VERIFICATION_REPORT.md` | PARTIALLY_COVERED | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | Also matches: RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md |
+| `ARCHIVE/Review Report/COMPLETE_PROJECT_VERIFICATION_SUMMARY.md` | PARTIALLY_COVERED | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | Also matches: RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md, 00_GOVERNANCE/01_SCOPE/PHASE_6_FINAL_SCOPE_CONFIRMATION.md |
+| `ARCHIVE/Review Report/COMPLETE_REVIEW_SUMMARY.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/DOCUMENT_VERIFICATION_REPORT.md` | PARTIALLY_COVERED | `08_EXECUTION/PHASE7_EXECUTION_DOCS_TRANSFER_VERIFICATION.md` | Also matches: 09_SPECIFICATIONS/PHASE8_SPECIFICATIONS_TRANSFER_VERIFICATION.md, RAG_KB/phase5_pack/09_SPECIFICATIONS/PHASE8_SPECIFICATIONS_TRANSFER_VERIFICATION.md |
+| `ARCHIVE/Review Report/FILES_FOR_DETAILED_STUDY.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/FINAL_VERIFICATION_REPORT.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/FINAL_VERIFICATION_SUMMARY.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/FINAL_WORKING_PLAN.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/FUNDAMENTALS_REVIEW_REPORT.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/GAP_REFERENCES_ANALYSIS_AND_INTEGRATION_PLAN.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/GAP_REFERENCES_ANALYSIS_SUMMARY.md` | PARTIALLY_COVERED | `00_GOVERNANCE/01_SCOPE/PHASE_6_SCOPE_GAP_ANALYSIS.md` |  |
+| `ARCHIVE/Review Report/INDIVIDUAL_FILE_REVIEW_AND_INTEGRATION_PLAN.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/MASTER_DOCUMENT_ENHANCED_VERSION.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/MASTER_DOCUMENT_FINAL_ANALYSIS.md` | PARTIALLY_COVERED | `01_MASTER_DOCUMENTS/PHASE_6_FINAL_MASTER_CONSOLIDATED_PLAN.md` | Also matches: RAG_KB/phase5_pack/01_MASTER_DOCUMENTS/PHASE_6_FINAL_MASTER_CONSOLIDATED_PLAN.md |
+| `ARCHIVE/Review Report/MISSING_DOCUMENTS_SUMMARY.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/UPDATED_INTEGRATION_PLAN.md` | MISSING | `—` |  |
+| `ARCHIVE/Review Report/VERIFICATION_COMPLETE_SUMMARY.md` | PARTIALLY_COVERED | `02_WEEK_PLANS/WEEK_0/PHASE6_WEEK0_DETAILED_PLAN.md` |  |
+| `ARCHIVE/v1.1_UPDATE_SUMMARY.md` | MISSING | `—` |  |
+| `REORGANIZATION_COMPLETE.md` | PARTIALLY_COVERED | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | Also matches: RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md |
+| `REORGANIZATION_PLAN.md` | MISSING | `—` |  |
+| `REORGANIZATION_PLAN_SUMMARY.md` | MISSING | `—` |  |
+| `Review Report/MASTER_DOCUMENT_ENHANCED_VERSION.md` | MISSING | `—` |  |
+| `Review Report/MISSING_DOCUMENTS_SUMMARY.md` | MISSING | `—` |  |
+
+---
+
+## 4. Missing Items (Grouped by Intended Authority)
+
+### Canon
+
+| Source File | Why Missing | Why It Matters | Suggested Target (NO INSERTION) |
+|-------------|-------------|----------------|----------------------------------|
+| `01_FUNDAMENTALS/CANONICAL_BOM_HIERARCHY_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `01_FUNDAMENTALS/FUNDAMENTALS_VERIFICATION_CHECKLIST.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `01_FUNDAMENTALS/FUNDAMENTALS_VERIFICATION_QUERIES.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `01_FUNDAMENTALS/FUNDAMENTALS_v2.0_CORRECTIONS_APPLIED.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `01_FUNDAMENTALS/GAP_REGISTERS_GUIDE.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `01_FUNDAMENTALS/MASTER_FUNDAMENTALS_v2.0.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `01_FUNDAMENTALS/PATCH_APPENDIX_v1.1.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `02_GOVERNANCE/GOVERNANCE_FINAL_FREEZE_TRACKER.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `02_GOVERNANCE/NEPL_CANONICAL_RULES.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_CANONICAL_FLOW.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `05_DESIGN_DOCUMENTS/GENERIC_ITEM_MASTER/GENERIC_ITEM_MASTER_FREEZE_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/CANONICAL_FLOW.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `07_VERIFICATION/FUNDAMENTALS_VERIFICATION_CHECKLIST.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `07_VERIFICATION/FUNDAMENTALS_VERIFICATION_QUERIES.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/FREEZE_DECLARATION_TEMPLATE.md` | No equivalent found in V1.0 authoritative sources | May contain constitutional rules or definitions | 00_CANON/ (if constitutional rule) |
+
+### Architecture
+
+| Source File | Why Missing | Why It Matters | Suggested Target (NO INSERTION) |
+|-------------|-------------|----------------|----------------------------------|
+| `01_FUNDAMENTALS/FEEDER_MASTER_BACKEND_DESIGN_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `01_FUNDAMENTALS/PROPOSAL_BOM_MASTER_BACKEND_DESIGN_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `02_GOVERNANCE/BOM_GAP_REGISTER.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `03_GAP_REGISTERS/BOM_GAP_REGISTER.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `03_GAP_REGISTERS/MASTER_BOM_GAP_REGISTER_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `03_GAP_REGISTERS/PROPOSAL_BOM_GAP_REGISTER_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `04_PHASES/FEEDER_BOM_DOCUMENTATION_INDEX.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_EXECUTION_READINESS_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_MASTER_STATUS.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_ROUND0_COMPLETE_METHOD.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_ROUND0_IMPLEMENTATION_GUIDE.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/FEEDER_BOM_ROUND0_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/PHASE2_2_VERIFICATION_SQL.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/FEEDER_BOM/PHASE2_EXECUTION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/GENERIC_ITEM_MASTER/GENERIC_ITEM_MASTER_CUMULATIVE_REVIEW_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/GENERIC_ITEM_MASTER/GENERIC_ITEM_MASTER_CUMULATIVE_REVIEW_R2_FINAL.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/GENERIC_ITEM_MASTER/GENERIC_R2_COMPLETE_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_BACKEND_DESIGN_INDEX.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_BACKEND_DESIGN_PART1_FOUNDATION.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_BACKEND_DESIGN_PART2_DATA_MODELS.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_BACKEND_DESIGN_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_CORRECTION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_CUMULATIVE_REVIEW_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_GAP_REGISTER_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/MASTER_BOM/MASTER_BOM_ROUND0_READINESS.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/COPY_RULES.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/GATES_TRACKER.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/PANEL_BOM_DOCUMENT_REGISTER.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/PANEL_BOM_PLANNING_TRACK.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/PANEL_BOM_REVIEW_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/PANEL_BOM_TODO_TRACKER.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/QUANTITY_CONTRACT.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_CODE_EVIDENCE_PACK_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_CORRECTION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_CUMULATIVE_REVIEW_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_GAP_REGISTER_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_HIERARCHY_CLARIFICATION.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/PROPOSAL_BOM/PROPOSAL_BOM_MASTER_BACKEND_DESIGN_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_ILLEGAL_DEFAULTS.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_RULES.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_WRITE_GATEWAY_DESIGN.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/RESOLUTION_B/RESOLUTION_B_WRITE_PATHS.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/SPECIFIC_ITEM_MASTER/SPECIFIC_ITEM_MASTER_DETAILED_DESIGN.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/SPECIFIC_ITEM_MASTER/SPECIFIC_ITEM_MASTER_ROUND0_READINESS.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/SPECIFIC_ITEM_MASTER/SPECIFIC_ITEM_MASTER_ROUND1_CHECKLIST.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `05_DESIGN_DOCUMENTS/SPECIFIC_ITEM_MASTER/SPECIFIC_ITEM_MASTER_ROUND1_KICKOFF_TEMPLATE.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/BOM_GAP_REGISTER.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/CURSOR_EXEC_MASTER_BOM_REVIEW_PLAYBOOK_v1.0_20251218.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/FEEDER_BOM_EXECUTION_READINESS_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/FEEDER_MASTER_BACKEND_DESIGN_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_INDEX.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART1_FOUNDATION.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART2_DATA_MODELS.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART3_STRUCTURE.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART4_COPY_PROCESS.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PART5_RULES.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_BACKEND_DESIGN_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_BOM_GAP_REGISTER_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PANEL_BOM_DOCUMENT_REGISTER.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PROPOSAL_BOM_GAP_REGISTER_R1.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PROPOSAL_BOM_MASTER_BACKEND_DESIGN_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+| `10_STANDARDS_AND_TEMPLATES/CURSOR_PLAYBOOKS/CURSOR_EXEC_MASTER_BOM_REVIEW_PLAYBOOK_v1.0_20251218.md` | No equivalent found in V1.0 authoritative sources | May contain design patterns or system structure | 12_ARCHITECTURE/ |
+
+### Planning/SOP
+
+| Source File | Why Missing | Why It Matters | Suggested Target (NO INSERTION) |
+|-------------|-------------|----------------|----------------------------------|
+| `01_FUNDAMENTALS/ADOPTION_QUICK_ANSWERS.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `01_FUNDAMENTALS/ADOPTION_STRATEGIC_ANALYSIS.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `01_FUNDAMENTALS/EXECUTION_WINDOW_SOP.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `01_FUNDAMENTALS/FUNDAMENTALS_v2.0_PHASE_5_GAP_ANALYSIS.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `01_FUNDAMENTALS/IMPLEMENTATION_MAPPING.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `01_FUNDAMENTALS/v1.3_PHASE_5_PLACEMENT.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `02_GOVERNANCE/GOVERNANCE_BADGES.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `02_GOVERNANCE/NEPL_CUMULATIVE_VERIFICATION_STANDARD.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `02_GOVERNANCE/NEPL_PRODUCT_ARCHIVAL_STANDARD.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/FUNDAMENTALS_WINDOW_EXECUTION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/MASTER_PLANNING_INDEX.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/NEXT_STEPS_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/PHASE1_IMPLEMENTATION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/PHASE2_WINDOWA_EXECUTION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/PHASE3_EXECUTION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/PHASE4_IMPLEMENTATION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/PHASES_3_4_5_MASTER_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/PHASES_3_4_5_TODO_TRACKER.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/PHASE_NAVIGATION_MAP.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `04_PHASES/PHASE_WISE_CHECKLIST.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `07_VERIFICATION/PHASE2_2_VERIFICATION_SQL.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_PLANNING_INDEX.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE1_IMPLEMENTATION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE2_2_VERIFICATION_SQL.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE4_IMPLEMENTATION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASES_3_4_5_MASTER_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE_NAVIGATION_MAP.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASE_WISE_CHECKLIST.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `10_STANDARDS_AND_TEMPLATES/GOVERNANCE_CHECKLISTS/CURSOR_ONLY_EXEC_NEPL_GOVERNANCE_CHECKLIST_v1.0_20251218.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `10_STANDARDS_AND_TEMPLATES/ONBOARDING/NEPL_GOVERNANCE_ONBOARDING_POSTER_v1.0_20251218.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/WINDOW_A_EVIDENCE_HEADER_TEMPLATE.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/WINDOW_B_EVIDENCE_HEADER_TEMPLATE.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/WINDOW_PB_EVIDENCE_HEADER_TEMPLATE.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `ARCHIVE/ADOPTION_QUICK_ANSWERS.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `ARCHIVE/ADOPTION_STRATEGIC_ANALYSIS.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+| `ARCHIVE/IMPLEMENTATION_MAPPING.md` | No equivalent found in V1.0 authoritative sources | May contain execution processes or operational guidance | 00_GOVERNANCE/01_SCOPE/ or 00_GOVERNANCE/02_PLANNING/ |
+
+### Reference
+
+| Source File | Why Missing | Why It Matters | Suggested Target (NO INSERTION) |
+|-------------|-------------|----------------|----------------------------------|
+| `00_INDEX.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/FILE_LINK_GRAPH.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/FUNDAMENTALS_BASELINE_BUNDLE_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/FUNDAMENTALS_INDEX.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/FUNDAMENTALS_SERIAL_TRACKER_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/GAP_CORRECTION_STATUS_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/MASTER_FUNDAMENTALS_v2.0_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/MASTER_INSTANCE_MAPPING_v1.0.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/MASTER_REFERENCE.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/v1.1_UPDATE_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `01_FUNDAMENTALS/v1.3_TABLE_STRUCTURE_REVIEW.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `02_GOVERNANCE/DASHBOARD_REVIEW_STATUS.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `06_PATCHES/PATCH_DOCUMENT_MAPPING.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `06_PATCHES/PATCH_INTEGRATION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `06_PATCHES/PATCH_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `06_PATCHES/PATCH_REGISTER.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/COMPLETE_REVIEW_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/FILES_FOR_DETAILED_STUDY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/FINAL_VERIFICATION_REPORT.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/FINAL_VERIFICATION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/FINAL_WORKING_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/FUNDAMENTALS_REVIEW_REPORT.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/GAP_REFERENCES_ANALYSIS_AND_INTEGRATION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/INDIVIDUAL_FILE_REVIEW_AND_INTEGRATION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_ENHANCED_VERSION.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/CURSOR_ONLY_EXEC_NEPL_GOVERNANCE_CHECKLIST_v1.0_20251218.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/FUNDAMENTALS_VERIFICATION_CHECKLIST.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/FUNDAMENTALS_VERIFICATION_QUERIES.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_DOCUMENT_COVERAGE_GAP_REPORT.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/MASTER_REFERENCE.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PATCH_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PATCH_REGISTER.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/RESOLUTION_B_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_REVISION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_REVISION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/MISSING_DOCUMENTS_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `08_REVIEWS_AND_ANALYSIS/UPDATED_INTEGRATION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `10_STANDARDS_AND_TEMPLATES/GOVERNANCE_CHECKLISTS/CURSOR_PROMPT_PRODUCT_ARCHIVE_COMPLIANCE_v1.0_20251218.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `10_STANDARDS_AND_TEMPLATES/TEMPLATES/GAP_CLOSURE_TEMPLATE.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/FILE_LINK_GRAPH.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/GAP_REGISTERS_GUIDE.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/MASTER_REFERENCE.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/PATCH_APPENDIX_v1.1.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/COMPLETE_REVIEW_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/FILES_FOR_DETAILED_STUDY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/FINAL_VERIFICATION_REPORT.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/FINAL_VERIFICATION_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/FINAL_WORKING_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/FUNDAMENTALS_REVIEW_REPORT.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/GAP_REFERENCES_ANALYSIS_AND_INTEGRATION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/INDIVIDUAL_FILE_REVIEW_AND_INTEGRATION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/MASTER_DOCUMENT_ENHANCED_VERSION.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/MISSING_DOCUMENTS_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/Review Report/UPDATED_INTEGRATION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `ARCHIVE/v1.1_UPDATE_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `REORGANIZATION_PLAN.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `REORGANIZATION_PLAN_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `Review Report/MASTER_DOCUMENT_ENHANCED_VERSION.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+| `Review Report/MISSING_DOCUMENTS_SUMMARY.md` | No equivalent found in V1.0 authoritative sources | May contain reference material or historical context | 11_REFERENCE/ |
+
+---
+
+## 5. Overlap / Duplication Candidates
+
+| Source File | Overlaps With V1.0 | Recommendation |
+|-------------|---------------------|-----------------|
+| `01_FUNDAMENTALS/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `01_FUNDAMENTALS/v1.3_WORKBOOK_README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `02_GOVERNANCE/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `03_GAP_REGISTERS/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `04_PHASES/PHASES_1_5_COMPLETE_REVIEW.md` | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md`, `RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | MERGE |
+| `04_PHASES/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `05_DESIGN_DOCUMENTS/PANEL_BOM/MASTER_INDEX.md` | `01_MASTER_DOCUMENTS/PHASE_6_MASTER_CONSOLIDATED.md`, `RAG_KB/phase5_pack/01_MASTER_DOCUMENTS/PHASE_6_MASTER_CONSOLIDATED.md` | REVIEW |
+| `05_DESIGN_DOCUMENTS/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `06_PATCHES/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `07_VERIFICATION/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `08_REVIEWS_AND_ANALYSIS/COMPLETE_PROJECT_VERIFICATION_REPORT.md` | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md`, `RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | REVIEW |
+| `08_REVIEWS_AND_ANALYSIS/COMPLETE_PROJECT_VERIFICATION_SUMMARY.md` | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md`, `RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | MERGE |
+| `08_REVIEWS_AND_ANALYSIS/DOCUMENT_VERIFICATION_REPORT.md` | `08_EXECUTION/PHASE7_EXECUTION_DOCS_TRANSFER_VERIFICATION.md`, `09_SPECIFICATIONS/PHASE8_SPECIFICATIONS_TRANSFER_VERIFICATION.md` | MERGE |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_FINAL_ANALYSIS.md` | `01_MASTER_DOCUMENTS/PHASE_6_FINAL_MASTER_CONSOLIDATED_PLAN.md`, `RAG_KB/phase5_pack/01_MASTER_DOCUMENTS/PHASE_6_FINAL_MASTER_CONSOLIDATED_PLAN.md` | REVIEW |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/PHASES_1_5_COMPLETE_REVIEW.md` | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md`, `RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | MERGE |
+| `08_REVIEWS_AND_ANALYSIS/MASTER_DOCUMENT_GAP_REFERENCES/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `08_REVIEWS_AND_ANALYSIS/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `09_CODE_AND_SCRIPTS/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `10_STANDARDS_AND_TEMPLATES/README.md` | `README.md`, `scripts/README.md` | MERGE |
+| `ARCHIVE/INDEX.md` | `README_INDEX.md`, `03_MATRICES/MATRIX_INDEX.md` | MERGE |
+| `ARCHIVE/Review Report/COMPLETE_PROJECT_VERIFICATION_REPORT.md` | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md`, `RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | REVIEW |
+| `ARCHIVE/Review Report/COMPLETE_PROJECT_VERIFICATION_SUMMARY.md` | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md`, `RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | MERGE |
+| `ARCHIVE/Review Report/DOCUMENT_VERIFICATION_REPORT.md` | `08_EXECUTION/PHASE7_EXECUTION_DOCS_TRANSFER_VERIFICATION.md`, `09_SPECIFICATIONS/PHASE8_SPECIFICATIONS_TRANSFER_VERIFICATION.md` | MERGE |
+| `ARCHIVE/Review Report/MASTER_DOCUMENT_FINAL_ANALYSIS.md` | `01_MASTER_DOCUMENTS/PHASE_6_FINAL_MASTER_CONSOLIDATED_PLAN.md`, `RAG_KB/phase5_pack/01_MASTER_DOCUMENTS/PHASE_6_FINAL_MASTER_CONSOLIDATED_PLAN.md` | REVIEW |
+| `REORGANIZATION_COMPLETE.md` | `03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md`, `RAG_KB/phase5_pack/03_MATRICES/PHASE6_MATRIX_VERIFICATION_COMPLETE.md` | REVIEW |
+
+---
+
+## 6. Hard Gaps Raised
+
+**GAP — DO NOT GUESS:** The following items could not be safely classified or placed:
+
+| Source File | Reason for Gap |
+|-------------|----------------|
+| `01_FUNDAMENTALS/ADOPTION_STRATEGIC_ANALYSIS.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `01_FUNDAMENTALS/FUNDAMENTALS_v2.0_PHASE_5_GAP_ANALYSIS.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `01_FUNDAMENTALS/GAP_CORRECTION_STATUS_SUMMARY.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `01_FUNDAMENTALS/MASTER_FUNDAMENTALS_v2.0_SUMMARY.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `01_FUNDAMENTALS/v1.1_UPDATE_SUMMARY.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `01_FUNDAMENTALS/v1.3_TABLE_STRUCTURE_REVIEW.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `02_GOVERNANCE/DASHBOARD_REVIEW_STATUS.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `04_PHASES/FUNDAMENTALS_WINDOW_EXECUTION_SUMMARY.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `04_PHASES/NEXT_STEPS_SUMMARY.md` | Ambiguous authority - could be Reference or Planning/SOP |
+| `04_PHASES/PHASE1_IMPLEMENTATION_SUMMARY.md` | Ambiguous authority - could be Reference or Planning/SOP |
+
+---
+
+**Report Generated:** 2026-01-14T13:18:04.879177
+**Method:** Concept matching, heading analysis, authority classification
+**Status:** READ-ONLY AUDIT COMPLETE — No modifications performed

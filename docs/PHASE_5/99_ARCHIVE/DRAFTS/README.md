@@ -2,18 +2,22 @@
 
 **Version:** 1.0  
 **Date:** 2025-01-27  
-**Status:** CANONICAL  
+**Status:** REFERENCE_ONLY (Archive/Drafts)  
 **Owner:** Phase 5 Senate  
+
+_Link audit fix: 2026-01-21 (Phase E) — archive/draft banner added and links redirected to canonical Phase 5 locations; no content meaning changed._
+
+> Reference-only: this is an **archive/draft** document. Links may be stale; canonical Phase 5 docs live under `docs/PHASE_5/`.
 
 ## Purpose
 This is the Phase 5 Senate workspace - the canonical source of truth for Phase 5 analysis and design work.
 
 ## Quick Navigation
 
-- **Start Here:** [`00_GOVERNANCE/PHASE_5_MASTER_ALIGNMENT.md`](00_GOVERNANCE/PHASE_5_MASTER_ALIGNMENT.md) - Complete alignment guide
-- **Folder Mapping:** [`00_GOVERNANCE/PHASE_4_5_FOLDER_MAPPING_GUIDE.md`](00_GOVERNANCE/PHASE_4_5_FOLDER_MAPPING_GUIDE.md) ⭐ - Complete WHERE/WHEN/WHY for all 4 folders
-- **Document Index:** [`00_GOVERNANCE/PHASE_5_DOC_INDEX.md`](00_GOVERNANCE/PHASE_5_DOC_INDEX.md) - All files mapped
-- **Requirement Trace:** [`05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md`](05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md) - Requirements tracking
+- **Start Here:** [`00_GOVERNANCE/PHASE_5_MASTER_ALIGNMENT.md`](../../00_GOVERNANCE/PHASE_5_MASTER_ALIGNMENT.md) - Complete alignment guide
+- **Folder Mapping:** [`00_GOVERNANCE/PHASE_4_5_FOLDER_MAPPING_GUIDE.md`](../../00_GOVERNANCE/PHASE_4_5_FOLDER_MAPPING_GUIDE.md) ⭐ - Complete WHERE/WHEN/WHY for all 4 folders
+- **Document Index:** [`00_GOVERNANCE/PHASE_5_DOC_INDEX.md`](../../00_GOVERNANCE/PHASE_5_DOC_INDEX.md) - All files mapped
+- **Requirement Trace:** [`05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md`](../../05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md) - Requirements tracking
 
 ---
 
@@ -59,17 +63,17 @@ Phase 5 aligns with **Master Plan P1 + P2**:
 ## Key Documents
 
 ### Governance
-- [`PHASE_5_CHARTER.md`](00_GOVERNANCE/PHASE_5_CHARTER.md) - Phase 5 charter
-- [`PHASE_5_SCOPE_FENCE.md`](00_GOVERNANCE/PHASE_5_SCOPE_FENCE.md) - Scope definition
-- [`PHASE_5_MASTER_ALIGNMENT.md`](00_GOVERNANCE/PHASE_5_MASTER_ALIGNMENT.md) - Complete alignment guide
+- [`PHASE_5_CHARTER.md`](../../00_GOVERNANCE/PHASE_5_CHARTER.md) - Phase 5 charter
+- [`PHASE_5_SCOPE_FENCE.md`](../../00_GOVERNANCE/PHASE_5_SCOPE_FENCE.md) - Scope definition
+- [`PHASE_5_MASTER_ALIGNMENT.md`](../../00_GOVERNANCE/PHASE_5_MASTER_ALIGNMENT.md) - Complete alignment guide
 
 ### Freeze Gate
-- [`SPEC_5_FREEZE_GATE_CHECKLIST.md`](02_FREEZE_GATE/SPEC_5_FREEZE_GATE_CHECKLIST.md) - Freeze verification
-- [`PHASE_5_PENDING_UPGRADES_INTEGRATION.md`](02_FREEZE_GATE/PHASE_5_PENDING_UPGRADES_INTEGRATION.md) - Integration guide
+- [`SPEC_5_FREEZE_GATE_CHECKLIST.md`](../../02_FREEZE_GATE/SPEC_5_FREEZE_GATE_CHECKLIST.md) - Freeze verification
+- [`PHASE_5_PENDING_UPGRADES_INTEGRATION.md`](../../02_FREEZE_GATE/PHASE_5_PENDING_UPGRADES_INTEGRATION.md) - Integration guide
 
 ### Traceability
-- [`PHASE_5_REQUIREMENT_TRACE.md`](05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md) - Requirements tracking
-- [`FILE_TO_REQUIREMENT_MAP.csv`](05_TRACEABILITY/FILE_TO_REQUIREMENT_MAP.csv) - File mapping
+- [`PHASE_5_REQUIREMENT_TRACE.md`](../../05_TRACEABILITY/PHASE_5_REQUIREMENT_TRACE.md) - Requirements tracking
+- [`FILE_TO_REQUIREMENT_MAP.csv`](../../05_TRACEABILITY/FILE_TO_REQUIREMENT_MAP.csv) - File mapping
 
 ---
 

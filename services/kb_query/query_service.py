@@ -31,13 +31,33 @@ class QueryService:
             index_root: Path to RAG_INDEX/ (defaults to REPO_ROOT/RAG_INDEX)
         """
         REPO_ROOT = Path(__file__).parent.parent.parent
-        self.index_root = index_root or (REPO_ROOT / "RAG_INDEX")
+        base_index_root = index_root or (REPO_ROOT / "RAG_INDEX")
         
-        # Initialize index objects
-        keyword_db_path = self.index_root / "keyword_index.db"
+        # Check for subdirectory from environment variable
+        import os
+        subdir = os.getenv("RAG_INDEX_SUBDIR", "").strip()
+        if subdir:
+            # If index_root was already provided with subdir, don't double it
+            if str(base_index_root).endswith(subdir):
+                self.index_root = base_index_root
+            else:
+                self.index_root = base_index_root / subdir
+        else:
+            self.index_root = base_index_root
+            # Auto-detect: if root doesn't have index, try decisions or work
+            if not (self.index_root / "keyword_index_metadata.json").exists():
+                if (self.index_root / "decisions" / "keyword_index_metadata.json").exists():
+                    self.index_root = self.index_root / "decisions"
+                elif (self.index_root / "work" / "keyword_index_metadata.json").exists():
+                    self.index_root = self.index_root / "work"
+        
+        # Use keyword_index_metadata.json (rank-bm25 format), not keyword_index.db
+        # KeywordIndex expects a path, but we'll pass the metadata file path
+        # The KeywordIndex will derive the metadata file from the index_path
+        keyword_index_base = self.index_root / "keyword_index"
         vector_index_path = self.index_root / "vector_index.faiss"
         
-        self.keyword_index = KeywordIndex(keyword_db_path)
+        self.keyword_index = KeywordIndex(keyword_index_base)
         self.vector_index = VectorIndex(vector_index_path)
         
         # Load indexes
