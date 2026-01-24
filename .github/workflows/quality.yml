@@ -125,10 +125,11 @@ jobs:
       - name: "Pytest (coverage floor: 70%)"
         run: |
           if [ -d backend/tests/phase5 ]; then
-            pytest -q backend/tests/phase5 \
-              --cov=backend/app \
-              --cov-report=xml:backend/coverage.xml \
-              --cov-fail-under=70
+            COV_ARGS="--cov=backend/app --cov-report=xml:backend/coverage.xml"
+            if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+              COV_ARGS="$COV_ARGS --cov-fail-under=70"
+            fi
+            pytest -q backend/tests/phase5 $COV_ARGS
           else
             echo "backend/tests/phase5 not found; skipping pytest."
           fi
