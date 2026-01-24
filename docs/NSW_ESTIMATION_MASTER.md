@@ -1,11 +1,13 @@
 # NSW Estimation Software — Master Project Documentation
 
-**Project:** NSW Estimation Software  
-**Origin:** Evolved from NEPL Estimation Software V2  
-**Repository:** NSW_Estimation_Software  
-**Document:** docs/NSW_ESTIMATION_MASTER.md  
-**Version:** v3.0 (FROZEN)  
-**Status:** Phase 4 Execution (In Progress) | Phase 5 Locked (Not Started)  
+![Coverage](docs/badges/coverage.svg)
+
+**Project:** NSW Estimation Software
+**Origin:** Evolved from NEPL Estimation Software V2
+**Repository:** NSW_Estimation_Software
+**Document:** docs/NSW_ESTIMATION_MASTER.md
+**Version:** v3.0 (FROZEN)
+**Status:** Phase 4 Execution (In Progress) | Phase 5 Locked (Not Started)
 **Last Updated:** 2025-12-18
 
 **Freeze Criteria:** Allowed only after validation of internal consistency (Section: Gate Canon + Paths + Terminology Lock).
@@ -77,10 +79,10 @@ Transform NEPL Estimation Software V2 into NSW Estimation Software through a con
 
 ## Terminology Lock
 
-**NEPL:** Source system (frozen meaning)  
-**NSW:** Next-generation target system (Phase 5 onward)  
-**Baseline:** Git-tagged factual state used as governing truth  
-**PROTECTED:** Core business logic (wrapper-only changes allowed)  
+**NEPL:** Source system (frozen meaning)
+**NSW:** Next-generation target system (Phase 5 onward)
+**Baseline:** Git-tagged factual state used as governing truth
+**PROTECTED:** Core business logic (wrapper-only changes allowed)
 **Execution Window:** Governed scope block with evidence and rollback discipline
 
 ### Truth Level Badges
@@ -239,8 +241,8 @@ Phase 5: NSW Extraction (🔒 Locked — Not Started)
 
 ## Phase-0 Foundation Track (Pre-Phase)
 
-**Status:** ✅ COMPLETE  
-**Purpose:** Fundamentals gap correction, documentation closure, and verification readiness  
+**Status:** ✅ COMPLETE
+**Purpose:** Fundamentals gap correction, documentation closure, and verification readiness
 **Type:** Foundation Track (Pre-Phase) — not an execution phase
 
 **Objective:** Establish fundamentals baseline, correct gaps, and prepare verification readiness before Phase 1 begins.
@@ -262,7 +264,7 @@ Phase 5: NSW Extraction (🔒 Locked — Not Started)
 
 ### Phase 1 — Baseline Capture ✅ COMPLETE
 
-**Objective:** Establish a clean, factual snapshot of what exists.  
+**Objective:** Establish a clean, factual snapshot of what exists.
 **Date:** 2025-12-17
 
 **Modules captured (8):**
@@ -289,7 +291,7 @@ Phase 5: NSW Extraction (🔒 Locked — Not Started)
 
 ### Phase 2 — Traceability & Mapping ✅ COMPLETE
 
-**Objective:** Map features → routes → controllers → services → models → views/JS.  
+**Objective:** Map features → routes → controllers → services → models → views/JS.
 **Date:** 2025-12-17
 
 **Key deliverables:**
@@ -306,7 +308,7 @@ Phase 5: NSW Extraction (🔒 Locked — Not Started)
 
 ### Phase 3 — Planning & Roadmap ✅ COMPLETE
 
-**Objective:** Convert knowledge into executable, low-risk delivery plan.  
+**Objective:** Convert knowledge into executable, low-risk delivery plan.
 **Date:** 2025-12-17 to 2025-12-18
 
 **Control stages (S0–S5):**
@@ -386,8 +388,8 @@ Phase 5 outputs are documents only. Any implementation must be registered as Pha
 
 ⚠️ **SCOPE FENCE:** Design + verification references only; no new implementation inside v3.0.
 
-**Status:** ✅ CLOSED (Option-A Implemented + Runtime Verified)  
-**Date:** 2025-12-19  
+**Status:** ✅ CLOSED (Option-A Implemented + Runtime Verified)
+**Date:** 2025-12-19
 **Scope:** Proposal BOM (QuotationSaleBomItem) L2 write enforcement analysis
 
 **Summary:**
@@ -411,8 +413,8 @@ Resolution-B identified all write paths, illegal defaults, and required fixes to
 
 ⚠️ **SCOPE FENCE:** Planning artifacts only; execution gated by Panel BOM Gates Tracker.
 
-**Status:** 📋 PLANNING COMPLETE (Execution Deferred)  
-**Track:** PB0-PB6  
+**Status:** 📋 PLANNING COMPLETE (Execution Deferred)
+**Track:** PB0-PB6
 **Purpose:** Primary planning track for Panel BOM design layer aligned with Fundamentals + Feeder BOM governance
 
 **Planning Phases:**
@@ -958,4 +960,3 @@ Complete mapping of gaps to layers:
 ---
 
 **END OF DOCUMENT**
-

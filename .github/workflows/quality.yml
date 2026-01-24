@@ -64,6 +64,8 @@ jobs:
 
   backend-tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -75,14 +77,34 @@ jobs:
           if [ -f backend/requirements.txt ]; then
             pip install -r backend/requirements.txt
           fi
-          pip install pytest
+          pip install pytest pytest-cov
       - name: Pytest (phase5)
         run: |
           if [ -d backend/tests/phase5 ]; then
-            PYTHONPATH=backend pytest -q backend/tests/phase5
+            PYTHONPATH=backend pytest -q backend/tests/phase5 \
+              --cov=backend/app \
+              --cov-report=xml:backend/coverage.xml \
+              --cov-fail-under=70 \
+              --cov-omit="*/alembic/*,*/tests/*"
           else
             echo "backend/tests/phase5 not found; skipping pytest."
           fi
+      - name: Generate coverage badge (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python -m pip install 'genbadge[coverage]'
+          mkdir -p docs/badges
+          genbadge coverage \
+            -i backend/coverage.xml \
+            -o docs/badges/coverage.svg
+      - name: Commit coverage badge (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/badges/coverage.svg
+          git commit -m "chore(badge): update coverage.svg [skip ci]" || echo "No badge change"
+          git push
 
   frontend-build:
     runs-on: ubuntu-latest
@@ -104,4 +126,3 @@ jobs:
           else
             echo "frontend/package.json not found; skipping build."
           fi
-
