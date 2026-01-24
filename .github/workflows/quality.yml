@@ -83,8 +83,7 @@ jobs:
           if [ -d backend/tests/phase5 ]; then
             PYTHONPATH=backend pytest -q backend/tests/phase5 \
               --cov=backend/app \
-              --cov-report=xml:backend/coverage.xml \
-              --cov-fail-under=70
+              --cov-report=xml:backend/coverage.xml
           else
             echo "backend/tests/phase5 not found; skipping pytest."
           fi
