@@ -66,6 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -95,14 +96,18 @@ jobs:
           genbadge coverage \
             -i backend/coverage.xml \
             -o docs/badges/coverage.svg
-      - name: Commit coverage badge (main only)
+      - name: Create coverage badge PR (main only)
         if: github.ref == 'refs/heads/main'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/badges/coverage.svg
-          git commit -m "chore(badge): update coverage.svg [skip ci]" || echo "No badge change"
-          git push
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(badge): update coverage.svg [skip ci]"
+          title: "chore(badge): update coverage.svg"
+          body: "Automated coverage badge update."
+          branch: "bot/coverage-badge-${{ github.run_id }}"
+          base: "main"
+          add-paths: |
+            docs/badges/coverage.svg
 
   frontend-build:
     runs-on: ubuntu-latest
