@@ -2,6 +2,7 @@
 Catalog endpoints (v1)
 SKU-first, item-browse friendly
 """
+
 import csv
 import io
 import re
@@ -10,7 +11,7 @@ from decimal import Decimal, InvalidOperation
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, UploadFile, File, HTTPException
+from fastapi import APIRouter, Depends, Query, UploadFile, File
 
 from app.core.raise_api_error import raise_api_error
 from app.core.error_codes import ErrorCodes
@@ -67,15 +68,12 @@ def list_items(
 
     if q:
         like = f"%{q}%"
-        query = query.filter(or_(CatalogItem.item_code.ilike(like), CatalogItem.name.ilike(like)))
+        query = query.filter(
+            or_(CatalogItem.item_code.ilike(like), CatalogItem.name.ilike(like))
+        )
 
     total = query.count()
-    items = (
-        query.order_by(CatalogItem.id.desc())
-        .offset(offset)
-        .limit(limit)
-        .all()
-    )
+    items = query.order_by(CatalogItem.id.desc()).offset(offset).limit(limit).all()
 
     return {
         "total": total,
@@ -137,7 +135,9 @@ def get_item(item_id: int, db: Session = Depends(get_db)):
                 "make": s.make,
                 "uom": s.uom,
                 "is_active": s.is_active,
-                "current_price": str(s.current_price) if s.current_price is not None else None,
+                "current_price": (
+                    str(s.current_price) if s.current_price is not None else None
+                ),
                 "current_currency": s.current_currency,
                 "current_price_updated_at": s.current_price_updated_at,
             }
@@ -168,19 +168,16 @@ def list_skus(
 
     if q:
         like = f"%{q}%"
-        query = query.filter(or_(
-            CatalogSku.sku_code.ilike(like),
-            CatalogSku.name.ilike(like),
-            CatalogSku.description.ilike(like),
-        ))
+        query = query.filter(
+            or_(
+                CatalogSku.sku_code.ilike(like),
+                CatalogSku.name.ilike(like),
+                CatalogSku.description.ilike(like),
+            )
+        )
 
     total = query.count()
-    skus = (
-        query.order_by(CatalogSku.id.desc())
-        .offset(offset)
-        .limit(limit)
-        .all()
-    )
+    skus = query.order_by(CatalogSku.id.desc()).offset(offset).limit(limit).all()
 
     return {
         "total": total,
@@ -196,7 +193,9 @@ def list_skus(
                 "make": s.make,
                 "uom": s.uom,
                 "is_active": s.is_active,
-                "current_price": str(s.current_price) if s.current_price is not None else None,
+                "current_price": (
+                    str(s.current_price) if s.current_price is not None else None
+                ),
                 "current_currency": s.current_currency,
                 "current_price_updated_at": s.current_price_updated_at,
             }
@@ -236,7 +235,9 @@ def get_sku(sku_id: int, db: Session = Depends(get_db)):
         "make": sku.make,
         "uom": sku.uom,
         "is_active": sku.is_active,
-        "current_price": str(sku.current_price) if sku.current_price is not None else None,
+        "current_price": (
+            str(sku.current_price) if sku.current_price is not None else None
+        ),
         "current_currency": sku.current_currency,
         "current_price_updated_at": sku.current_price_updated_at,
         "price_history": [
@@ -270,7 +271,7 @@ def import_skus(
     - Creates PriceList for the batch
     - Archives prices in SkuPrice
     - Updates CatalogSku.current_price for fast quoting
-    
+
     Behavior:
     - dry_run=True: validate only, return errors
     - dry_run=False: reject if any errors, else commit
@@ -325,66 +326,78 @@ def import_skus(
 
         # FINAL-only guard (strict governance)
         if stage and stage != "FINAL":
-            errors.append({
-                "row": i,
-                "field": "import_stage",
-                "error": "Only FINAL imports allowed",
-                "value": stage
-            })
+            errors.append(
+                {
+                    "row": i,
+                    "field": "import_stage",
+                    "error": "Only FINAL imports allowed",
+                    "value": stage,
+                }
+            )
             continue
 
         # Required field validation
         if not make or not sku_code:
-            errors.append({
-                "row": i,
-                "field": "make/sku_code",
-                "error": "Required fields missing",
-                "value": f"make='{make}', sku_code='{sku_code}'"
-            })
+            errors.append(
+                {
+                    "row": i,
+                    "field": "make/sku_code",
+                    "error": "Required fields missing",
+                    "value": f"make='{make}', sku_code='{sku_code}'",
+                }
+            )
             continue
 
         # SKU validation
         if len(sku_code) < 3 or not any(c.isalpha() for c in sku_code):
-            errors.append({
-                "row": i,
-                "field": "sku_code",
-                "error": "Invalid SKU (must be at least 3 chars and contain letters)",
-                "value": sku_code
-            })
+            errors.append(
+                {
+                    "row": i,
+                    "field": "sku_code",
+                    "error": "Invalid SKU (must be at least 3 chars and contain letters)",
+                    "value": sku_code,
+                }
+            )
             continue
 
         # Currency validation
         if currency and len(currency) != 3:
-            errors.append({
-                "row": i,
-                "field": "currency",
-                "error": "Must be 3-letter code (e.g., INR, USD)",
-                "value": currency
-            })
+            errors.append(
+                {
+                    "row": i,
+                    "field": "currency",
+                    "error": "Must be 3-letter code (e.g., INR, USD)",
+                    "value": currency,
+                }
+            )
             continue
 
         # Price validation
         price = _to_decimal(price_raw)
         if price is None or price < 0:
-            errors.append({
-                "row": i,
-                "field": "list_price",
-                "error": "Invalid price (must be numeric >= 0)",
-                "value": price_raw
-            })
+            errors.append(
+                {
+                    "row": i,
+                    "field": "list_price",
+                    "error": "Invalid price (must be numeric >= 0)",
+                    "value": price_raw,
+                }
+            )
             continue
 
-        valid.append({
-            "make": make,
-            "sku_code": sku_code,
-            "series": (r.get("series") or "").strip() or None,
-            "description": (r.get("description") or "").strip() or None,
-            "uom": uom or "EA",
-            "currency": currency or "INR",
-            "notes": (r.get("notes") or "").strip() or None,
-            "list_price": price,
-            "import_stage": (r.get("import_stage") or "").strip() or None,
-        })
+        valid.append(
+            {
+                "make": make,
+                "sku_code": sku_code,
+                "series": (r.get("series") or "").strip() or None,
+                "description": (r.get("description") or "").strip() or None,
+                "uom": uom or "EA",
+                "currency": currency or "INR",
+                "notes": (r.get("notes") or "").strip() or None,
+                "list_price": price,
+                "import_stage": (r.get("import_stage") or "").strip() or None,
+            }
+        )
 
     summary = {
         "batch_id": batch_id,
@@ -422,9 +435,7 @@ def import_skus(
     valid_currency = valid[0]["currency"] if valid else "INR"
     price_list_name = f"{valid_make} - {source_file}"
     price_list = (
-        db.query(PriceList)
-        .filter(PriceList.name == price_list_name)
-        .one_or_none()
+        db.query(PriceList).filter(PriceList.name == price_list_name).one_or_none()
     )
     if price_list is None:
         price_list = PriceList(
@@ -517,14 +528,14 @@ def import_skus(
 
     db.commit()
 
-    summary.update({
-        "items_created": items_created,
-        "skus_created": skus_created,
-        "skus_updated": skus_updated,
-        "prices_inserted": prices_inserted,
-        "price_list_id": price_list.id,
-        "price_list_name": price_list_name,
-    })
+    summary.update(
+        {
+            "items_created": items_created,
+            "skus_created": skus_created,
+            "skus_updated": skus_updated,
+            "prices_inserted": prices_inserted,
+            "price_list_id": price_list.id,
+            "price_list_name": price_list_name,
+        }
+    )
     return summary
-
-

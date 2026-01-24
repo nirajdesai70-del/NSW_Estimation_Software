@@ -2,9 +2,10 @@
 Tests for Pricing Resolver
 Phase-5 Commit 1: Rate resolution with override governance
 """
+
 import pytest
 from decimal import Decimal
-from unittest.mock import Mock, MagicMock
+from unittest.mock import MagicMock
 from sqlalchemy.orm import Session
 
 from app.estimation.types import RateSource, LineInput, PriceSnapshot
@@ -24,7 +25,9 @@ class MockProductRateLookup:
     def get_rate_for_product(self, *, product_id: int, quote_id: int) -> Decimal:
         key = (product_id, quote_id)
         if key not in self.rates:
-            raise ValueError(f"No rate found for product_id={product_id}, quote_id={quote_id}")
+            raise ValueError(
+                f"No rate found for product_id={product_id}, quote_id={quote_id}"
+            )
         return Decimal(str(self.rates[key]))
 
 
@@ -47,10 +50,12 @@ class TestPricingResolver:
     @pytest.fixture
     def product_lookup(self):
         """Create mock product lookup with default rates"""
-        return MockProductRateLookup({
-            (101, 1): 1000.00,
-            (102, 1): 2000.00,
-        })
+        return MockProductRateLookup(
+            {
+                (101, 1): 1000.00,
+                (102, 1): 2000.00,
+            }
+        )
 
     def test_resolve_pricelist_rate_success(self, resolver, product_lookup, mock_db):
         """Test successful PRICELIST rate resolution"""
@@ -77,7 +82,9 @@ class TestPricingResolver:
         assert snapshot.sku_rate == Decimal("1000.00")
         assert snapshot.override_rate is None
 
-    def test_resolve_pricelist_does_not_write_db(self, resolver, product_lookup, mock_db):
+    def test_resolve_pricelist_does_not_write_db(
+        self, resolver, product_lookup, mock_db
+    ):
         """Test PRICELIST resolve does not write to DB (audit happens in snapshot)"""
         line = LineInput(
             line_id=1,
@@ -181,7 +188,9 @@ class TestPricingResolver:
             override_reason=None,
         )
 
-        with pytest.raises(OverrideValidationError, match="override_reason is mandatory"):
+        with pytest.raises(
+            OverrideValidationError, match="override_reason is mandatory"
+        ):
             resolver.resolve_line_rate(
                 quote_id=1,
                 line=line,
@@ -211,7 +220,9 @@ class TestPricingResolver:
                 product_rate_lookup=product_lookup,
             )
 
-    def test_resolve_manual_override_approver_allowed(self, resolver, product_lookup, mock_db):
+    def test_resolve_manual_override_approver_allowed(
+        self, resolver, product_lookup, mock_db
+    ):
         """Test Approver role can perform manual override"""
         line = LineInput(
             line_id=1,
@@ -299,7 +310,9 @@ class TestPricingResolver:
         # Note: commit removed (caller controls atomicity)
         assert not mock_db.commit.called
 
-    def test_determinism_same_input_same_output(self, resolver, product_lookup, mock_db):
+    def test_determinism_same_input_same_output(
+        self, resolver, product_lookup, mock_db
+    ):
         """Test determinism: same input produces same output"""
         line = LineInput(
             line_id=1,
@@ -333,9 +346,11 @@ class TestPricingResolver:
     def test_decimal_quantization(self, resolver):
         """Test that rates are quantized to 4 decimal places"""
         # Create lookup with imprecise rate
-        lookup = MockProductRateLookup({
-            (101, 1): 1000.123456789,  # Will be quantized to 1000.1235
-        })
+        lookup = MockProductRateLookup(
+            {
+                (101, 1): 1000.123456789,  # Will be quantized to 1000.1235
+            }
+        )
 
         line = LineInput(
             line_id=1,

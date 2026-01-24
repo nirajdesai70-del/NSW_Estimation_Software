@@ -1,6 +1,7 @@
 """
 BOM (Bill of Materials) endpoints
 """
+
 from typing import Dict, List, Any, Optional
 from fastapi import APIRouter, Depends, Header
 from sqlalchemy.orm import Session
@@ -22,6 +23,7 @@ def _require_tenant_id(x_tenant_id: Optional[str]) -> int:
             error_code=ErrorCodes.VALIDATION_MISSING_TENANT,
             detail="X-Tenant-ID header required",
         )
+        raise RuntimeError("unreachable")
     try:
         return int(x_tenant_id)
     except ValueError:
@@ -30,6 +32,7 @@ def _require_tenant_id(x_tenant_id: Optional[str]) -> int:
             error_code=ErrorCodes.VALIDATION_ERROR,
             detail="X-Tenant-ID must be an integer",
         )
+        raise RuntimeError("unreachable")
 
 
 @router.post("/explode", response_model=BomExplodeResponse)
@@ -40,10 +43,10 @@ def explode_bom(
 ):
     """
     BOM explosion (L1 → L2).
-    
+
     Option A: unmapped L1 lines are returned in `unmapped[]` (non-fatal).
     G-08: many L1 lines may map to the same L2 SKU (aggregation supported).
-    
+
     Returns deterministic output with SKU aggregation and provenance tracking.
     """
     tenant_id = _require_tenant_id(x_tenant_id)
@@ -190,19 +193,18 @@ def explode_bom(
 
             item = {
                 "catalog_sku_id": sku_id,
-
                 # Canonical fields (match schema)
                 "make": make,
                 "oem_catalog_no": oem_catalog_no,
                 "uom": meta.get("uom"),
-
                 # Backward-compatible aliases (optional but helpful)
                 "sku_code": oem_catalog_no,
                 "name": make,
-
                 "mapping_count": bucket["mapping_count"],
                 "mapping_types": sorted(list(bucket["mapping_types"])),
-                "l1_sources": sorted(bucket["l1_sources"], key=lambda x: x["l1_intent_line_id"]),
+                "l1_sources": sorted(
+                    bucket["l1_sources"], key=lambda x: x["l1_intent_line_id"]
+                ),
             }
             items.append(item)
 
@@ -225,19 +227,19 @@ def explode_bom(
                         "catalog_sku_id": sku_id,
                         "mapping_type": mp["mapping_type"],
                         "is_primary": mp["is_primary"],
-
                         # Canonical fields
                         "make": make,
                         "oem_catalog_no": oem_catalog_no,
                         "uom": meta.get("uom"),
-
                         # Backward-compatible aliases
                         "sku_code": oem_catalog_no,
                         "name": make,
                     }
                 )
 
-        items.sort(key=lambda x: (x.get("catalog_sku_id", 0), x.get("l1_intent_line_id", 0)))
+        items.sort(
+            key=lambda x: (x.get("catalog_sku_id", 0), x.get("l1_intent_line_id", 0))
+        )
 
     # 6) Summary
     summary = {
@@ -262,5 +264,3 @@ def explode_bom(
 def get_bom(bom_id: int):
     """Get BOM by ID (still stub)"""
     return {"message": f"Get BOM {bom_id} endpoint - to be implemented"}
-
-

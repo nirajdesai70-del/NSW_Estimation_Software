@@ -1,8 +1,8 @@
 """
 Test for UNRESOLVED and is_price_missing contributing zero (G-03, G-05)
 """
+
 from decimal import Decimal
-import pytest
 
 from app.api.v1.endpoints import quotation as quotation_ep
 
@@ -50,6 +50,7 @@ def test_unresolved_or_price_missing_contributes_zero(monkeypatch):
       - is_price_missing=true contributes 0
       - flags are raised for operator visibility
     """
+
     class _NoRulesLookup:
         def __init__(self, db): ...
         def list_active_rules_for_quote(self, tenant_id, quotation_id):  # noqa: ARG002
@@ -117,4 +118,3 @@ def test_unresolved_or_price_missing_contributes_zero(monkeypatch):
 
     assert "HAS_UNRESOLVED_LINES" in out["flags"]
     assert "HAS_PRICE_MISSING_LINES" in out["flags"]
-
