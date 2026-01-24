@@ -84,8 +84,7 @@ jobs:
             PYTHONPATH=backend pytest -q backend/tests/phase5 \
               --cov=backend/app \
               --cov-report=xml:backend/coverage.xml \
-              --cov-fail-under=70 \
-              --cov-omit="*/alembic/*,*/tests/*"
+              --cov-fail-under=70
           else
             echo "backend/tests/phase5 not found; skipping pytest."
           fi
