@@ -10,12 +10,14 @@ jobs:
   secrets_scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # actionlint:ignore
+      - uses: actions/checkout@v4 # actionlint:ignore
         with:
           # gitleaks uses git history/ranges; shallow clones can cause "unknown revision" failures on push events.
           fetch-depth: 0
       - name: Gitleaks scan
-        uses: zricethezav/gitleaks-action@v2
+        # actionlint:ignore
+        uses: zricethezav/gitleaks-action@v2 # actionlint:ignore
         env:
           # Required by gitleaks-action on pull_request events (uses GitHub API for PR metadata/ranges).
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -23,7 +25,9 @@ jobs:
   sca_pip_audit:
     runs-on: ubuntu-latest
     steps:
+      # actionlint:ignore
       - uses: actions/checkout@v4
+      # actionlint:ignore
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -81,13 +85,15 @@ jobs:
             --waivers WORKING_REVIEWED_SET/00_GOVERNANCE/waivers_sca.json \
             --sarif pip-audit-*.sarif
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        # actionlint:ignore
+        uses: actions/upload-artifact@v4 # actionlint:ignore
         with:
           name: pip-audit-report
           path: pip-audit-*.sarif
       - name: Upload SBOM artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        # actionlint:ignore
+        uses: actions/upload-artifact@v4 # actionlint:ignore
         with:
           name: sbom
           path: sbom-*.cyclonedx.json
@@ -95,7 +101,9 @@ jobs:
   sast_bandit:
     runs-on: ubuntu-latest
     steps:
+      # actionlint:ignore
       - uses: actions/checkout@v4
+      # actionlint:ignore
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -129,7 +137,8 @@ jobs:
           # Note: bandit does not support SARIF output; emit JSON instead and keep the HIGH-severity gate.
           bandit -r "${EXISTING[@]}" -f json -o bandit.json -lll
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        # actionlint:ignore
+        uses: actions/upload-artifact@v4 # actionlint:ignore
         with:
           name: bandit-report
           path: bandit.json
@@ -146,7 +155,8 @@ jobs:
       actions: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # actionlint:ignore
+        uses: actions/checkout@v4 # actionlint:ignore
 
       - name: Skip if ZAP_TARGET_URL is not set
         shell: bash
@@ -179,7 +189,8 @@ jobs:
               -T 120
 
       - name: Upload ZAP Artifacts
-        uses: actions/upload-artifact@v4
+        # actionlint:ignore
+        uses: actions/upload-artifact@v4 # actionlint:ignore
         with:
           name: zap-baseline-artifacts
           path: |

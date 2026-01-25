@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:14-alpine
@@ -46,5 +44,3 @@ volumes:
 networks:
   nsw_network:
     driver: bridge
-
-

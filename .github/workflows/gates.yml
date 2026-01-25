@@ -14,13 +14,15 @@ jobs:
       # 0) Checkout
       # ------------------------------------------------------------
       - name: Checkout
-        uses: actions/checkout@v4
+        # actionlint:ignore
+        uses: actions/checkout@v4 # actionlint:ignore
 
       # ------------------------------------------------------------
       # 1) Python
       # ------------------------------------------------------------
       - name: Set up Python
-        uses: actions/setup-python@v5
+        # actionlint:ignore
+        uses: actions/setup-python@v5 # actionlint:ignore
         with:
           python-version: "3.11"
 
@@ -180,7 +182,8 @@ jobs:
       # ------------------------------------------------------------
       - name: Upload gate reports
         if: always()
-        uses: actions/upload-artifact@v4
+        # actionlint:ignore
+        uses: actions/upload-artifact@v4 # actionlint:ignore
         with:
           name: gate-reports
           path: governance/decisions/staging/gate_run_*.md

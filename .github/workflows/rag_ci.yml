@@ -13,10 +13,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # actionlint:ignore
+        uses: actions/checkout@v4 # actionlint:ignore
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        # actionlint:ignore
+        uses: actions/setup-python@v5 # actionlint:ignore
         with:
           python-version: "3.11"
           cache: "pip"
@@ -59,7 +61,8 @@ jobs:
 
       - name: Upload build reports (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4.3.1
+        # actionlint:ignore
+        uses: actions/upload-artifact@v4.3.1 # actionlint:ignore
         with:
           name: rag-lite-build-reports
           path: |
@@ -82,16 +85,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # actionlint:ignore
+        uses: actions/checkout@v4 # actionlint:ignore
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        # actionlint:ignore
+        uses: actions/setup-python@v5 # actionlint:ignore
         with:
           python-version: "3.11"
           cache: "pip"
 
       - name: Cache HF models
-        uses: actions/cache@v4
+        # actionlint:ignore
+        uses: actions/cache@v4 # actionlint:ignore
         with:
           path: |
             .cache/huggingface
@@ -136,7 +142,8 @@ jobs:
 
       - name: Upload build reports (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4.3.1
+        # actionlint:ignore
+        uses: actions/upload-artifact@v4.3.1 # actionlint:ignore
         with:
           name: rag-full-build-reports
           path: |
@@ -145,11 +152,11 @@ jobs:
 
       - name: Upload index metadata (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4.3.1
+        # actionlint:ignore
+        uses: actions/upload-artifact@v4.3.1 # actionlint:ignore
         with:
           name: rag-full-index-metadata
           path: |
             RAG_INDEX/index_metadata.json
           retention-days: 7
           if-no-files-found: ignore
-

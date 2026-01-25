@@ -1,0 +1,3 @@
+# Ignore action resolution in offline environments.
+ignore:
+  - 'Unable to resolve action .*'
